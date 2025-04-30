@@ -33,7 +33,11 @@ const router = createBrowserRouter([
       { path: "blogs", element: <BlogSection /> },
       { path: "blogs/:id", element: <BlogDetail /> },
       { path: "product/:id", element: <ProductDetails /> },
-      { path: "profile", element: ( <ProtectedRoute> <ProfilePage /> </ProtectedRoute>) },
+      { path: "profile", element: ( 
+      // <ProtectedRoute> 
+        <ProfilePage /> 
+      //   </ProtectedRoute>
+        ) },
       {path: "shop", element: <Shop /> }
     ],
   },

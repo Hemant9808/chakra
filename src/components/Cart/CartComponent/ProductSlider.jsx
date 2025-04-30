@@ -6,6 +6,9 @@ const ProductSlider = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate();
 
+
+  
+
   const products = [
     {
       id: 11,
@@ -43,7 +46,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 2,
+      id: 12,
       name: "[Charak] Premium Organic Ashwagandha – The Ultimate Stress & Vitality Booster",
       tagline: "Restore Balance, Energy & Strength Naturally",
       price: 4999,
@@ -78,7 +81,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 1,
+      id: 13,
       name: "[Charak] Premium Gokshura – Natural Vitality & Wellness Booster",
       tagline: "Boost Vitality & Wellness Naturally with Gokshura",
       price: 5699,
@@ -113,7 +116,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 2,
+      id: 14,
       name: "[Charak] Premium Organic Ashwagandha – The Ultimate Stress & Vitality Booster",
       tagline: "Restore Balance, Energy & Strength Naturally",
       price: 4999,
@@ -148,7 +151,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 1,
+      id: 15,
       name: "[Charak] Premium Gokshura – Natural Vitality & Wellness Booster",
       tagline: "Boost Vitality & Wellness Naturally with Gokshura",
       price: 5699,
@@ -183,7 +186,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 2,
+      id:16,
       name: "[Charak] Premium Organic Ashwagandha – The Ultimate Stress & Vitality Booster",
       tagline: "Restore Balance, Energy & Strength Naturally",
       price: 4999,
@@ -218,7 +221,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 1,
+      id: 17,
       name: "[Charak] Premium Gokshura – Natural Vitality & Wellness Booster",
       tagline: "Boost Vitality & Wellness Naturally with Gokshura",
       price: 5699,
@@ -253,7 +256,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id: 2,
+      id: 18,
       name: "[Charak] Premium Organic Ashwagandha – The Ultimate Stress & Vitality Booster",
       tagline: "Restore Balance, Energy & Strength Naturally",
       price: 4999,
