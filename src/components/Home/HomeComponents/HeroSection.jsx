@@ -2,7 +2,7 @@ import { FaShieldAlt, FaBox, FaWhatsapp } from "react-icons/fa";
 
 const HeroSection = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center bg-white text-black p-8 md:p-16">
+    <div className="flex flex-col md:flex-row items-center bg-black text-black p-8 md:p-16">
       {/* Left Section (Video/Image) */}
       <div className="relative w-full md:w-1/2">
   <iframe
