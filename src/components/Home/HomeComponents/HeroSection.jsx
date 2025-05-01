@@ -14,7 +14,7 @@ const HeroSection = () => {
     allowFullScreen
   ></iframe>
   <div className="absolute top-4 left-4 text-white text-xl font-bold">
-    Bold Care
+    Bold Care gerger
   </div>
 </div>
 
