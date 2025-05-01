@@ -14,7 +14,7 @@ const PromoBanner = () => {
         className="bg-black flex sm:flex-row flex-col text-white rounded-xl items-center max-w-[90%] w-[80rem] h-full p-6 shadow-lg"
       >
         {/* Left Side Text */}
-        <motion.div
+        {/* <motion.div
           initial={{ x: -30, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.7 }}
@@ -44,7 +44,7 @@ const PromoBanner = () => {
            </Link>
 
           </motion.button>
-        </motion.div>
+        </motion.div> */}
 
         {/* Right Side Image */}
         <motion.div
