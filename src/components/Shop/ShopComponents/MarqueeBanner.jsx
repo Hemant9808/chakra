@@ -1,27 +1,31 @@
 import React from "react";
-import { FaRegHandPointRight } from "react-icons/fa";
-import "./marquee.css"; // Import custom CSS for animation
+import { BsLightningChargeFill } from "react-icons/bs";
+import "./marquee.css"; // Same custom CSS for animation
 
 const MarqueeBanner = () => {
-  const items = [
-    "WELLVAS15 : Apply this code and get 15% off",
-    "Don’t know what to buy? Take the Male Wellness Test!",
+  const messages = [
+    "⚡ Hello from Team WELLVAS!",
+    "🎉 Use WELLVAS15 to save 15% instantly!",
+    "🧠 Take the Men's Wellness Quiz today!",
+    "💪 Boost your energy with Ayurvedic care!",
   ];
 
   return (
-    <div className="w-full bg-black overflow-hidden py-2">
-      <div className="marquee whitespace-nowrap flex gap-10">
-        {Array(10)
+    <div className="w-full bg-gradient-to-r from-black via-gray-900 to-black py-2 overflow-hidden shadow-inner border-t border-b border-gray-700">
+      <div className="marquee flex gap-12 items-center whitespace-nowrap text-sm md:text-base font-medium text-white">
+        {Array(8)
           .fill(" ")
           .map((_, index) => (
             <React.Fragment key={index}>
-              {items.map((text, idx) => (
+              {messages.map((msg, idx) => (
                 <span
                   key={`${index}-${idx}`}
-                  className="text-white text-sm md:text-base flex items-center gap-2"
+                  className="flex items-center gap-2 text-white"
                 >
-                  <FaRegHandPointRight className="text-[#d6ab83]" />
-                  {text}
+                  <BsLightningChargeFill className="text-green-300" />
+                  <span className="bg-gradient-to-r from-white to-green-700 bg-clip-text text-transparent">
+                    {msg}
+                  </span>
                 </span>
               ))}
             </React.Fragment>

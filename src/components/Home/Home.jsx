@@ -7,10 +7,12 @@ import VideoSlider from './HomeComponents/VideoSlider'
 import OfficeMap from './HomeComponents/OfficeMap'
 import HeroSlider from './HomeComponents/ProductCarousel'
 import PromoBanner from "./HomeComponents/PromoBanner";
+import MarqueeBanner from "../Shop/ShopComponents/MarqueeBanner"
 
 function Home(){
     return (
         <div className="">
+        <MarqueeBanner />
         <PromoBanner />
         
     
