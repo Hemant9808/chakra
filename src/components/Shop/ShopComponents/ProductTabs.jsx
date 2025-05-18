@@ -1,88 +1,108 @@
-import React, { useState } from "react";
-import { productsData } from "./productsData"; // your product data array
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useCartStore } from "../../../Store/useCartStore";
+import { toast } from "react-hot-toast";
+import { productService } from "../../../services/productService";
 
-
-const categories = [
-  "ALL PRODUCTS",
-  "PERFORM BETTER",
-  "BETTER ERECTIONS",
-  "LAST LONGER",
-  "BEST SELLER",
-  "COMBOS FOR ALPHA MEN",
-];
-
-const ProductTabs = () => {
+const ProductTabs = ({ products: allProducts, categories }) => {
   const [activeTab, setActiveTab] = useState("ALL PRODUCTS");
+  const [products, setProducts] = useState(allProducts);
+  const [loading, setLoading] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const filteredProducts =
-    activeTab === "ALL PRODUCTS"
-      ? productsData
-      : productsData.filter((p) => p.category === activeTab);
+  useEffect(() => {
+    if (activeTab === "ALL PRODUCTS") {
+      setProducts(allProducts);
+    } else {
+      setLoading(true);
+      productService.getProductsByCategory(activeTab)
+        .then((data) => setProducts(data))
+        .catch(() => setProducts([]))
+        .finally(() => setLoading(false));
+    }
+  }, [activeTab, allProducts]);
 
   return (
     <div className="w-full px-4 py-8">
       {/* Tabs */}
       <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
+        <button
+          onClick={() => setActiveTab("ALL PRODUCTS")}
+          className={`px-4 cursor-pointer py-2 font-semibold border-b-2 ${
+            activeTab === "ALL PRODUCTS"
+              ? "border-black text-black"
+              : "border-transparent text-gray-500"
+          } hover:text-black transition-all`}
+        >
+          ALL PRODUCTS
+        </button>
         {categories.map((cat) => (
           <button
-            key={cat}
-            onClick={() => setActiveTab(cat)}
-            className={`px-4 py-2 font-semibold border-b-2 ${
-              activeTab === cat
+            key={cat._id}
+            onClick={() => setActiveTab(cat.name)}
+            className={`px-4 py-2 cursor-pointer font-semibold border-b-2 ${
+              activeTab === cat.name
                 ? "border-black text-black"
                 : "border-transparent text-gray-500"
             } hover:text-black transition-all`}
           >
-            {cat}
+            {cat.name}
           </button>
         ))}
       </div>
 
       {/* Product Grid */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredProducts.map((product, index) => (
-          <div
-            key={index}
-            className="bg-white shadow rounded-xl p-4 flex flex-col items-center"
-          >
-            <div className="relative w-full h-48 flex justify-center">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="max-h-full"
-              />
-              {product.discount && (
-                <span className="absolute top-2 left-2 bg-brown-600 text-white text-xs px-2 py-1 rounded-full">
-                  -{product.discount}%
-                </span>
-              )}
-              {/* {product.sharkTank && (
-                <img
-                  src="/shark-tank-badge.png"
-                  alt="Shark Tank"
-                  className="absolute top-2 right-2 w-12"
-                />
-              )} */}
-            </div>
-            <div className="text-center mt-4">
-              <h3 className="font-semibold text-sm">{product.name}</h3>
-              <div className="text-yellow-500 text-sm mt-1">
-                {"⭐".repeat(Math.round(product.rating))}
-              </div>
-              <div className="text-sm mt-2">
-                <span className="text-red-500 line-through mr-2">
-                  ₹{product.originalPrice}
-                </span>
-                <span className="font-bold">₹{product.price}</span>
-              </div>
-              <button className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800" onClick={() => addToCart(product)}>
-                ADD TO CART
+        {loading ? (
+          <div className="col-span-full text-center">Loading products...</div>
+        ) : products.length === 0 ? (
+          <div className="col-span-full text-center">No products found</div>
+        ) : (
+          products.map((product) => (
+            <motion.div
+              key={product._id}
+              className="bg-white shadow rounded-xl p-4 flex flex-col"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link to={`/ProductDetailsById/${product._id}`} className="group">
+                <div className="relative w-full h-48 flex justify-center overflow-hidden">
+                  <img
+                    src={product.images[0]?.url || '/placeholder.png'}
+                    alt={product.name}
+                    className="object-cover transition-transform group-hover:scale-110"
+                  />
+                  {product.stock <= 0 && (
+                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                      Out of Stock
+                    </div>
+                  )}
+                </div>
+                <div className="text-center mt-4">
+                  <h3 className="font-semibold text-sm group-hover:text-green-600 transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
+                  <div className="text-sm mt-2">
+                    <span className="font-bold">₹{product.price}</span>
+                  </div>
+                </div>
+              </Link>
+              <button
+                className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
+                onClick={() => {
+                  addToCart(product);
+                  // toast.success('Added to cart!');
+                }}
+                disabled={product.stock <= 0}
+              >
+                {product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
               </button>
-            </div>
-          </div>
-        ))}
+            </motion.div>
+          ))
+        )}
       </div>
     </div>
   );

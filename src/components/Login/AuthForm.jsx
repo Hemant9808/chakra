@@ -1,37 +1,72 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useAuth } from "../../context/AuthContext"; // Import useAuth
 import { useNavigate } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
+import useAuthStore from "../../Store/useAuthStore";
+import { toast } from "react-hot-toast"; // Add toast for notifications
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const { login, signup, loginWithGoogle } = useAuth(); // Get auth functions
   const navigate = useNavigate();
+
+  // Form state
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+
+  // Get auth functions and state from Zustand store
+  // const { login, signup, loading, error } = useAuthStore((state) => ({
+  //   login: state.login,
+  //   signup: state.signup,
+  //   loading: state.loading,
+  //   error: state.error,
+  // }));
+  const login = useAuthStore((state) => state.login);
+const signup = useAuthStore((state) => state.signup);
+const loading = useAuthStore((state) => state.loading);
+const error = useAuthStore((state) => state.error);
+
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isLogin) {
-        await login(email, password);
+        await login(formData.email, formData.password);
+        toast.success("Login successful!");
       } else {
-        await signup(name, email, password);
+        // Validate all required fields for signup
+        const requiredFields = [
+          "firstName",
+          "lastName",
+          "userName",
+          "email",
+          "phone",
+          "password",
+        ];
+        const missingFields = requiredFields.filter((field) => !formData[field]);
+        
+        if (missingFields.length > 0) {
+          toast.error(`Please fill in all required fields: ${missingFields.join(", ")}`);
+          return;
+        }
+
+        await signup(formData);
+        toast.success("Account created successfully!");
       }
       navigate("/");
     } catch (error) {
-      console.error("Auth error:", error.message);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      await loginWithGoogle();
-      navigate("/");
-    } catch (error) {
-      console.error("Google login error:", error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -43,76 +78,133 @@ const AuthForm = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <h2 className="text-3xl font-bold text-center text-gray-800">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           {isLogin ? "Welcome Back!" : "Create an Account"}
         </h2>
 
-        {/* Google Login */}
-        <motion.button
-  onClick={async () => {
-    const user = await loginWithGoogle();
-    if (user) navigate("/"); // Redirect to home after login
-  }}
-  className="w-full mt-4 flex items-center justify-center bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition-all"
-  whileHover={{ scale: 1.05 }}
->
-  <FaGoogle className="mr-2" /> Continue with Google
-</motion.button>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {error}
+          </div>
+        )}
 
-        <div className="relative my-4">
-          <hr className="border-gray-300" />
-          <p className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-white px-2 text-gray-500">OR</p>
-        </div>
-
-        {/* Form */}
         <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
           {!isLogin && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-blue-500"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
+                    placeholder="First Name"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
+                    placeholder="Last Name"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  name="userName"
+                  className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
+                  placeholder="Username"
+                  value={formData.userName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
+                  placeholder="Phone Number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </>
           )}
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-blue-500"
+              name="email"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
               placeholder="Your Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-blue-500"
+              name="password"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
               placeholder="Your Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
           </div>
 
           <motion.button
             type="submit"
-            className="w-full mt-4 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-all"
-            whileHover={{ scale: 1.05 }}
+            className={`w-full mt-4 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-all ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            whileHover={{ scale: loading ? 1 : 1.05 }}
+            disabled={loading}
           >
-            {isLogin ? "Login" : "Sign Up"}
+            {loading ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
           </motion.button>
         </form>
 
         <p className="mt-4 text-center text-sm">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-blue-500 hover:underline transition-all"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setFormData({
+                firstName: "",
+                lastName: "",
+                userName: "",
+                email: "",
+                phone: "",
+                password: "",
+              });
+            }}
+            className="text-green-600 hover:underline transition-all"
           >
             {isLogin ? "Sign Up" : "Login"}
           </button>

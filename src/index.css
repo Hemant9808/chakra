@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+.gold-gradient-text {
+    background: linear-gradient(90deg, #D4AF37 0%, #F2DFA4 50%, #D4AF37 100%);
+    background-size: 200% auto;
+    animation: gradientBg 8s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  
+  @keyframes gradientBg {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  

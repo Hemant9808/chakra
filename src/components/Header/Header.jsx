@@ -4,24 +4,33 @@ import { FaShoppingCart, FaBars, FaTimes, FaUser, FaLeaf } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { useCartStore } from "../../Store/useCartStore";
+import useAuthStore from '../../Store/useAuthStore';
+import { toast } from 'react-hot-toast';
+import { clearLocalStorage } from "../../middleware/middleware";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const cartItems = useCartStore((state) => state.cartItems);
+  const { cartItems, getTotalItems, getTotalPrice } = useCartStore();
+  const token = localStorage.getItem("authToken");
+  
+  const authUser = useAuthStore(state => state.user);
+  const authLogout = useAuthStore(state => state.logout);
+  
 
-  const totalCartItems = cartItems.reduce((total, item) => total + item.quantity, 0);
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalCartItems = getTotalItems();
+  const totalPrice = getTotalPrice();
 
   const navLinks = [
     { path: "/quiz", label: "Male Wellness Test" },
+    { path: "/shop", label: "Shop" },
+    { path: "/gallery", label: "Gallery" },
     { path: "/", label: "Home" },
     { path: "/contact", label: "Contact" },
     { path: "/about", label: "About" },
     { path: "/blogs", label: "Blogs" },
-    { path: "/shop", label: "Shop" },
   ];
 
   // Close sidebar on outside click
@@ -42,6 +51,12 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  const handleLogout = () => {
+    authLogout();
+    clearLocalStorage(navigate);
+    toast.success('Logged out successfully');
+  };
 
   return (
     <header className="shadow sticky top-0 z-50 bg-black text-white">
@@ -95,17 +110,41 @@ const Header = () => {
 
           <span className="text-sm font-semibold">₹{totalPrice}</span>
 
-          {user ? (
-            <button onClick={logout} className="bg-red-600 px-4 py-2 rounded-md hover:bg-red-700">
-              Logout
-            </button>
+          {token  ? (
+            <div className="flex items-center space-x-4">
+              <div className="relative group">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-green-600">
+                  <span>Hi, {authUser?.firstName || 'User'}</span>
+                </button>
+                <div className="absolute right-0 w-48 py-2 mt-2 bg-white rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/orders"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50"
+                  >
+                    Orders
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
           ) : (
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-[#e5dac3] text-black px-4 py-2 rounded-md hover:bg-[#d4be9b]"
+            <Link
+              to="/login"
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
             >
               Login
-            </button>
+            </Link>
           )}
         </div>
 
@@ -161,20 +200,41 @@ const Header = () => {
               </NavLink>
             ))}
 
-            {user ? (
-              <button onClick={logout} className="bg-red-600 px-4 py-2 rounded-md hover:bg-red-700">
-                Logout
-              </button>
+            {token ? (
+              <div className="flex items-center space-x-4">
+                <div className="relative group">
+                  <button className="flex items-center space-x-1 text-gray-700 hover:text-green-600">
+                    <span>Hi, {authUser?.firstName || 'User'}</span>
+                  </button>
+                  <div className="absolute right-0 w-48 py-2 mt-2 bg-white rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50"
+                    >
+                      Orders
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
             ) : (
-              <button
-                onClick={() => {
-                  navigate("/login");
-                  setIsOpen(false);
-                }}
-                className="bg-[#e5dac3] text-black px-4 py-2 rounded-md hover:bg-[#d4be9b]"
+              <Link
+                to="/login"
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
               >
                 Login
-              </button>
+              </Link>
             )}
           </motion.nav>
         )}

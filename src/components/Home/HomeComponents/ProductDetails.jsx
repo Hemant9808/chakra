@@ -7,6 +7,8 @@ const ProductDetails = () => {
   const location = useLocation();
   const product = location.state?.product;
 
+  console.log(product);
+
   if (!product) {
     return <div className="text-center text-xl font-bold mt-10">Product not found</div>;
   }

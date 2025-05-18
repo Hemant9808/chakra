@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../../../Store/useCartStore";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const categories = ["Nutrition", "Hair", "Beard", "Performance", "Hygiene", "Skin"];
 
@@ -90,7 +91,7 @@ const ProductCarousel = () => {
   const [selectedCategory, setSelectedCategory] = useState("Nutrition");
   const [currentIndex, setCurrentIndex] = useState(0);
   const addToCart = useCartStore((state) => state.addToCart);
-
+ const navigate = useNavigate()
   const currentProducts = products[selectedCategory] || [];
   const visibleProducts = currentProducts.slice(currentIndex, currentIndex + 3);
 
@@ -159,8 +160,10 @@ const ProductCarousel = () => {
                 <span className="line-through text-gray-500">₹{product.oldPrice}</span>
               </p>
               <button
-                className="bg-green-500 text-white px-4 py-2 rounded-lg mt-2 hover:bg-green-600 transition"
-                onClick={() => addToCart(product)}
+                className="bg-green-500 cursor-pointer text-white px-4 py-2 rounded-lg mt-2 hover:bg-green-600 transition"
+                onClick={() => navigate("/shop")
+                // addToCart(product)
+                }
               >
                 Add to Cart
               </button>

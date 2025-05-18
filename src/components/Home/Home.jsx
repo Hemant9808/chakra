@@ -7,6 +7,7 @@ import VideoSlider from './HomeComponents/VideoSlider'
 import OfficeMap from './HomeComponents/OfficeMap'
 import HeroSlider from './HomeComponents/ProductCarousel'
 import PromoBanner from "./HomeComponents/PromoBanner";
+import Hero from "./HomeComponents/Hero";
 
 function Home(){
     return (
@@ -14,9 +15,10 @@ function Home(){
         <PromoBanner />
         
     
-        <HeroSection />
+        {/* <HeroSection /> */}
+        {/* <Hero/> */}
        
-        {/* <HeroSlider /> */}
+        <HeroSlider />
        
         <VideoSlider />
         <ProductCarousel />
