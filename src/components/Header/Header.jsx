@@ -24,10 +24,8 @@ const Header = () => {
   const totalPrice = getTotalPrice();
 
   const navLinks = [
-    { path: "/quiz", label: "Male Wellness Test" },
-    { path: "/shop", label: "Shop" },
-    { path: "/gallery", label: "Gallery" },
     { path: "/", label: "Home" },
+    { path: "/quiz", label: "Wellness Test" },
     { path: "/contact", label: "Contact" },
     { path: "/about", label: "About" },
     { path: "/blogs", label: "Blogs" },
@@ -61,12 +59,12 @@ const Header = () => {
   return (
     <header className="shadow sticky top-0 z-50 bg-black text-white">
       <nav className="px-6 lg:px-10 py-4 flex justify-between items-center">
-        {/* Logo */}
+        <img src=""></img>
         <Link to="/" className="flex items-center space-x-2">
           {/* Show icon only on small screens, full name on large */}
           <FaLeaf className="text-[#e5dac3] text-2xl lg:hidden" />
           <span className="text-2xl font-semibold tracking-wide text-[#e5dac3] hidden lg:block">
-            Charak Wellness
+            Wellvas
           </span>
         </Link>
 

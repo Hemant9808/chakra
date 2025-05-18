@@ -12,6 +12,7 @@ import Hero from "./HomeComponents/Hero";
 function Home(){
     return (
         <div className="">
+        <MarqueeBanner />
         <PromoBanner />
         
     
