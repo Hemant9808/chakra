@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { productService } from '../../services/productService';
 import { useCartStore } from '../../Store/useCartStore';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useLocation } from "react-router-dom";
+import { checkIfUserIsLoggedIn } from '../../middleware/middleware';
 
 const ProductDetailsById = () => {
+  const navigate = useNavigate()
   const { id } = useParams();
   console.log("page rendered");
   const [product, setProduct] = useState(null);
@@ -143,6 +145,10 @@ const ProductDetailsById = () => {
 
           <button
             onClick={() => {
+              if (!checkIfUserIsLoggedIn()) {
+                  navigate("/login")
+                  return;
+                  }
               addToCart(product);
               // toast.success('Added to cart!');
             }}

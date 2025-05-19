@@ -326,7 +326,14 @@ const ProductSlider = () => {
               </div>
               <button
                 className="bg-[#96d569] text-black w-full py-2 mt-3 rounded font-bold hover:bg-[#d4be9b]"
-                onClick={() => addToCart(product)}
+                onClick={() => {
+
+                  if (!checkIfUserIsLoggedIn()) {
+                  navigate("/login")
+                  return;
+                  }
+                  addToCart(product)
+                  }}
               >
                 ADD TO CART
               </button>

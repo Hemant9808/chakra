@@ -76,11 +76,11 @@ const CartComponent = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="flex items-center space-x-4">
-                  <img
+                 {item && item.productId && item.productId.name &&<img
                     src={item.productId?.images[0]?.url}
                     alt={item.productId.name}
                     className="w-20 h-20 rounded-md object-cover flex-shrink-0"
-                  />
+                  />}
                   <div className="flex-1">
                     <h4
                       className="text-base font-semi00ld truncate max-w-[200px]"
@@ -147,11 +147,11 @@ const CartComponent = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <td className="py-4 flex items-center space-x-4">
-                        <img
+                       {item && item.productId && item.productId.name && <img
                           src={item.productId.images[0]?.url}
                           alt={item.productId.name}
                           className="w-16 h-16 rounded-md object-cover"
-                        />
+                        />}
                         <span className="text-lg truncate max-w-[150px]">
                           {item.productId.name}
                         </span>

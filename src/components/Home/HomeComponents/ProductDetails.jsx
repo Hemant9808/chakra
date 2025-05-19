@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CartContext } from "../../../context/CartContext";
+import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
 
 const ProductDetails = () => {
   const { addToCart } = useContext(CartContext);
   const location = useLocation();
   const product = location.state?.product;
+  const navigate = useNavigate()
+
 
   console.log(product);
 
@@ -86,7 +89,12 @@ const ProductDetails = () => {
 
           <button
             className="border-2 border-black text-black py-3 mt-6 w-full rounded-lg font-bold text-lg hover:bg-gray-200"
-            onClick={() => addToCart(product)}
+            onClick={() =>{
+              if (!checkIfUserIsLoggedIn()) {
+                  navigate("/login")
+                  return;
+                  }
+                  addToCart(product)}}
           >
             ADD TO CART
           </button>

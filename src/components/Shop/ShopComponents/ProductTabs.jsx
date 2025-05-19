@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../../Store/useCartStore";
 import { toast } from "react-hot-toast";
 import { productService } from "../../../services/productService";
+import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
 
 const ProductTabs = ({ products: allProducts, categories }) => {
   const [activeTab, setActiveTab] = useState("ALL PRODUCTS");
   const [products, setProducts] = useState(allProducts);
   const [loading, setLoading] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (activeTab === "ALL PRODUCTS") {
@@ -93,6 +95,10 @@ const ProductTabs = ({ products: allProducts, categories }) => {
               <button
                 className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
                 onClick={() => {
+                  if (!checkIfUserIsLoggedIn()) {
+                  navigate("/login")
+                  return;
+                  }
                   addToCart(product);
                   // toast.success('Added to cart!');
                 }}

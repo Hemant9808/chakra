@@ -37,7 +37,7 @@ export const useAuthMiddleware = () => {
 };
 
 // Function to check if user is logged in
-const checkIfUserIsLoggedIn = () => {
+export const checkIfUserIsLoggedIn = () => {
   const token = localStorage.getItem("auth-storage")
       ? JSON.parse(localStorage.getItem("auth-storage")).state.token
       : null; // Replace with your actual auth token logic

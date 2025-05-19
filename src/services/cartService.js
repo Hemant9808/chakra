@@ -1,12 +1,18 @@
 import axios from 'axios';
 import axiosInstance from '../axios';
-
+import { checkIfUserIsLoggedIn } from '../middleware/middleware';
+import { useNavigate } from "react-router-dom";
 const API_URL = '/cart'; // Update with your actual API URL
 
 const cartService = {
   // Get user's cart
   getCart: async () => {
     try {
+      if(!checkIfUserIsLoggedIn){
+        redirect("/login")
+        return;
+      }
+
       const response = await axiosInstance.get(`${API_URL}/getUserCart  `, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
@@ -20,7 +26,20 @@ const cartService = {
 
   // Add item to cart
   addToCart: async (productId, quantity, price) => {
+    console.log("fasgs")
+    // console.log(checkIfUserIsLoggedIn())
     try {
+      if (!checkIfUserIsLoggedIn()) {
+        throw new Error("User not logged in");
+      }
+
+      // if(!checkIfUserIsLoggedIn()){
+      //   const navigate = useNavigate();
+      //   console.log(checkIfUserIsLoggedIn())
+      //   // redirect("/login")
+      //   navigate("/login");
+      //   return;
+      // }
       const response = await axiosInstance.post(
         `${API_URL}/addToCart`,
         { productId, quantity, price },
