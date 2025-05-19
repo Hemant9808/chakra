@@ -25,10 +25,13 @@ const Header = () => {
 
   const navLinks = [
     { path: "/", label: "Home" },
+    { path: "/shop", label: "Shop" },
     { path: "/quiz", label: "Wellness Test" },
+   
     { path: "/contact", label: "Contact" },
     { path: "/about", label: "About" },
     { path: "/blogs", label: "Blogs" },
+   
   ];
 
   // Close sidebar on outside click

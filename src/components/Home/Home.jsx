@@ -8,6 +8,7 @@ import OfficeMap from './HomeComponents/OfficeMap'
 import HeroSlider from './HomeComponents/ProductCarousel'
 import PromoBanner from "./HomeComponents/PromoBanner";
 import Hero from "./HomeComponents/Hero";
+import MarqueeBanner from "../Shop/ShopComponents/MarqueeBanner";
 
 function Home(){
     return (

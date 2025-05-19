@@ -1,7 +1,7 @@
 import axios from 'axios';
 import axiosInstance from '../axios';
 
-const API_URL = 'http://localhost:4000/payment'; // Update with your actual API URL
+const API_URL = '/payment'; // Update with your actual API URL
 
 const paymentService = {
   // Get Razorpay key

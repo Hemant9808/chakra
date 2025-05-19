@@ -1,7 +1,7 @@
 import axios from 'axios';
 import axiosInstance from '../axios';
 
-const API_URL = 'http://localhost:4000/cart'; // Update with your actual API URL
+const API_URL = '/cart'; // Update with your actual API URL
 
 const cartService = {
   // Get user's cart
