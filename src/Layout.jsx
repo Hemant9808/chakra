@@ -14,7 +14,7 @@ function Layout() {
       <div className="flex-1 flex flex-col">
         <Outlet />
       </div>
-      {/* {!hideFab && <FabButton />} */}
+      {!hideFab && <FabButton />}
      {!hideFab && <Footer />}
     </div>
   )
