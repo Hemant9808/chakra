@@ -21,6 +21,7 @@ import Checkout from './components/Checkout/Checkout';
 import Gallery from './components/Gallery/Gallery';
 import BlogSection from './components/Blogs/BlogSection';
 import BlogDetail from './components/Blogs/BlogDetail';
+import ChatPage from './pages/ChatPage';
 
 
 function AppRoutes() {
@@ -68,6 +69,7 @@ function AppRoutes() {
           />
           <Route path="/orders" element={<Orders />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="chat" element={<ChatPage />} />
         </Route>
       </Routes>
     </>
