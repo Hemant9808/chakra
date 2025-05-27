@@ -19,11 +19,11 @@ const PromoBanner = () => {
           transition={{ delay: 0.2, duration: 0.7 }}
           className="sm:w-1/2 w-full order-2 sm:order-1"
         >
-          <img
+          {/* <img
             src="https://cdn.pixabay.com/photo/2023/11/10/16/36/shilajit-products-8379708_1280.jpg"
             alt="Wellvas Nutrition"
             className="w-full p-7 h-full object-cover"
-          />
+          /> */}
         </motion.div>
 
         {/* Text Section */}
