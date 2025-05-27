@@ -6,7 +6,6 @@ const UserProfile = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false); // Controls profile visibility
   const [activeTab, setActiveTab] = useState("profile");
 
-  // Dummy user data
   const user = {
     name: "Devashish",
     email: "devashish@example.com",

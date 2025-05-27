@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../Store/useAuthStore";
-import { toast } from "react-hot-toast"; // Add toast for notifications
+import { toast } from "react-hot-toast";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
 
-  // Form state
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -45,7 +45,7 @@ const error = useAuthStore((state) => state.error);
         await login(formData.email, formData.password);
         toast.success("Login successful!");
       } else {
-        // Validate all required fields for signup
+  
         const requiredFields = [
           "firstName",
           "lastName",

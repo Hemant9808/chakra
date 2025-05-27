@@ -52,7 +52,7 @@ const Checkout = () => {
       const order = await paymentService.createPaymentOrder(totalAmount);
       console.log("razorpay order", order)
       
-      // Create order on backend
+      
       const orderResponse = await orderService.createOrder({
         items: cartItems,
         totalPrice: totalAmount,
@@ -97,14 +97,13 @@ const Checkout = () => {
       };
       console.log("options", options)
        const razor = new window.Razorpay(options)
-      // console.log("response kfjsnf",response.object);
+      
       
       razor.open()
 
       
     } catch (error) {
       console.error("error", error.message) 
-      // toast.error(error.message || 'Payment failed');
     } finally {
       setLoading(false);
     }

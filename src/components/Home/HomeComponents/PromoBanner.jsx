@@ -1,62 +1,60 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const PromoBanner = () => {
-  return (
-    <div className="flex justify-center items-center py-10 px-4 bg-gradient-to-b from-white to-gray-50">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="flex flex-col sm:flex-row bg-black text-white rounded-2xl max-w-7xl w-full overflow-hidden shadow-xl"
-      >
-        {/* Image Section */}
-        <motion.div
-          initial={{ x: 40, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.7 }}
-          className="sm:w-1/2 w-full order-2 sm:order-1"
-        >
-          {/* <img
-            src="https://cdn.pixabay.com/photo/2023/11/10/16/36/shilajit-products-8379708_1280.jpg"
-            alt="Wellvas Nutrition"
-            className="w-full p-7 h-full object-cover"
-          /> */}
-        </motion.div>
+const slides = [
+  {
+    id: 1,
+    image: "/ResourseImages/1.png",
+    button: "View Products",
+  },
+  {
+    id: 2,
+    image: "/ResourseImages/2.png",
+    button: "View Products",
+  },
+  {
+    id: 3,
+    image: "/ResourseImages/3.png",
+    button: "View Products",
+  },
+];
 
-        {/* Text Section */}
-        <motion.div
-          initial={{ x: -40, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.7 }}
-          className="sm:w-1/2 w-full p-8 order-1 sm:order-2 flex flex-col justify-center"
-        >
-          <h2 className="text-3xl font-extrabold leading-tight text-[#fbe14b]">
-            Fuel Your Day with Ayurveda-Powered Wellness
-          </h2>
-          <p className="mt-4 text-lg text-gray-200">
-            Packed with clinically-backed ingredients, Wellvas brings you India’s smartest blend of ancient adaptogens and modern nutrition. Engineered for energy, gut health, and performance.
-          </p>
-          <ul className="mt-6 space-y-3 text-sm text-gray-300">
-            <li><strong>24g</strong> Ayurvedic Protein Complex</li>
-            <li><strong>6B CFU</strong> Gut-friendly Probiotics</li>
-            <li><strong>28</strong> Essential Vitamins & Minerals</li>
-          </ul>
-          <Link to="/shop">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="mt-8 px-6 py-3 bg-yellow-400 text-black font-semibold rounded-md hover:bg-yellow-300"
-            >
-              Explore Now
-            </motion.button>
-          </Link>
-        </motion.div>
-      </motion.div>
+export default function PromoBanner() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative w-full max-w-7xl mx-auto h-[220px] md:h-[400px] mt-6 md:mt-16 px-2 ">
+      <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-lg">
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === current ? "opacity-100 z-20" : "opacity-0 z-10"
+            }`}
+          >
+            <img
+              src={slide.image}
+              alt={`slide-${slide.id}`}
+              className=" h-full object-cover w-full max-w-7xl rounded-2xl"
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-end justify-center pb-4 md:pb-6 px-4 text-white rounded-2xl">
+               <Link
+               to="/shop"
+              className="bg-white text-black px-5 py-2 rounded-full text-sm md:text-base font-semibold hover:bg-gray-200 transition inline-block"
+              >
+             {slide.button}
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default PromoBanner;
+}

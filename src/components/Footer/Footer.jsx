@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaFacebook, FaPhone, FaEnvelope, FaCheckCircle } from "react-icons/fa";
 
 const Footer = () => {
@@ -10,8 +11,18 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-3">Products</h3>
             <ul className="text-sm space-y-2">
-              {["Biozyme Performance Whey", "Raw Whey Protein", "Super Gainer XXL", "Creatine", "Protein Bars"].map((item, index) => (
-                <li key={index} className="hover:text-yellow-500 cursor-pointer">{item}</li>
+              {[
+                { name: "Biozyme Performance Whey", path: "/products/biozyme-performance-whey" },
+                { name: "Raw Whey Protein", path: "/products/raw-whey-protein" },
+                { name: "Super Gainer XXL", path: "/products/super-gainer-xxl" },
+                { name: "Creatine", path: "/products/creatine" },
+                { name: "Protein Bars", path: "/products/protein-bars" },
+              ].map((item, index) => (
+                <li key={index}>
+                  <Link to={item.path} className="hover:text-yellow-500 cursor-pointer">
+                    {item.name}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
@@ -20,8 +31,18 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-3">Categories</h3>
             <ul className="text-sm space-y-2">
-              {["Proteins", "Gainers", "Pre/Post Workout", "Fat Loss", "Fitness Accessories"].map((item, index) => (
-                <li key={index} className="hover:text-yellow-500 cursor-pointer">{item}</li>
+              {[
+                { name: "Proteins", path: "/category/proteins" },
+                { name: "Gainers", path: "/category/gainers" },
+                { name: "Pre/Post Workout", path: "/category/pre-post-workout" },
+                { name: "Fat Loss", path: "/category/fat-loss" },
+                { name: "Fitness Accessories", path: "/category/fitness-accessories" },
+              ].map((item, index) => (
+                <li key={index}>
+                  <Link to={item.path} className="hover:text-yellow-500 cursor-pointer">
+                    {item.name}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
@@ -30,8 +51,19 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-3">Useful Links</h3>
             <ul className="text-sm space-y-2">
-              {["About Us", "FAQs", "Blog", "T & C", "Privacy Policy"].map((item, index) => (
-                <li key={index} className="hover:text-yellow-500 cursor-pointer">{item}</li>
+              {[
+                { name: "About Us", path: "/about-us" },
+                { name: "FAQs", path: "/faqs" },
+                { name: "Blog", path: "/blog" },
+                { name: "T & C", path: "/terms-and-conditions" },
+                { name: "Privacy Policy", path: "/privacy-policy" },
+                { name: "Refund Policy", path: "/refund-policy" },
+              ].map((item, index) => (
+                <li key={index}>
+                  <Link to={item.path} className="hover:text-yellow-500 cursor-pointer">
+                    {item.name}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
@@ -47,7 +79,7 @@ const Footer = () => {
               <FaPhone /> <span>+91 8271442413</span>
             </div>
             <div className="mt-2 text-sm flex items-center space-x-2">
-              <FaEnvelope /> <span>info@Charakwellness.com</span>
+              <FaEnvelope /> <span>support@wellvas.com</span>
             </div>
             <div className="mt-4 flex space-x-3">
               {[FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaFacebook].map((Icon, index) => (
