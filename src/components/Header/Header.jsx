@@ -14,7 +14,9 @@ const Header = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { cartItems, getTotalItems, getTotalPrice } = useCartStore();
-  const token = localStorage.getItem("authToken");
+  const   userStorage = localStorage.getItem("auth-storage");
+  const token = JSON.parse(userStorage).state.token
+  console.log("token",token);
   
   const authUser = useAuthStore(state => state.user);
   const authLogout = useAuthStore(state => state.logout);

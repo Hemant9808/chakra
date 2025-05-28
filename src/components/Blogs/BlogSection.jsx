@@ -29,7 +29,7 @@ const BlogSection = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:4000/product/upload-image", {
+      const response = await fetch("https://wellvas-backend.onrender.com/product/upload-image", {
         method: "POST",
         body: formData,
       });

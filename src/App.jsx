@@ -22,6 +22,7 @@ import Gallery from './components/Gallery/Gallery';
 import BlogSection from './components/Blogs/BlogSection';
 import BlogDetail from './components/Blogs/BlogDetail';
 import ChatPage from './pages/ChatPage';
+import OrderInfoPage from './components/OrdersInfo/OrderInfoPage';
 
 
 function AppRoutes() {
@@ -67,7 +68,7 @@ function AppRoutes() {
               // </ProtectedRoute>
             }
           />
-          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders" element={<OrderInfoPage/>} />
           <Route path="/profile" element={<Profile />} />
           <Route path="chat" element={<ChatPage />} />
         </Route>
