@@ -9,23 +9,26 @@ import HeroSlider from './HomeComponents/ProductCarousel'
 import PromoBanner from "./HomeComponents/PromoBanner";
 import Hero from "./HomeComponents/Hero";
 import MarqueeBanner from "../Shop/ShopComponents/MarqueeBanner";
+import WhyWellvas from "./HomeComponents/WhyWellvas";
+import Testimonials from "./HomeComponents/Testimonials.jsx";
+import BlogHighlights from "./HomeComponents/BlogPreview.jsx";
+import FeaturedProduct from "./HomeComponents/FeaturedProduct.jsx";
 
 function Home(){
     return (
         <div className="">
+          
         <MarqueeBanner />
         <PromoBanner />
-        
-    
         {/* <HeroSection /> */}
         {/* <Hero/> */}
-       
-        <HeroSlider />
-       
-        <VideoSlider />
         <ProductCarousel />
+        <VideoSlider />
         <ProductSlider />
-        
+        <Testimonials />
+        <FeaturedProduct />
+        <BlogHighlights />
+        <WhyWellvas />
         <LoudAndProud />
         {/* <OfficeMap /> */}
         

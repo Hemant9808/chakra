@@ -35,7 +35,7 @@ const blogPosts = [
 const BlogSection = () => {
   return (
     <section className="bg-gray-50 py-10">
-   
+   d
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
           Our Latest Posts

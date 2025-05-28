@@ -6,10 +6,10 @@ const LoudAndProud = () => {
   const isInView = useInView(ref, { triggerOnce: true, threshold: 0.2 });
 
   const articles = [
-    { logo: "Outlook MONEY", text: "Takes the first step to normalize this taboo topic in society." },
-    { logo: "Live Mint", text: "A brand dedicated to offering effective and stigma-free solutions." },
-    { logo: "YOURSTORY", text: "Bold Care has become the go-to solution for men!" },
-    { logo: "Inc42", text: "Bold Care is taking Bold Care of Men's Sexual Health and Wellness" },
+    { logo: "Outlook MONEY", text:  "Wellvas is taking the lead in wellness by addressing health with honesty and innovation." },
+    { logo: "Live Mint", text: "A refreshing Ayurvedic brand with a modern touch — empowering holistic wellness."},
+    { logo: "YOURSTORY", text: "A fast-growing brand redefining preventive care for the new generation." },
+    { logo: "Inc42", text: "Wellvas is blending traditional roots with scientific thinking — the future of health." },
   ];
 
   return (

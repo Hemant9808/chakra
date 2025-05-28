@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import cartService from "../services/cartService";
 
-// Load cart items from localStorage on store creation
 const loadCartItems = () => {
   try {
     const savedCart = localStorage.getItem('cartItems');
@@ -18,7 +17,6 @@ export const useCartStore = create((set) => ({
   loading: false,
   error: null,
 
-  // Fetch cart from backend
   fetchCart: async () => {
     try {
       set({ loading: true, error: null });
@@ -32,7 +30,6 @@ export const useCartStore = create((set) => ({
     }
   },
 
-  // Add item to cart
   addToCart: async (product) => {
     try {
       set({ loading: true, error: null });
@@ -47,7 +44,6 @@ export const useCartStore = create((set) => ({
     }
   },
 
-  // Remove item from cart
   removeItem: async (productId) => {
     try {
       set({ loading: true, error: null });
@@ -62,7 +58,6 @@ export const useCartStore = create((set) => ({
     }
   },
 
-  // Update item quantity
   updateQuantity: async (productId, quantity) => {
     try {
       set({ loading: true, error: null });
@@ -75,8 +70,6 @@ export const useCartStore = create((set) => ({
       toast.error(error.message);
     }
   },
-
-  // Clear entire cart
   clearCart: async () => {
     try {
       set({ loading: true, error: null });
@@ -90,7 +83,6 @@ export const useCartStore = create((set) => ({
     }
   },
 
-  // Calculate total items
   getTotalItems: () => {
     return useCartStore.getState().cartItems.reduce(
       (total, item) => total + item.quantity,
@@ -98,7 +90,6 @@ export const useCartStore = create((set) => ({
     );
   },
 
-  // Calculate total price
   getTotalPrice: () => {
     return useCartStore.getState().cartItems.reduce(
       (total, item) => total + item.price * item.quantity,
