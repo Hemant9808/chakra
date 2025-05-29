@@ -15,7 +15,7 @@ const Header = () => {
   const { user, logout } = useAuth();
   const { cartItems, getTotalItems, getTotalPrice } = useCartStore();
   const   userStorage = localStorage.getItem("auth-storage");
-  const token = JSON.parse(userStorage).state.token
+  const token = JSON.parse(userStorage)?.state?.token
   console.log("token",token);
   
   const authUser = useAuthStore(state => state.user);
