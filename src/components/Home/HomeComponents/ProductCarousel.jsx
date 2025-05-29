@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../../../Store/useCartStore";
 import { useNavigate } from "react-router-dom";
+import '../../../Styles/global.css'
 
 const categories = [
   "Men's Wellness",
@@ -181,6 +182,24 @@ const products = {
     whyChoose: ["High strength formulation", "Ayurvedic blend"],
     howToUse: ["Take 1 capsule twice daily after meals"],
     reviews: ["Effective and natural", "Really helped with fatigue"]
+  },
+  {
+    id: 9,
+    name: "Ashwazen Max",
+    price: 999,
+    oldPrice: 1299,
+    rating: 4.6,
+    reviews: 110,
+    benefits: "Strength, Stamina & Vitality",
+    ingredients: "Ashwagandha, Safed Musli, Shilajit",
+    image: "/ResourseImages/AshwaMax.png",
+    tagline: "Daily Energy and Stress Support",
+    description: "Combines adaptogens and herbal powerhouses to reduce fatigue and boost performance.",
+    brand: "Wellvas",
+    savings: "Save ₹300",
+    whyChoose: ["High strength formulation", "Ayurvedic blend"],
+    howToUse: ["Take 1 capsule twice daily after meals"],
+    reviews: ["Effective and natural", "Really helped with fatigue"]
   }
 ],
 
@@ -267,38 +286,46 @@ const ProductCarousel = () => {
   initial={{ opacity: 0, x: 50 }}
   animate={{ opacity: 1, x: 0 }}
   transition={{ duration: 0.5 }}
-  className={`w-full px-10 flex justify-center gap-6`}
+  className="w-full pl-4 sm:px-10 flex gap-4 sm:justify-center overflow-x-auto no-scrollbar scroll-smooth"
 >
-  {visibleProducts.map((product) => (
-    <div
-      key={product.id}
-      className="bg-white shadow-md p-4 rounded-xl w-full max-w-sm flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
-      onClick={() => navigate(`/product/${product.id}`, { state: { product } })}
-    >
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-40 h-40 object-contain rounded-md"
-      />
-      <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
-      <p className="text-gray-500 text-sm text-center">{product.benefits}</p>
-      <p className="text-gray-700 text-xs mb-2">With: {product.ingredients}</p>
-      <p className="text-green-600 font-bold text-lg mt-2">
-        ₹{product.price}{" "}
-        <span className="line-through text-gray-500 text-sm">₹{product.oldPrice}</span>
-      </p>
-      <button
-        className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
-        onClick={(e) => {
-          e.stopPropagation();
-          addToCart(product);
-        }}
+  <div
+    className={`flex gap-4 px-6 sm:px-10 ${
+      currentProducts.length <= 3 ? "justify-center" : "justify-start"
+    }`}
+  >
+    {currentProducts.map((product) => (
+      <div
+        key={product.id}
+        className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
+        onClick={() => navigate(`/product/${product.id}`, { state: { product } })}
       >
-        Add to Cart
-      </button>
-    </div>
-  ))}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-40 h-40 object-contain rounded-md"
+        />
+        <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
+        <p className="text-gray-500 text-sm text-center">{product.benefits}</p>
+        <p className="text-gray-700 text-xs mb-2">With: {product.ingredients}</p>
+        <p className="text-green-600 font-bold text-lg mt-2">
+          ₹{product.price}{" "}
+          <span className="line-through text-gray-500 text-sm">₹{product.oldPrice}</span>
+        </p>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart(product);
+          }}
+        >
+          Add to Cart
+        </button>
+      </div>
+    ))}
+  </div>
 </motion.div>
+
+
 
 
 

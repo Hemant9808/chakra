@@ -7,6 +7,9 @@ import { useCartStore } from "../../Store/useCartStore";
 import useAuthStore from '../../Store/useAuthStore';
 import { toast } from 'react-hot-toast';
 import { clearLocalStorage } from "../../middleware/middleware";
+import logo from "../../../public/ResourseImages/logo2.jpg"; // Adjust path as needed
+// import { FaLeaf } from "react-icons/fa";
+// import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,11 +69,15 @@ const Header = () => {
       <nav className="px-6 lg:px-10 py-4 flex justify-between items-center">
         <img src=""></img>
         <Link to="/" className="flex items-center space-x-2">
-          {/* Show icon only on small screens, full name on large */}
+          {/* Show icon only on small screens */}
           <FaLeaf className="text-[#e5dac3] text-2xl lg:hidden" />
-          <span className="text-2xl font-semibold tracking-wide text-[#e5dac3] hidden lg:block">
-            Wellvas
-          </span>
+          
+          {/* Show full logo on large screens */}
+          <img
+            src={logo}
+            alt="Wellvas Logo"
+            className="hidden lg:block h-10 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}

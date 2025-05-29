@@ -13,8 +13,20 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0c0c0c] text-white pt-12 pb-8">
-      <div className="max-w-7xl mx-auto px-5">
+    <footer
+      className="relative bg-[#0c0c0c] text-white pt-12 pb-8"
+      style={{
+        backgroundImage: `url('/ResourseImages/bg.png')`, // Replace with your image path
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black opacity-60 z-0" />
+
+      {/* Content wrapper */}
+      <div className="relative z-10 max-w-7xl mx-auto px-5">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Products Section */}
           <div>
@@ -44,6 +56,7 @@ const Footer = () => {
                 { name: "Immunity Boosters", path: "/category/immunity" },
                 { name: "Liver Health", path: "/category/liver-health" },
                 { name: "Daily Essentials", path: "/category/daily-essentials" },
+                { name: "Anti Addiction", path: "/category/anti-addiction" },
               ].map((item, index) => (
                 <li key={index}>
                   <Link to={item.path} className="hover:text-yellow-400 transition">
@@ -111,15 +124,15 @@ const Footer = () => {
             <FaCheckCircle className="text-green-500" />
             <span>100% Safe & Secure Payments</span>
           </div>
-          <div className="flex space-x-2">
-            <img src="https://via.placeholder.com/40" alt="Visa" />
-            <img src="https://via.placeholder.com/40" alt="MasterCard" />
-            <img src="https://via.placeholder.com/40" alt="UPI" />
+          <div className="flex space-x-4">
+            <img src="/ResourseImages/visa.png" alt="Visa" className="h-15 w-auto" />
+            <img src="/ResourseImages/mastercard.png" alt="MasterCard" className="h-15 w-auto" />
+            <img src="/ResourseImages/upi.png" alt="UPI" className="h-15 w-auto" />
           </div>
         </div>
 
         {/* Disclaimer */}
-        <p className="text-xs text-center text-gray-500 mt-6">
+        <p className="text-xs text-center text-gray-400 mt-6">
           All Wellvas products are manufactured at FSSAI-approved facilities. Products are not intended to diagnose, treat, cure, or prevent any disease. Consult a physician before use.
         </p>
       </div>

@@ -11,16 +11,16 @@ const ProductBanner = () => {
             <br /> your wellness-related questions.
           </h2>
           <p className="text-lg text-brown mb-6">Feel Free To Talk.</p>
-          <div className="bg-brown text-white py-2 px-6 inline-block text-lg font-medium rounded-md">
-            Dr. [Your Expert Name]
+          <div className="bg-brown text-black py-2 px-6 inline-block text-lg font-medium rounded-md">
+            Dr. Ravi Ranjan
           </div>
-          <p className="text-brown mt-2">Senior Ayurvedic Doctor, CharakWellness</p>
+          <p className="text-brown mt-2">Senior Ayurvedic Doctor, Wellvas</p>
         </div>
 
         {/* Image Section */}
         <div className="md:w-1/2 flex justify-center mt-6 md:mt-0">
           <img
-            src="https://static.vecteezy.com/system/resources/previews/050/817/819/non_2x/happy-smiling-male-doctor-with-hand-present-something-empty-space-standing-isolate-on-transparent-background-png.png"
+            src="/ResourseImages/doctor.png"
             alt="CharakWellness Product"
             className="max-w-sm w-full rounded-lg shadow-lg"
           />

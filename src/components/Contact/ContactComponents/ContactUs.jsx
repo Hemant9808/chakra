@@ -81,9 +81,9 @@ export default function ContactUs() {
         </button>
       </form>
       <div className="mt-8 text-center text-gray-600">
-        <p><strong>Address:</strong> CharakWellness HQ, New Delhi</p>
-        <p><strong>Email:</strong> support@charakwellness.com</p>
-        <p><strong>Phone:</strong> +91-9000000000</p>
+        <p><strong>Address:</strong> Wellvas HQ, Malviya Nagar, New Delhi</p>
+        <p><strong>Email:</strong> support@wellvas.com</p>
+        <p><strong>Phone:</strong> +91-8271442413</p>
         <div className="flex justify-center space-x-4 mt-4">
           <a href="#" className="text-xl"><FaFacebook /></a>
           <a href="#" className="text-xl"><FaInstagram /></a>
