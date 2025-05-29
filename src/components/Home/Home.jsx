@@ -13,6 +13,7 @@ import WhyWellvas from "./HomeComponents/WhyWellvas";
 import Testimonials from "./HomeComponents/Testimonials.jsx";
 import BlogHighlights from "./HomeComponents/BlogPreview.jsx";
 import FeaturedProduct from "./HomeComponents/FeaturedProduct.jsx";
+import FrequentlyBoughtTogether from "./HomeComponents/FrequentlyBoughtTogether.jsx";
 
 function Home(){
     return (
@@ -24,7 +25,8 @@ function Home(){
         {/* <Hero/> */}
         <ProductCarousel />
         <VideoSlider />
-        <ProductSlider />
+        {/* <ProductSlider /> */}
+        <FrequentlyBoughtTogether />
         <Testimonials />
         <FeaturedProduct />
         <BlogHighlights />

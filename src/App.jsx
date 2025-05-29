@@ -25,6 +25,7 @@ import ChatPage from './pages/ChatPage';
 import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 import RefundPolicy from './components/refund/RefundPolicy';
 import TermsAndConditions from './components/T&C/TermsAndConditions';
+import Faqs from './components/FaQs/Faqs';
 
 
 function AppRoutes() {
@@ -49,6 +50,7 @@ function AppRoutes() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/faqs" element={<Faqs />} />
           <Route
             path="profile"
             element={

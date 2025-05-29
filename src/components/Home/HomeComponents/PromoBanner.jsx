@@ -5,17 +5,17 @@ const slides = [
   {
     id: 1,
     image: "/ResourseImages/1.png",
-    button: "View Products",
+    button: "Shop Now",
   },
   {
     id: 2,
     image: "/ResourseImages/2.png",
-    button: "View Products",
+    button:"Shop Now",
   },
   {
     id: 3,
     image: "/ResourseImages/3.png",
-    button: "View Products",
+    button: "Shop Now",
   },
 ];
 

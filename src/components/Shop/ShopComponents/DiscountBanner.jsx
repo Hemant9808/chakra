@@ -17,7 +17,7 @@ const DiscountBanner = () => {
           </h2>
 
           <p className="mt-2 text-sm sm:text-base text-gray-300">
-            Use code <span className="font-semibold text-white bg-yellow-400 text-black px-2 py-1 rounded-md">SUKH15</span> at checkout. <br />
+            Use code <span className="font-semibold text-white bg-yellow-400 text-black px-2 py-1 rounded-md">WELL15</span> at checkout. <br />
             Applicable on orders above ₹1500.
           </p>
 
