@@ -65,7 +65,14 @@ const Header = () => {
   };
 
   return (
-    <header className="shadow sticky top-0 z-50 bg-black text-white">
+    <header
+  className="shadow sticky top-0 z-50 text-white bg-cover bg-center"
+  style={{
+    backgroundImage: "url('/ResourseImages/bg.png')", // your placeholder path
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundBlendMode: "darken",
+  }}
+>
       <nav className="px-6 lg:px-10 py-4 flex justify-between items-center">
         <img src=""></img>
         <Link to="/" className="flex items-center space-x-2">
