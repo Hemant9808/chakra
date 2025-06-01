@@ -105,12 +105,12 @@ const Header = () => {
         {/* Icons and Auth - Desktop */}
         <div className="hidden lg:flex items-center space-x-6">
           {/* Profile */}
-          <div className="cursor-pointer" onClick={() => navigate("/profile")}>
+        {token &&  <div className="cursor-pointer" onClick={() => navigate("/profile")}>
             <FaUser className="text-xl hover:text-gray-400" />
-          </div>
+          </div>}
 
           {/* Cart */}
-          <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
+         {token && <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
             <FaShoppingCart className="text-xl hover:text-gray-400" />
             {totalCartItems > 0 && (
               <motion.span
@@ -123,7 +123,7 @@ const Header = () => {
                 {totalCartItems}
               </motion.span>
             )}
-          </div>
+          </div>}
 
           <span className="text-sm font-semibold">₹{totalPrice}</span>
 
@@ -168,7 +168,7 @@ const Header = () => {
         {/* Mobile Menu: Cart & User always visible */}
         <div className="flex items-center space-x-4 lg:hidden">
           {/* Cart */}
-          <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
+        {token &&  <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
             <FaShoppingCart className="text-xl hover:text-gray-400" />
             {totalCartItems > 0 && (
               <motion.span
@@ -181,12 +181,12 @@ const Header = () => {
                 {totalCartItems}
               </motion.span>
             )}
-          </div>
+          </div>}
 
           {/* Profile */}
-          <div className="cursor-pointer" onClick={() => navigate("/profile")}>
+        {token &&  <div className="cursor-pointer" onClick={() => navigate("/profile")}>
             <FaUser className="text-xl hover:text-gray-400" />
-          </div>
+          </div>}
 
           {/* Mobile Menu Toggle */}
           <button onClick={() => setIsOpen(!isOpen)} className="text-2xl">

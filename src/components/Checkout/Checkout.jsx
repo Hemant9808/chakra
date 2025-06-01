@@ -36,6 +36,27 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const renderProductInfo = (item) => {
+    // Check if productId exists and has the required properties
+    if (item.productId && item.productId._id) {
+      return {
+        id: item.productId._id,
+        name: item.productId.name || 'Product Name Not Available',
+        image: item.productId.images?.[0]?.url || '/placeholder.png',
+        price: item.price || 0,
+        quantity: item.quantity || 1
+      };
+    }
+    // Fallback for items without productId
+    return {
+      id: item._id,
+      name: 'Product Name Not Available',
+      image: '/placeholder.png',
+      price: item.price || 0,
+      quantity: item.quantity || 1
+    };
+  };
+
   const handlePayment = async () => {
     try {
       setLoading(true);
@@ -73,23 +94,18 @@ const Checkout = () => {
         order_id: order.order.id,
         callback_url: "https://medimart-nayg.onrender.com/payment/paymentverification",
         prefill: {
-          name: "Hemant Kumar",
-          email: "hemant.kumar@example.com",
-          contact: "9304389008",
+          name: formData.name || "John Doe",
+          email: formData.email || "john.doe@example.com",
+          contact: formData.phone || "9876543210",
         },
         notes: {
-          address: "Razorpay Corporate Office",
-        },
-        prefill: {
-          name: "John Doe", // User's name
-          email: "john.doe@example.com", // User's email
-          contact: "9876543210",  // User's phone number
+          address: formData.address || "Razorpay Corporate Office",
         },
         theme: {
           color: "#121212",
         },
         method: {
-          upi: true, // This ensures UPI shows up
+          upi: true,
           card: true,
           netbanking: true,
           wallet: true,
@@ -104,6 +120,7 @@ const Checkout = () => {
       
     } catch (error) {
       console.error("error", error.message) 
+      toast.error("Payment initialization failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -164,12 +181,12 @@ const Checkout = () => {
               className="overflow-hidden px-6 pb-6"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="border px-4 py-2 rounded-md" />
-                <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} className="border px-4 py-2 rounded-md" />
-                <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="md:col-span-2 border px-4 py-2 rounded-md" />
-                <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className="border px-4 py-2 rounded-md" />
-                <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} className="border px-4 py-2 rounded-md" />
-                <input type="text" name="pincode" placeholder="Pincode" value={formData.pincode} onChange={handleChange} className="md:col-span-2 border px-4 py-2 rounded-md" />
+                <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
+                <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
+                <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="md:col-span-2 border px-4 py-2 rounded-md" required />
+                <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
+                <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
+                <input type="text" name="pincode" placeholder="Pincode" value={formData.pincode} onChange={handleChange} className="md:col-span-2 border px-4 py-2 rounded-md" required />
               </div>
             </motion.div>
           </div>
@@ -183,18 +200,21 @@ const Checkout = () => {
       {/* Right: Order Summary */}
       <div className="border border-gray-200 rounded-md p-6 shadow-sm space-y-6">
         <h3 className="font-semibold text-lg">Cart ({cartItems.length})</h3>
-        {cartItems.map((item) => (
-          <div key={item.productId._id} className="flex justify-between items-center text-sm">
-            <div className="flex items-center gap-4">
-              <img src={item.productId.images[0]?.url} alt={item.productId.name} className="w-16 h-16 object-cover rounded" />
-              <div>
-                <p>{item.productId.name}</p>
-                <p className="text-gray-500">Qty: {item.quantity}</p>
+        {cartItems.map((item) => {
+          const product = renderProductInfo(item);
+          return (
+            <div key={product.id} className="flex justify-between items-center text-sm">
+              <div className="flex items-center gap-4">
+                <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                <div>
+                  <p>{product.name}</p>
+                  <p className="text-gray-500">Qty: {product.quantity}</p>
+                </div>
               </div>
+              <p>₹{product.price * product.quantity}</p>
             </div>
-            <p>₹{item.price * item.quantity}</p>
-          </div>
-        ))}
+          );
+        })}
 
         <div>
           <input
@@ -228,7 +248,7 @@ const Checkout = () => {
         <button
           onClick={handlePayment}
           className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"
-          disabled={loading}
+          disabled={loading || !formData.name || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.state || !formData.pincode}
         >
           {loading ? 'Processing...' : 'Place Order'}
         </button>
