@@ -149,7 +149,7 @@ const ProductCarousel = () => {
           className="overflow-hidden"
         >
           <div
-            className={`flex gap-4 px-6 sm:px-10 ${
+            className={`flex gap-4 px-6 sm:px-10 overflow-scroll ${
               products.length <= 3 ? "justify-center" : "justify-start"
             }`}
           >
@@ -159,10 +159,11 @@ const ProductCarousel = () => {
                 <ProductSkeleton key={index} />
               ))
             ) : (
+              
               products.slice(currentIndex, currentIndex + 3).map((product) => (
                 <div
                   key={product._id}
-                  className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
+                  className="bg-white shadow-md p-4 rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
                   onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
                 >
                   <img
