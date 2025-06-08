@@ -10,10 +10,9 @@ import Login from './components/Login/Login';
 import Quiz from './components/Quiz/Quiz';
 import Cart from './components/Cart/Cart';
 
-import ProductDetails from './components/Home/HomeComponents/ProductDetails';
+// import ProductDetails from './components/Home/HomeComponents/ProductDetails';
 import ProfilePage from './components/UserProfile/ProfilePage';
 import Shop from './components/Shop/Shop';
-import ProductDetailsById from './components/Shop/ProductDetails';
 import { useAuthMiddleware } from './middleware/middleware';
 import Orders from './components/Orders/Orders';
 import Profile from './components/Profile/Profile';
@@ -27,6 +26,7 @@ import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 import RefundPolicy from './components/refund/RefundPolicy';
 import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
+import ProductDetailsById from './components/Shop/productDetials';
 
 
 function AppRoutes() {
@@ -44,7 +44,7 @@ function AppRoutes() {
           <Route path="quiz" element={<Quiz />} />
           <Route path="blogs" element={<BlogSection />} />
           <Route path="blogs/:id" element={<BlogDetail />} />
-          <Route path="product/:id" element={<ProductDetails />} />
+          {/* <Route path="product/:id" element={<ProductDetails />} /> */}
           <Route path="ProductDetailsById/:id" element={<ProductDetailsById />} />
           <Route path="shop" element={<Shop />} />
           <Route path="gallery" element={<Gallery />} />

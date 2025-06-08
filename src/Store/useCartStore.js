@@ -32,6 +32,7 @@ export const useCartStore = create((set) => ({
 
   addToCart: async (product) => {
     try {
+      console.log("product",product)
       set({ loading: true, error: null });
       const cart = await cartService.addToCart(product._id, 1, product.price);
       const items = cart.items || [];

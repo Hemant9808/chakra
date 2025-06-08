@@ -218,7 +218,7 @@ const Header = () => {
             ))}
 
             {token ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col gap-4  items-center ">
                 <div className="relative group">
                   <button className="flex items-center space-x-1 text-gray-700 hover:text-green-600">
                     <span>Hi, {authUser?.firstName || 'User'}</span>
@@ -243,12 +243,19 @@ const Header = () => {
                       Logout
                     </button>
                   </div>
+                
                 </div>
+                 <button
+                    onClick={handleLogout}
+                    className="block w-25 bg-red-200 rounded-lg mt-3 text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    Logout
+                  </button>
               </div>
             ) : (
               <Link
                 to="/login"
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                className="bg-green-600  text-white px-4 py-2 rounded-md hover:bg-green-700"
               >
                 Login
               </Link>
