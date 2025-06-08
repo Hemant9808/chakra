@@ -92,7 +92,7 @@ const Checkout = () => {
         image:
           "https://avatars.githubusercontent.com/u/143936287?s=400&u=b0405682c50a0ca7f98e02b46db96e91520df3b5&v=4",
         order_id: order.order.id,
-        callback_url: "https://medimart-nayg.onrender.com/payment/paymentverification",
+        // callback_url: "https://medimart-nayg.onrender.com/payment/paymentverification",
         prefill: {
           name: formData.name || "John Doe",
           email: formData.email || "john.doe@example.com",
