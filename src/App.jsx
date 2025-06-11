@@ -27,6 +27,7 @@ import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 import RefundPolicy from './components/refund/RefundPolicy';
 import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
+import WellvasLandingPage from './components/Landing Page/WellvasLandingPage';
 
 
 function AppRoutes() {
@@ -52,6 +53,7 @@ function AppRoutes() {
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/faqs" element={<Faqs />} />
+          <Route path="/landingPage" element={<WellvasLandingPage />} />
           <Route
             path="profile"
             element={
