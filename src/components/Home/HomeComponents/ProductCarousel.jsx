@@ -1,245 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../../../Store/useCartStore";
 import { useNavigate } from "react-router-dom";
+import { productService } from "../../../services/productService";
+import { toast } from "react-hot-toast";
 import '../../../Styles/global.css'
 
-const categories = [
-  "Men's Wellness",
-  "Immunity Boosters",
-  "Liver Health",
-  "Daily Essentials",
-  "Anti Addiction",
-];
+const ProductSkeleton = () => (
+  <div className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center">
+    <div className="w-40 h-40 bg-gray-200 rounded-md animate-pulse" />
+    <div className="w-32 h-6 bg-gray-200 rounded mt-3 animate-pulse" />
+    <div className="w-24 h-4 bg-gray-200 rounded mt-2 animate-pulse" />
+    <div className="w-20 h-6 bg-gray-200 rounded mt-2 animate-pulse" />
+    <div className="w-full h-10 bg-gray-200 rounded-md mt-3 animate-pulse" />
+  </div>
+);
 
-const products = {
-  "Men's Wellness": [
-    {
-      id: 1,
-      name: "Evas Neo",
-      price: 699,
-      oldPrice: 899,
-      rating: 4.6,
-      reviews: 130,
-      benefits: "Stamina & Energy",
-      ingredients: "Ashwagandha, Safed Musli",
-      image: "/ResourseImages/EvasNeo.png",
-      tagline: "Boost vitality and energy",
-      description: "Evas Neo helps support male stamina and energy levels naturally.",
-      brand: "Wellvas",
-      savings: "Save ₹200",
-      whyChoose: ["Herbal formulation", "Trusted by experts"],
-      howToUse: ["Take 1 capsule daily"],
-      reviews: ["Very effective!", "Loved the results"]
-    },
-    {
-      id: 2,
-      name: "Evas Pro",
-      price: 999,
-      oldPrice: 1299,
-      rating: 4.7,
-      reviews: 160,
-      benefits: "Strength & Vitality",
-      ingredients: "Ashwagandha, Shilajit, Gokshura",
-      image: "/ResourseImages/EvasPro.png",
-      tagline: "Ultimate daily strength booster",
-      description: "Evas Pro supports strength and endurance with Ayurvedic ingredients.",
-      brand: "Wellvas",
-      savings: "Save ₹300",
-      whyChoose: ["High-quality herbs", "100% natural"],
-      howToUse: ["Take 1-2 capsules per day"],
-      reviews: ["Boosted my performance!", "Will repurchase."]
-    },
-    {
-      id: 3,
-      name: "Evas Max",
-      price: 1199,
-      oldPrice: 1499,
-      rating: 4.8,
-      reviews: 190,
-      benefits: "Performance Booster",
-      ingredients: "Safed Musli, Shilajit, Kaunch Beej",
-      image: "/ResourseImages/EvasMax.png",
-      tagline: "Power-packed support for men",
-      description: "Evas Max delivers intense energy and recovery for active lifestyles.",
-      brand: "Wellvas",
-      savings: "Save ₹300",
-      whyChoose: ["Premium herbs", "Trusted by athletes"],
-      howToUse: ["Use daily after meals"],
-      reviews: ["Amazing product!", "Highly recommended."]
-    },
-  ],
-  "Immunity Boosters": [
-    {
-      id: 4,
-      name: "Wellcore 360",
-      price: 499,
-      oldPrice: 699,
-      rating: 4.5,
-      reviews: 100,
-      benefits: "Complete Immune Support",
-      ingredients: "Vitamins, Minerals, Zinc",
-      image: "/ResourseImages/Wellcore360.png",
-      tagline: "All-in-one immunity booster",
-      description: "Wellcore 360 is a complete blend for daily immunity maintenance.",
-      brand: "Wellvas",
-      savings: "Save ₹200",
-      whyChoose: ["Daily essential", "Backed by research"],
-      howToUse: ["Take with breakfast"],
-      reviews: ["Great for immunity", "Very effective"]
-    },
-  ],
-  "Liver Health": [
-    {
-      id: 5,
-      name: "Evas Bolts",
-      price: 699,
-      oldPrice: 899,
-      rating: 4.6,
-      reviews: 85,
-      benefits: "Liver Detox & Rejuvenation",
-      ingredients: "Kalmegh, Bhui Amla, Kutki",
-      image: "/ResourseImages/EvasBolts.png",
-      tagline: "Cleanse your liver effectively",
-      description: "Evas Bolts support liver health and detox with herbal formulation.",
-      brand: "Wellvas",
-      savings: "Save ₹200",
-      whyChoose: ["FSSAI approved", "Chemical-free"],
-      howToUse: ["Take one tablet after meals"],
-      reviews: ["Worked for me", "Very happy"]
-    },
-  ],
-  "Daily Essentials": [
-  {
-    id: 6,
-    name: "Shilajit 10g",
-    price: 399,
-    oldPrice: 499,
-    rating: 4.7,
-    reviews: 70,
-    benefits: "Vitality Support",
-    ingredients: "Pure Himalayan Shilajit",
-    image: "/ResourseImages/Shilajit.png",
-    tagline: "Natural Vitality Boost",
-    description: "Supports energy, stamina, and immunity with authentic Shilajit.",
-    brand: "Wellvas",
-    savings: "Save ₹100",
-    whyChoose: ["Lab-tested purity", "Sourced from Himalayas"],
-    howToUse: ["Take a pea-sized amount with warm water"],
-    reviews: ["Felt more energetic", "Great quality product"]
-  },
-  {
-    id: 7,
-    name: "Shilajit 20g",
-    price: 699,
-    oldPrice: 899,
-    rating: 4.8,
-    reviews: 90,
-    benefits: "Enhanced Vitality & Stamina",
-    ingredients: "Pure Himalayan Shilajit",
-    image: "/ResourseImages/Shilajit.png",
-    tagline: "Double strength daily vitality",
-    description: "Premium Himalayan Shilajit in larger quantity for sustained wellness.",
-    brand: "Wellvas",
-    savings: "Save ₹200",
-    whyChoose: ["Authentic source", "Powerful adaptogen"],
-    howToUse: ["Take a pea-sized amount twice daily"],
-    reviews: ["Value for money", "Excellent quality"]
-  },
-  {
-    id: 8,
-    name: "Ashwazen Pro",
-    price: 849,
-    oldPrice: 1049,
-    rating: 4.5,
-    reviews: 85,
-    benefits: "Calm Energy & Stress Relief",
-    ingredients: "Ashwagandha, Ginseng",
-    image: "/ResourseImages/AshwaPro.png",
-    tagline: "Adaptogenic support for busy lives",
-    description: "Ashwazen Pro promotes balance, energy, and mental clarity.",
-    brand: "Wellvas",
-    savings: "Save ₹200",
-    whyChoose: ["Clinically backed", "Stress and energy support"],
-    howToUse: ["Take 1 capsule after meals"],
-    reviews: ["Noticeable calmness", "Improved focus"]
-  },
-  {
-    id: 9,
-    name: "Ashwazen Max",
-    price: 999,
-    oldPrice: 1299,
-    rating: 4.6,
-    reviews: 110,
-    benefits: "Strength, Stamina & Vitality",
-    ingredients: "Ashwagandha, Safed Musli, Shilajit",
-    image: "/ResourseImages/AshwaMax.png",
-    tagline: "Daily Energy and Stress Support",
-    description: "Combines adaptogens and herbal powerhouses to reduce fatigue and boost performance.",
-    brand: "Wellvas",
-    savings: "Save ₹300",
-    whyChoose: ["High strength formulation", "Ayurvedic blend"],
-    howToUse: ["Take 1 capsule twice daily after meals"],
-    reviews: ["Effective and natural", "Really helped with fatigue"]
-  },
-  {
-    id: 9,
-    name: "Ashwazen Max",
-    price: 999,
-    oldPrice: 1299,
-    rating: 4.6,
-    reviews: 110,
-    benefits: "Strength, Stamina & Vitality",
-    ingredients: "Ashwagandha, Safed Musli, Shilajit",
-    image: "/ResourseImages/AshwaMax.png",
-    tagline: "Daily Energy and Stress Support",
-    description: "Combines adaptogens and herbal powerhouses to reduce fatigue and boost performance.",
-    brand: "Wellvas",
-    savings: "Save ₹300",
-    whyChoose: ["High strength formulation", "Ayurvedic blend"],
-    howToUse: ["Take 1 capsule twice daily after meals"],
-    reviews: ["Effective and natural", "Really helped with fatigue"]
-  }
-],
-
-"Anti Addiction": [
-  {
-    id: 10,
-    name: "Anti Addiction Drops 30ml",
-    price: 599,
-    oldPrice: 699,
-    rating: 4.4,
-    reviews: 32,
-    benefits: "Helps reduce cravings & dependency",
-    ingredients: "Triphala, Brahmi, Guduchi",
-    image: "/ResourseImages/AntiAddiction.png",
-    tagline: "Naturally Fight Addictions",
-    description: "Formulated to help reduce dependency on harmful substances with Ayurvedic herbs.",
-    brand: "Wellvas",
-    savings: "Save ₹100",
-    whyChoose: ["Non-habit forming", "Herbal detox support"],
-    howToUse: ["Take 10 drops twice daily in water"],
-    reviews: ["Subtle but effective", "Definitely helped me cut back"]
-  }
-]
-};
+const CategorySkeleton = () => (
+  <div className="flex flex-wrap justify-center gap-4 mb-8">
+    {[1, 2, 3, 4, 5].map((index) => (
+      <div
+        key={index}
+        className="w-24 h-10 bg-gray-200 rounded-full animate-pulse"
+      />
+    ))}
+  </div>
+);
 
 const ProductCarousel = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Men's Wellness");
+  const [selectedCategory, setSelectedCategory] = useState("ALL PRODUCTS");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate();
 
-  const currentProducts = products[selectedCategory] || [];
-  const visibleProducts = currentProducts.slice(currentIndex, currentIndex + 3);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [productsData, categoriesData] = await Promise.all([
+        productService.getAllProducts(),
+        productService.getAllCategories()
+      ]);
+      
+      // Filter featured products
+      const featuredProducts = productsData.filter(product => product.isFeatured);
+      setProducts(featuredProducts);
+      setCategories(categoriesData);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory === "ALL PRODUCTS") {
+      fetchData()
+      return;
+    }
+    
+    const fetchProductsByCategory = async () => {
+      try {
+        setLoading(true);
+        const categoryProducts = await productService.getProductsByCategory(selectedCategory);
+        // Filter featured products
+        const featuredProducts = categoryProducts.filter(product => product.isFeatured);
+        setProducts(featuredProducts);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductsByCategory();
+  }, [selectedCategory]);
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : Math.max(currentProducts.length - 3, 0)));
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : Math.max(products.length - 3, 0)));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev < currentProducts.length - 3 ? prev + 1 : 0));
+    setCurrentIndex((prev) => (prev < products.length - 3 ? prev + 1 : 0));
   };
 
   return (
@@ -248,90 +97,103 @@ const ProductCarousel = () => {
         <h2 className="text-3xl sm:text-4xl font-bold text-[#355425] mb-4">
           Explore Our Wellness Essentials
         </h2>
-        <p className="text-gray-600 max-w-xl mx-auto">
-          Curated blends designed to support your lifestyle goals — be it stamina, immunity,
-          liver health, or daily vitality.
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Discover our curated collection of premium wellness products, carefully selected to support your journey to optimal health.
         </p>
       </div>
 
-      <div className="flex justify-center gap-4 mb-10 flex-wrap">
-        {categories.map((category) => (
+      {/* Category Tabs */}
+      {loading && categories.length === 0 ? (
+        <CategorySkeleton />
+      ) : (
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
           <button
-            key={category}
-            className={`px-4 py-2 rounded-full transition-all text-sm sm:text-base ${
-              selectedCategory === category
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+            onClick={() => setSelectedCategory("ALL PRODUCTS")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              selectedCategory === "ALL PRODUCTS"
+                ? "bg-[#355425] text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
-            onClick={() => {
-              setSelectedCategory(category);
-              setCurrentIndex(0);
-            }}
           >
-            {category}
+            All Products
           </button>
-        ))}
-      </div>
+          {categories.map((category) => (
+            <button
+              key={category._id}
+              onClick={() => setSelectedCategory(category.name)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                selectedCategory === category.name
+                  ? "bg-[#355425] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+      )}
 
-      <div className="relative flex items-center justify-center">
+      {/* Product Carousel */}
+      <div className="relative max-w-7xl mx-auto">
         <button
           onClick={handlePrev}
-          className="absolute left-0 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
         >
           <ChevronLeft size={24} />
         </button>
 
         <motion.div
-  key={currentIndex + selectedCategory}
-  initial={{ opacity: 0, x: 50 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.5 }}
-  className="w-full pl-4 sm:px-10 flex gap-4 sm:justify-center overflow-x-auto no-scrollbar scroll-smooth"
->
-  <div
-    className={`flex gap-4 px-6 sm:px-10 ${
-      currentProducts.length <= 3 ? "justify-center" : "justify-start"
-    }`}
-  >
-    {currentProducts.map((product) => (
-      <div
-        key={product.id}
-        className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
-        onClick={() => navigate(`/product/${product.id}`, { state: { product } })}
-      >
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-40 h-40 object-contain rounded-md"
-        />
-        <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
-        <p className="text-gray-500 text-sm text-center">{product.benefits}</p>
-        <p className="text-gray-700 text-xs mb-2">With: {product.ingredients}</p>
-        <p className="text-green-600 font-bold text-lg mt-2">
-          ₹{product.price}{" "}
-          <span className="line-through text-gray-500 text-sm">₹{product.oldPrice}</span>
-        </p>
-        <button
-          className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
-          onClick={(e) => {
-            e.stopPropagation();
-            addToCart(product);
-          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="overflow-hidden"
         >
-          Add to Cart
-        </button>
-      </div>
-    ))}
-  </div>
-</motion.div>
-
-
-
-
+          <div
+            className={`flex gap-4 px-6 sm:px-10 overflow-scroll ${
+              products.length <= 3 ? "justify-center" : "justify-start"
+            }`}
+          >
+            {loading ? (
+              // Show 3 skeleton products while loading
+              Array(3).fill(null).map((_, index) => (
+                <ProductSkeleton key={index} />
+              ))
+            ) : (
+              
+              products.slice(currentIndex, currentIndex + 3).map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-white shadow-md p-4 rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
+                  onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
+                >
+                  <img
+                    src={product.images[0]?.url || '/placeholder.png'}
+                    alt={product.name}
+                    className="w-40 h-40 object-contain rounded-md"
+                  />
+                  <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
+                  <p className="text-gray-700 text-xs mb-2">Brand: {product.brand}</p>
+                  <p className="text-green-600 font-bold text-lg mt-2">
+                    ₹{product.price}
+                  </p>
+                  <button
+                    className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
+                    onClick={(e) => {
+                      // e.stopPropagation();
+                      addToCart(product);
+                    }}
+                  >
+                    Buy Now
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </motion.div>
 
         <button
           onClick={handleNext}
-          className="absolute right-0 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
         >
           <ChevronRight size={24} />
         </button>

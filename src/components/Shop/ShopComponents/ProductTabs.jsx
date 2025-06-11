@@ -6,7 +6,32 @@ import { toast } from "react-hot-toast";
 import { productService } from "../../../services/productService";
 import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
 
-const ProductTabs = ({ products: allProducts, categories }) => {
+const ProductSkeleton = () => (
+  <div className="bg-white shadow rounded-xl p-4 flex flex-col">
+    <div className="relative w-full h-48 flex justify-center overflow-hidden">
+      <div className="w-full h-full bg-gray-200 animate-pulse rounded-md" />
+    </div>
+    <div className="text-center mt-4">
+      <div className="h-4 w-32 bg-gray-200 animate-pulse rounded mx-auto" />
+      <div className="h-3 w-24 bg-gray-200 animate-pulse rounded mx-auto mt-2" />
+      <div className="h-4 w-20 bg-gray-200 animate-pulse rounded mx-auto mt-2" />
+    </div>
+    <div className="h-10 bg-gray-200 animate-pulse rounded mt-3" />
+  </div>
+);
+
+const CategorySkeleton = () => (
+  <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
+    {[1, 2, 3, 4, 5].map((index) => (
+      <div
+        key={index}
+        className="w-24 h-10 bg-gray-200 animate-pulse rounded"
+      />
+    ))}
+  </div>
+);
+
+const ProductTabs = ({ products: allProducts, categories, loading: initialLoading }) => {
   const [activeTab, setActiveTab] = useState("ALL PRODUCTS");
   const [products, setProducts] = useState(allProducts);
   const [loading, setLoading] = useState(false);
@@ -28,36 +53,43 @@ const ProductTabs = ({ products: allProducts, categories }) => {
   return (
     <div className="w-full px-4 py-8">
       {/* Tabs */}
-      <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
-        <button
-          onClick={() => setActiveTab("ALL PRODUCTS")}
-          className={`px-4 cursor-pointer py-2 font-semibold border-b-2 ${
-            activeTab === "ALL PRODUCTS"
-              ? "border-black text-black"
-              : "border-transparent text-gray-500"
-          } hover:text-black transition-all`}
-        >
-          ALL PRODUCTS
-        </button>
-        {categories.map((cat) => (
+      {initialLoading ? (
+        <CategorySkeleton />
+      ) : (
+        <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
           <button
-            key={cat._id}
-            onClick={() => setActiveTab(cat.name)}
-            className={`px-4 py-2 cursor-pointer font-semibold border-b-2 ${
-              activeTab === cat.name
+            onClick={() => setActiveTab("ALL PRODUCTS")}
+            className={`px-4 cursor-pointer py-2 font-semibold border-b-2 ${
+              activeTab === "ALL PRODUCTS"
                 ? "border-black text-black"
                 : "border-transparent text-gray-500"
             } hover:text-black transition-all`}
           >
-            {cat.name}
+            ALL PRODUCTS
           </button>
-        ))}
-      </div>
+          {categories.map((cat) => (
+            <button
+              key={cat._id}
+              onClick={() => setActiveTab(cat.name)}
+              className={`px-4 py-2 cursor-pointer font-semibold border-b-2 ${
+                activeTab === cat.name
+                  ? "border-black text-black"
+                  : "border-transparent text-gray-500"
+              } hover:text-black transition-all`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Product Grid */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {loading ? (
-          <div className="col-span-full text-center">Loading products...</div>
+        {(loading || initialLoading) ? (
+          // Show 8 skeleton products while loading
+          Array(8).fill(null).map((_, index) => (
+            <ProductSkeleton key={index} />
+          ))
         ) : products.length === 0 ? (
           <div className="col-span-full text-center">No products found</div>
         ) : (
@@ -100,7 +132,6 @@ const ProductTabs = ({ products: allProducts, categories }) => {
                   return;
                   }
                   addToCart(product);
-                  // toast.success('Added to cart!');
                 }}
                 disabled={product.stock <= 0}
               >

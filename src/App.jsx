@@ -10,10 +10,9 @@ import Login from './components/Login/Login';
 import Quiz from './components/Quiz/Quiz';
 import Cart from './components/Cart/Cart';
 
-import ProductDetails from './components/Home/HomeComponents/ProductDetails';
+// import ProductDetails from './components/Home/HomeComponents/ProductDetails';
 import ProfilePage from './components/UserProfile/ProfilePage';
 import Shop from './components/Shop/Shop';
-import ProductDetailsById from './components/Shop/ProductDetails';
 import { useAuthMiddleware } from './middleware/middleware';
 import Orders from './components/Orders/Orders';
 import Profile from './components/Profile/Profile';
@@ -27,7 +26,11 @@ import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 import RefundPolicy from './components/refund/RefundPolicy';
 import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
+<<<<<<< HEAD
 import WellvasLandingPage from './components/Landing Page/WellvasLandingPage';
+=======
+import ProductDetailsById from './components/Shop/productDetials';
+>>>>>>> 89be11b5514d547646288c199aaed125a71d391f
 
 
 function AppRoutes() {
@@ -38,14 +41,14 @@ function AppRoutes() {
       <Toaster position="top-right" />
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Home />} />  
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login />} />
           <Route path="quiz" element={<Quiz />} />
           <Route path="blogs" element={<BlogSection />} />
           <Route path="blogs/:id" element={<BlogDetail />} />
-          <Route path="product/:id" element={<ProductDetails />} />
+          {/* <Route path="product/:id" element={<ProductDetails />} /> */}
           <Route path="ProductDetailsById/:id" element={<ProductDetailsById />} />
           <Route path="shop" element={<Shop />} />
           <Route path="gallery" element={<Gallery />} />

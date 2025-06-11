@@ -105,12 +105,12 @@ const Header = () => {
         {/* Icons and Auth - Desktop */}
         <div className="hidden lg:flex items-center space-x-6">
           {/* Profile */}
-          <div className="cursor-pointer" onClick={() => navigate("/profile")}>
+        {token &&  <div className="cursor-pointer" onClick={() => navigate("/profile")}>
             <FaUser className="text-xl hover:text-gray-400" />
-          </div>
+          </div>}
 
           {/* Cart */}
-          <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
+         {token && <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
             <FaShoppingCart className="text-xl hover:text-gray-400" />
             {totalCartItems > 0 && (
               <motion.span
@@ -123,7 +123,7 @@ const Header = () => {
                 {totalCartItems}
               </motion.span>
             )}
-          </div>
+          </div>}
 
           <span className="text-sm font-semibold">₹{totalPrice}</span>
 
@@ -168,7 +168,7 @@ const Header = () => {
         {/* Mobile Menu: Cart & User always visible */}
         <div className="flex items-center space-x-4 lg:hidden">
           {/* Cart */}
-          <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
+        {token &&  <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
             <FaShoppingCart className="text-xl hover:text-gray-400" />
             {totalCartItems > 0 && (
               <motion.span
@@ -181,12 +181,12 @@ const Header = () => {
                 {totalCartItems}
               </motion.span>
             )}
-          </div>
+          </div>}
 
           {/* Profile */}
-          <div className="cursor-pointer" onClick={() => navigate("/profile")}>
+        {token &&  <div className="cursor-pointer" onClick={() => navigate("/profile")}>
             <FaUser className="text-xl hover:text-gray-400" />
-          </div>
+          </div>}
 
           {/* Mobile Menu Toggle */}
           <button onClick={() => setIsOpen(!isOpen)} className="text-2xl">
@@ -218,7 +218,7 @@ const Header = () => {
             ))}
 
             {token ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col gap-4  items-center ">
                 <div className="relative group">
                   <button className="flex items-center space-x-1 text-gray-700 hover:text-green-600">
                     <span>Hi, {authUser?.firstName || 'User'}</span>
@@ -243,12 +243,19 @@ const Header = () => {
                       Logout
                     </button>
                   </div>
+                
                 </div>
+                 <button
+                    onClick={handleLogout}
+                    className="block w-25 bg-red-200 rounded-lg mt-3 text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    Logout
+                  </button>
               </div>
             ) : (
               <Link
                 to="/login"
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                className="bg-green-600  text-white px-4 py-2 rounded-md hover:bg-green-700"
               >
                 Login
               </Link>

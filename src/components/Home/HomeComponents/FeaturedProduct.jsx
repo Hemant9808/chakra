@@ -82,7 +82,7 @@ const FeaturedProduct = () => {
 
           <button
             onClick={() =>
-              navigate("/product-details", {
+              navigate("/ProductDetailsById/682a3151db7a01215f77dd56", {
                 state: { product },
               })
             }

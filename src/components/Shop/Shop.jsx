@@ -5,7 +5,6 @@ import { productService } from "../../services/productService";
 import ProductTabs from "./ShopComponents/ProductTabs";
 import DiscountBanner from "./ShopComponents/DiscountBanner";
 import MarqueeBanner from "./ShopComponents/MarqueeBanner";
-import LoadingSpinner from "../common/LoadingSpinner";
 
 function Shop() {
   const [products, setProducts] = useState([]);
@@ -35,14 +34,13 @@ function Shop() {
     fetchData();
   }, []);
 
-  if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-center text-red-500 mt-8">{error}</div>;
 
   return (
     <div>
       <MarqueeBanner />
       <DiscountBanner />
-      <ProductTabs products={products} categories={categories} />
+      <ProductTabs products={products} categories={categories} loading={loading} />
     </div>
   );
 }

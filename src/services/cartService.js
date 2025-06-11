@@ -30,14 +30,15 @@ const cartService = {
     // console.log(checkIfUserIsLoggedIn())
     try {
       if (!checkIfUserIsLoggedIn()) {
+        
         throw new Error("User not logged in");
       }
 
       // if(!checkIfUserIsLoggedIn()){
-      //   const navigate = useNavigate();
+      //   // const navigate = useNavigate();
       //   console.log(checkIfUserIsLoggedIn())
-      //   // redirect("/login")
-      //   navigate("/login");
+      //   window.AbortControllerlocation.href = "/login"
+      //   // navigate("/login");
       //   return;
       // }
       const response = await axiosInstance.post(

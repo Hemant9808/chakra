@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CartComponent from "./CartComponent/CartComponent";
 import ProductSlider from "./CartComponent/ProductSlider";
+import FrequentlyBoughtTogether from "../Home/HomeComponents/FrequentlyBoughtTogether";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -28,7 +29,8 @@ function Cart() {
   return (
     <>
       <CartComponent cartItems={cartItems} removeItem={removeItem} />
-      <ProductSlider addToCart={addToCart} />
+      {/* <ProductSlider addToCart={addToCart} /> */}
+      <FrequentlyBoughtTogether/>
     </>
   );
 }
