@@ -51,7 +51,6 @@ function AppRoutes() {
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/faqs" element={<Faqs />} />
-          <Route path="/landingPage" element={<WellvasLandingPage />} />
           <Route
             path="profile"
             element={
