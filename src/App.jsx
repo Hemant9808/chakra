@@ -26,12 +26,7 @@ import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 import RefundPolicy from './components/refund/RefundPolicy';
 import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
-<<<<<<< HEAD
-import WellvasLandingPage from './components/Landing Page/WellvasLandingPage';
-=======
 import ProductDetailsById from './components/Shop/productDetials';
->>>>>>> 89be11b5514d547646288c199aaed125a71d391f
-
 
 function AppRoutes() {
   useAuthMiddleware();
