@@ -28,7 +28,6 @@ import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
 import ProductDetailsById from './components/Shop/productDetials';
 
-
 function AppRoutes() {
   useAuthMiddleware();
 

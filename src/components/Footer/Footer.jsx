@@ -52,8 +52,8 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4 text-[#f4e9da]">Categories</h3>
             <ul className="text-sm space-y-2 text-gray-300">
               {[
-                { name: "Men's Wellness", path: "/category/mens-wellness" },
-                { name: "Immunity Boosters", path: "/category/immunity" },
+                { name: "Men's Wellness", path: "/shop#nutrition" },
+                { name: "Immunity Boosters", path: "/shop#combo" },
                 { name: "Liver Health", path: "/category/liver-health" },
                 { name: "Daily Essentials", path: "/category/daily-essentials" },
                 { name: "Anti Addiction", path: "/category/anti-addiction" },
