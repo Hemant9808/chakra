@@ -17,6 +17,7 @@ const ProductDetailsById = () => {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const addToCart = useCartStore((state) => state.addToCart);
+  const [showAgePopup, setShowAgePopup] = useState(false);
   const location = useLocation();
  const  whyChoose = [
         "High-potency Ashwagandha extract for maximum benefits",
@@ -41,7 +42,45 @@ const ProductDetailsById = () => {
     };
 
     fetchProduct();
+
   }, [id]);
+
+   useEffect(() => {
+
+   if(product?.categories[0] == "Men's Wellness"){
+    setShowAgePopup(true);
+   }
+  }, [product]);
+
+
+    if (showAgePopup) {
+    return (
+      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+          <h2 className="text-lg font-semibold mb-2">Are you over 18?</h2>
+          <p className="text-gray-600 mb-6 text-sm">
+            We must verify this before you proceed to our website due to legal obligations.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => setShowAgePopup(false)}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+            >
+              VERIFY AGE
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="bg-black hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded"
+            >
+              CANCEL
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-center text-red-500 mt-8">{error}</div>;
