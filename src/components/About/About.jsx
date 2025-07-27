@@ -5,6 +5,7 @@ import WhatWeOffer from "./AboutComponents/WhatWeOffer";
 import MeetOurTeam from "./AboutComponents/MeetOurTeam";
 import WhyChooseUs from "./AboutComponents/WhyChooseUs";
 import ContactSocialMedia from "./AboutComponents/ContactSocialMedia";
+import Note from "./AboutComponents/Note";
 
 function About(){
     return (
@@ -15,6 +16,7 @@ function About(){
         {/* <MeetOurTeam /> */}
         <WhyChooseUs />
         <ContactSocialMedia />
+        <Note />
         </>
     )
 }

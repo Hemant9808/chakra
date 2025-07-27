@@ -6,6 +6,16 @@ const faqs = [
     answer:
       "Wellvas is a modern Ayurvedic wellness brand that provides scientifically formulated supplements for daily health, men's wellness, immunity, and more. All products are FSSAI certified and made from premium-quality ingredients.",
   },
+    {
+    question: "Do you manufacture the medicines sold on Wellvas.com?",
+    answer:
+      "No, we do not manufacture medicines. We procure all our medicines from reliable, authorized third-party suppliers.",
+  },
+  {
+    question: "Are there any labs or third parties involved in my wellness test report?",
+    answer:
+      "No, all reports are generated automatically based on your answers. No medical samples are needed and your information stays within Wellvas.com.",
+  },
   {
     question: "Are your products safe to use daily?",
     answer:
