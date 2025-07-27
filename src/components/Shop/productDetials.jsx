@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { productService } from '../../services/productService';
+import { productService, formatPriceDisplay } from '../../services/productService';
 import { useCartStore } from '../../Store/useCartStore';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useLocation } from "react-router-dom";
@@ -17,6 +17,7 @@ const ProductDetailsById = () => {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const addToCart = useCartStore((state) => state.addToCart);
+  const [showAgePopup, setShowAgePopup] = useState(false);
   const location = useLocation();
  const  whyChoose = [
         "High-potency Ashwagandha extract for maximum benefits",
@@ -41,11 +42,51 @@ const ProductDetailsById = () => {
     };
 
     fetchProduct();
+
   }, [id]);
+
+   useEffect(() => {
+
+   if(product?.categories[0] == "Men's Wellness"){
+    setShowAgePopup(true);
+   }
+  }, [product]);
+
+
+    if (showAgePopup) {
+    return (
+      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+          <h2 className="text-lg font-semibold mb-2">Are you over 18?</h2>
+          <p className="text-gray-600 mb-6 text-sm">
+            We must verify this before you proceed to our website due to legal obligations.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => setShowAgePopup(false)}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+            >
+              VERIFY AGE
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="bg-black hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded"
+            >
+              CANCEL
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-center text-red-500 mt-8">{error}</div>;
   if (!product) return <div className="text-center mt-8">Product not found</div>;
+
+  const priceInfo = formatPriceDisplay(product);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -90,7 +131,17 @@ const ProductDetailsById = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="text-2xl font-bold text-gray-900">₹{product.price}</span>
+            {priceInfo.hasDiscount ? (
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl font-bold text-green-600">₹{priceInfo.displayPrice}</span>
+                <span className="text-lg text-gray-500 line-through">₹{priceInfo.originalPrice}</span>
+                <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded-full">
+                  {priceInfo.discountPercentage}% OFF
+                </span>
+              </div>
+            ) : (
+              <span className="text-2xl font-bold text-gray-900">₹{priceInfo.displayPrice}</span>
+            )}
             {product.stock > 0 ? (
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 In Stock ({product.stock})

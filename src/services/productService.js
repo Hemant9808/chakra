@@ -39,3 +39,25 @@ export const productService = {
   }
   
 }; 
+
+// Utility functions for price calculations
+export const calculateDiscountPercentage = (originalPrice, discountedPrice) => {
+  if (!discountedPrice || discountedPrice >= originalPrice) return 0;
+  return Math.round(((originalPrice - discountedPrice) / originalPrice) * 100);
+};
+
+export const formatPriceDisplay = (product) => {
+  if (!product) return { displayPrice: 0, originalPrice: 0, discountPercentage: 0, hasDiscount: false };
+  
+  const originalPrice = product.price || 0;
+  const discountedPrice = product.discountedPrice || 0;
+  const hasDiscount = discountedPrice > 0 && discountedPrice < originalPrice;
+  const discountPercentage = hasDiscount ? calculateDiscountPercentage(originalPrice, discountedPrice) : 0;
+  
+  return {
+    displayPrice: hasDiscount ? discountedPrice : originalPrice,
+    originalPrice: originalPrice,
+    discountPercentage: discountPercentage,
+    hasDiscount: hasDiscount
+  };
+}; 

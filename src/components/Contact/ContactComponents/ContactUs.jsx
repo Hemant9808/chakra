@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import {
-  FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaEnvelope, FaPhone,
+  FaFacebook, FaInstagram, FaEnvelope, FaPhone,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import {toast} from "react-hot-toast";
@@ -61,18 +61,17 @@ export default function ContactUs() {
         We'd love to hear from you! Our team is here to help.
       </p>
 
-      {/* Animated Status Message */}
+      {/* Status Messages */}
       <AnimatePresence>
         {status && (
           <motion.div
-            key="status"
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`p-3 mb-4 rounded text-center transition-all duration-300 ${
+            exit={{ opacity: 0, y: -20 }}
+            className={`p-4 mb-6 rounded-lg ${
               status.type === "success"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
+                ? "bg-green-100 text-green-700 border border-green-300"
+                : "bg-red-100 text-red-700 border border-red-300"
             }`}
           >
             {status.message}
@@ -80,75 +79,97 @@ export default function ContactUs() {
         )}
       </AnimatePresence>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="p-3 border rounded-lg w-full bg-gray-100"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="p-3 border rounded-lg w-full bg-gray-100"
-            required
-          />
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Name *
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="p-3 border rounded-lg w-full bg-gray-100"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email *
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="p-3 border rounded-lg w-full bg-gray-100"
+              required
+            />
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleChange}
-            className="p-3 border rounded-lg w-full bg-gray-100"
-          />
-          <input
-            type="text"
-            name="subject"
-            placeholder="Subject"
-            value={formData.subject}
-            onChange={handleChange}
-            className="p-3 border rounded-lg w-full bg-gray-100"
-          />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Phone
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="p-3 border rounded-lg w-full bg-gray-100"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Subject *
+            </label>
+            <input
+              type="text"
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              className="p-3 border rounded-lg w-full bg-gray-100"
+              required
+            />
+          </div>
         </div>
-        <textarea
-          name="message"
-          placeholder="Message"
-          value={formData.message}
-          onChange={handleChange}
-          className="p-3 border rounded-lg w-full bg-gray-100 h-32"
-          required
-        ></textarea>
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full p-3 font-bold rounded-lg transition-all duration-300 ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-black text-white hover:bg-gray-800"
-          }`}
-        >
-          {loading ? "Sending..." : "Send Message"}
-        </button>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Message *
+          </label>
+          <textarea
+            name="message"
+            placeholder="Message"
+            value={formData.message}
+            onChange={handleChange}
+            className="p-3 border rounded-lg w-full bg-gray-100 h-32"
+            required
+          ></textarea>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full p-3 font-bold rounded-lg transition-all duration-300 ${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-black text-white hover:bg-gray-800"
+            }`}
+          >
+            {loading ? "Sending..." : "Send Message"}
+          </button>
+        </div>
       </form>
 
       <div className="mt-8 text-center text-gray-600">
-        <p><strong>Address:</strong> Wellvas HQ, Malviya Nagar, New Delhi</p>
+        <p><strong>Address:</strong> E-46/3, Mohan Baba Nagar, Nearby - S K Payal Public School, Badarpur, New Delhi 110044</p>
         <p><strong>Email:</strong> support@wellvas.com</p>
         <p><strong>Phone:</strong> +91-8271442413</p>
         <div className="flex justify-center space-x-4 mt-4 text-xl">
-          <a href="#"><FaFacebook /></a>
-          <a href="#"><FaInstagram /></a>
-          <a href="#"><FaTwitter /></a>
-          <a href="#"><FaLinkedin /></a>
-          <a href="#"><FaEnvelope /></a>
-          <a href="#"><FaPhone /></a>
+          <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+          <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+          {/* <a href="mailto:support@wellvas.com"><FaEnvelope /></a>
+          <a href="tel:+918271442413"><FaPhone /></a> */}
         </div>
       </div>
     </div>

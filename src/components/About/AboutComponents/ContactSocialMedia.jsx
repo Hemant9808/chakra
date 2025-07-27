@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaEnvelope, FaPhone } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaEnvelope, FaPhone } from "react-icons/fa";
 
 const ContactSocialMedia = () => {
   const sectionRef = useRef(null);
@@ -52,17 +52,11 @@ const ContactSocialMedia = () => {
             transition={{ duration: 0.8, delay: 0.4 }}>
             <h3 className="text-2xl font-semibold mb-3">🌍 Follow Us</h3>
             <div className="flex justify-center gap-4 mt-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 text-3xl hover:scale-110 transition">
+              <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer" className="text-blue-600 text-3xl hover:scale-110 transition">
                 <FaFacebook />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-pink-500 text-3xl hover:scale-110 transition">
+              <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer" className="text-pink-500 text-3xl hover:scale-110 transition">
                 <FaInstagram />
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 text-3xl hover:scale-110 transition">
-                <FaTwitter />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-blue-700 text-3xl hover:scale-110 transition">
-                <FaLinkedin />
               </a>
             </div>
           </motion.div>

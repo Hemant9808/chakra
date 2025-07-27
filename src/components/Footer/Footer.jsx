@@ -2,9 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   FaInstagram,
-  FaLinkedin,
-  FaTwitter,
-  FaYoutube,
   FaFacebook,
   FaPhone,
   FaEnvelope,
@@ -108,12 +105,12 @@ const Footer = () => {
               <FaEnvelope /> <span>support@wellvas.com</span>
             </div>
             <div className="mt-5 flex space-x-3">
-              {[FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaFacebook].map((Icon, index) => (
-                <Icon
-                  key={index}
-                  className="text-yellow-400 text-xl cursor-pointer hover:scale-110 transition-transform"
-                />
-              ))}
+              <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer">
+                <FaInstagram className="text-yellow-400 text-xl cursor-pointer hover:scale-110 transition-transform" />
+              </a>
+              <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer">
+                <FaFacebook className="text-yellow-400 text-xl cursor-pointer hover:scale-110 transition-transform" />
+              </a>
             </div>
           </div>
         </div>
