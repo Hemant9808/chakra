@@ -4,6 +4,7 @@ import { useCartStore } from "../../../Store/useCartStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/LoadingSpinner";
+import { formatPriceDisplay } from "../../../services/productService";
 
 const CartComponent = () => {
   const {
@@ -31,11 +32,14 @@ const CartComponent = () => {
   const renderProductInfo = (item) => {
     // Check if productId exists and has the required properties
     if (item.productId && item.productId._id) {
+      const priceInfo = formatPriceDisplay(item.productId);
       return {
         id: item.productId._id,
         name: item.productId.name || 'Product Name Not Available',
         image: item.productId.images?.[0]?.url || '/placeholder.png',
-        price: item.price || 0,
+        price: priceInfo.displayPrice || 0,
+        originalPrice: priceInfo.originalPrice || 0,
+        hasDiscount: priceInfo.hasDiscount,
         quantity: item.quantity || 1
       };
     }
@@ -45,6 +49,8 @@ const CartComponent = () => {
       name: 'Product Name Not Available',
       image: '/placeholder.png',
       price: item.price || 0,
+      originalPrice: item.price || 0,
+      hasDiscount: false,
       quantity: item.quantity || 1
     };
   };
@@ -92,38 +98,40 @@ const CartComponent = () => {
               return (
                 <motion.div
                   key={product.id}
-                  className="bg-gray-900 p-4 rounded-lg shadow-lg"
+                  className="bg-gray-800 rounded-lg p-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
                 >
                   <div className="flex items-center space-x-4">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-20 h-20 rounded-md object-cover flex-shrink-0"
+                      className="w-20 h-20 object-cover rounded"
                     />
                     <div className="flex-1">
-                      <h4
-                        className="text-base font-semibold truncate max-w-[200px]"
-                        title={product.name}
-                      >
-                        {product.name}
-                      </h4>
-                      <p className="text-sm text-gray-400 mt-1">₹{product.price} each</p>
-
-                      <div className="flex items-center mt-3 space-x-3">
+                      <h3 className="font-semibold text-sm">{product.name}</h3>
+                      <div className="mt-2">
+                        {product.hasDiscount ? (
+                          <div className="flex items-center space-x-2">
+                            <span className="text-green-400 font-bold">₹{product.price}</span>
+                            <span className="text-gray-400 line-through text-sm">₹{product.originalPrice}</span>
+                          </div>
+                        ) : (
+                          <span className="text-green-400 font-bold">₹{product.price}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center space-x-2 mt-2">
                         <button
                           onClick={() => updateQuantity(product.id, product.quantity - 1)}
-                          className="w-8 h-8 text-lg bg-gray-700 rounded hover:bg-gray-600"
+                          className="bg-gray-700 text-white w-6 h-6 rounded flex items-center justify-center"
                         >
                           -
                         </button>
-                        <span className="text-base">{product.quantity}</span>
+                        <span className="text-sm">{product.quantity}</span>
                         <button
                           onClick={() => updateQuantity(product.id, product.quantity + 1)}
-                          className="w-8 h-8 text-lg bg-gray-700 rounded hover:bg-gray-600"
+                          className="bg-gray-700 text-white w-6 h-6 rounded flex items-center justify-center"
                         >
                           +
                         </button>
@@ -166,45 +174,57 @@ const CartComponent = () => {
                     return (
                       <motion.tr
                         key={product.id}
-                        className="border-b border-gray-700 hover:bg-gray-800"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
+                        className="border-b border-gray-700"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                       >
-                        <td className="py-4 flex items-center space-x-4">
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-16 h-16 rounded-md object-cover"
-                          />
-                          <span className="text-lg truncate max-w-[150px]">
-                            {product.name}
-                          </span>
+                        <td className="py-4">
+                          <div className="flex items-center space-x-4">
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-16 h-16 object-cover rounded"
+                            />
+                            <div>
+                              <h3 className="font-semibold">{product.name}</h3>
+                            </div>
+                          </div>
                         </td>
-                        <td className="py-4">₹{product.price}</td>
+                        <td className="py-4">
+                          {product.hasDiscount ? (
+                            <div className="flex flex-col">
+                              <span className="text-green-400 font-bold">₹{product.price}</span>
+                              <span className="text-gray-400 line-through text-sm">₹{product.originalPrice}</span>
+                            </div>
+                          ) : (
+                            <span className="text-green-400 font-bold">₹{product.price}</span>
+                          )}
+                        </td>
                         <td className="py-4">
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={() => updateQuantity(product.id, product.quantity - 1)}
-                              className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                              className="bg-gray-700 text-white w-8 h-8 rounded flex items-center justify-center"
                             >
                               -
                             </button>
-                            <span className="w-8 text-center">{product.quantity}</span>
+                            <span>{product.quantity}</span>
                             <button
                               onClick={() => updateQuantity(product.id, product.quantity + 1)}
-                              className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                              className="bg-gray-700 text-white w-8 h-8 rounded flex items-center justify-center"
                             >
                               +
                             </button>
                           </div>
                         </td>
-                        <td className="py-4">₹{product.price * product.quantity}</td>
+                        <td className="py-4 font-semibold">
+                          ₹{product.price * product.quantity}
+                        </td>
                         <td className="py-4">
                           <button
                             onClick={() => removeItem(product.id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-500 cursor-pointer hover:text-red-700"
                           >
                             <FaTrashAlt />
                           </button>
@@ -216,46 +236,44 @@ const CartComponent = () => {
               </tbody>
             </table>
           </div>
-        </>
-      )}
 
-      {cartItems.length > 0 && (
-        <motion.div
-          className="mt-10 flex flex-col lg:flex-row justify-between items-center gap-4"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-        
-          <div className="flex flex-col lg:flex-row items-center gap-4">
-            <h3 className="text-2xl font-semibold">Total: ₹{totalPrice}</h3>
-            {/* <button
-              onClick={clearCart}
-              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300"
-            >
-              Clear Cart
-            </button> */}
+          {/* Cart Summary */}
+          <div className="mt-8 lg:mt-12">
+            <div className="bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-4">Cart Summary</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Subtotal:</span>
+                  <span>₹{totalPrice}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping:</span>
+                  <span className="text-green-400">Free</span>
+                </div>
+                <div className="border-t border-gray-600 pt-2 mt-4">
+                  <div className="flex justify-between font-semibold text-lg">
+                    <span>Total:</span>
+                    <span>₹{totalPrice}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 space-y-3">
+                <Link
+                  to="/checkout"
+                  className="block w-full bg-green-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300"
+                >
+                  Proceed to Checkout
+                </Link>
+                <Link
+                  to="/shop"
+                  className="block w-full border border-gray-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-gray-700 transition duration-300"
+                >
+                  Continue Shopping
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col lg:flex-row items-center gap-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/checkout"
-                className="bg-[#66cc1d] text-white px-6 py-3 rounded-md hover:bg-[#d4c0a8] transition duration-300"
-              >
-                Proceed to Checkout
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/checkout"
-               
-               >
-            
-                
-              </Link>
-            </motion.div>
-          </div>
-        </motion.div>
+        </>
       )}
     </div>
   );

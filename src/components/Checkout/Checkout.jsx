@@ -7,6 +7,7 @@ import orderService from '../../services/orderService';
 import paymentService from '../../services/paymentService';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { formatPriceDisplay } from '../../services/productService';
 
 import { FaLock, FaTruck, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
 
@@ -39,11 +40,14 @@ const Checkout = () => {
   const renderProductInfo = (item) => {
     // Check if productId exists and has the required properties
     if (item.productId && item.productId._id) {
+      const priceInfo = formatPriceDisplay(item.productId);
       return {
         id: item.productId._id,
         name: item.productId.name || 'Product Name Not Available',
         image: item.productId.images?.[0]?.url || '/placeholder.png',
-        price: item.price || 0,
+        price: priceInfo.displayPrice || 0,
+        originalPrice: priceInfo.originalPrice || 0,
+        hasDiscount: priceInfo.hasDiscount,
         quantity: item.quantity || 1
       };
     }
@@ -53,6 +57,8 @@ const Checkout = () => {
       name: 'Product Name Not Available',
       image: '/placeholder.png',
       price: item.price || 0,
+      originalPrice: item.price || 0,
+      hasDiscount: false,
       quantity: item.quantity || 1
     };
   };
@@ -209,9 +215,21 @@ const Checkout = () => {
                 <div>
                   <p>{product.name}</p>
                   <p className="text-gray-500">Qty: {product.quantity}</p>
+                  {product.hasDiscount && (
+                    <p className="text-green-600 text-xs">Discounted Price</p>
+                  )}
                 </div>
               </div>
-              <p>₹{product.price * product.quantity}</p>
+              <div className="text-right">
+                {product.hasDiscount ? (
+                  <div>
+                    <p className="text-green-600 font-semibold">₹{product.price * product.quantity}</p>
+                    <p className="text-gray-400 line-through text-xs">₹{product.originalPrice * product.quantity}</p>
+                  </div>
+                ) : (
+                  <p>₹{product.price * product.quantity}</p>
+                )}
+              </div>
             </div>
           );
         })}

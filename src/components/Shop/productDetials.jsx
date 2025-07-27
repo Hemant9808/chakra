@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { productService } from '../../services/productService';
+import { productService, formatPriceDisplay } from '../../services/productService';
 import { useCartStore } from '../../Store/useCartStore';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useLocation } from "react-router-dom";
@@ -86,6 +86,8 @@ const ProductDetailsById = () => {
   if (error) return <div className="text-center text-red-500 mt-8">{error}</div>;
   if (!product) return <div className="text-center mt-8">Product not found</div>;
 
+  const priceInfo = formatPriceDisplay(product);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -129,7 +131,17 @@ const ProductDetailsById = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="text-2xl font-bold text-gray-900">₹{product.price}</span>
+            {priceInfo.hasDiscount ? (
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl font-bold text-green-600">₹{priceInfo.displayPrice}</span>
+                <span className="text-lg text-gray-500 line-through">₹{priceInfo.originalPrice}</span>
+                <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded-full">
+                  {priceInfo.discountPercentage}% OFF
+                </span>
+              </div>
+            ) : (
+              <span className="text-2xl font-bold text-gray-900">₹{priceInfo.displayPrice}</span>
+            )}
             {product.stock > 0 ? (
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 In Stock ({product.stock})

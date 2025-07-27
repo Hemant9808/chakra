@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../../Store/useCartStore";
 import { toast } from "react-hot-toast";
-import { productService } from "../../../services/productService";
+import { productService, formatPriceDisplay } from "../../../services/productService";
 import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
 
 const ProductSkeleton = () => (
@@ -93,52 +93,67 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
         ) : products.length === 0 ? (
           <div className="col-span-full text-center">No products found</div>
         ) : (
-          products.map((product) => (
-            <motion.div
-              key={product._id}
-              className="bg-white shadow rounded-xl p-4 flex flex-col"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link to={`/ProductDetailsById/${product._id}`} className="group">
-                <div className="relative w-full h-48 flex justify-center overflow-hidden">
-                  <img
-                    src={product.images[0]?.url || '/placeholder.png'}
-                    alt={product.name}
-                    className="object-cover transition-transform group-hover:scale-110"
-                  />
-                  {product.stock <= 0 && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                      Out of Stock
-                    </div>
-                  )}
-                </div>
-                <div className="text-center mt-4">
-                  <h3 className="font-semibold text-sm group-hover:text-green-600 transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
-                  <div className="text-sm mt-2">
-                    <span className="font-bold">₹{product.price}</span>
-                  </div>
-                </div>
-              </Link>
-              <button
-                className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
-                onClick={() => {
-                  if (!checkIfUserIsLoggedIn()) {
-                  navigate("/login")
-                  return;
-                  }
-                  addToCart(product);
-                }}
-                disabled={product.stock <= 0}
+          products.map((product) => {
+            const priceInfo = formatPriceDisplay(product);
+            return (
+              <motion.div
+                key={product._id}
+                className="bg-white shadow rounded-xl p-4 flex flex-col"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                {product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
-              </button>
-            </motion.div>
-          ))
+                <Link to={`/ProductDetailsById/${product._id}`} className="group">
+                  <div className="relative w-full h-48 flex justify-center overflow-hidden">
+                    <img
+                      src={product.images[0]?.url || '/placeholder.png'}
+                      alt={product.name}
+                      className="object-cover transition-transform group-hover:scale-110"
+                    />
+                    {product.stock <= 0 && (
+                      <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                        Out of Stock
+                      </div>
+                    )}
+                    {priceInfo.hasDiscount && (
+                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                        {priceInfo.discountPercentage}% OFF
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-center mt-4">
+                    <h3 className="font-semibold text-sm group-hover:text-green-600 transition-colors">
+                      {product.name}
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
+                    <div className="text-sm mt-2">
+                      {priceInfo.hasDiscount ? (
+                        <div className="flex flex-col items-center">
+                          <span className="font-bold text-green-600">₹{priceInfo.displayPrice}</span>
+                          <span className="text-gray-500 line-through text-xs">₹{priceInfo.originalPrice}</span>
+                        </div>
+                      ) : (
+                        <span className="font-bold">₹{priceInfo.displayPrice}</span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+                <button
+                  className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
+                  onClick={() => {
+                    if (!checkIfUserIsLoggedIn()) {
+                    navigate("/login")
+                    return;
+                    }
+                    addToCart(product);
+                  }}
+                  disabled={product.stock <= 0}
+                >
+                  {product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
+                </button>
+              </motion.div>
+            );
+          })
         )}
       </div>
     </div>
