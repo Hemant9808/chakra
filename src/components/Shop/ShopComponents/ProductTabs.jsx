@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCartStore } from "../../../Store/useCartStore";
 import { toast } from "react-hot-toast";
-import { productService, formatPriceDisplay } from "../../../services/productService";
+import { productService } from "../../../services/productService";
 import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
+import { PriceDisplay } from "../../../utils/priceUtils";
+
 
 const ProductSkeleton = () => (
   <div className="bg-white shadow rounded-xl p-4 flex flex-col">
@@ -38,17 +40,29 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
   const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate()
 
+  //get the id from the url
+  const { id } = useParams();
+
+  // console.log("id.........", id);
+
   useEffect(() => {
-    if (activeTab === "ALL PRODUCTS") {
+    console.log("id.........wefsdrfgth", id);
+    if (id === "all") {
       setProducts(allProducts);
     } else {
       setLoading(true);
-      productService.getProductsByCategory(activeTab)
+      productService.getProductsByCategory(id)
         .then((data) => setProducts(data))
         .catch(() => setProducts([]))
         .finally(() => setLoading(false));
     }
-  }, [activeTab, allProducts]);
+  }, [id, allProducts]);
+
+  const calculateDiscount = (price, discountPrice) => {
+    //deciaml to 2 decimal places
+    const discount = ((price - discountPrice) / price) * 100;
+    return discount.toFixed(2);
+  }
 
   return (
     <div className="w-full px-4 py-8">
@@ -60,7 +74,7 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
           <button
             onClick={() => setActiveTab("ALL PRODUCTS")}
             className={`px-4 cursor-pointer py-2 font-semibold border-b-2 ${
-              activeTab === "ALL PRODUCTS"
+              id === "all"
                 ? "border-black text-black"
                 : "border-transparent text-gray-500"
             } hover:text-black transition-all`}
@@ -70,9 +84,10 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
           {categories.map((cat) => (
             <button
               key={cat._id}
-              onClick={() => setActiveTab(cat.name)}
+              // onClick={() => setActiveTab(cat.name)}
+              onClick={() => navigate(`/shop/${cat.name}`)}
               className={`px-4 py-2 cursor-pointer font-semibold border-b-2 ${
-                activeTab === cat.name
+                id === cat.name
                   ? "border-black text-black"
                   : "border-transparent text-gray-500"
               } hover:text-black transition-all`}
@@ -93,67 +108,78 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
         ) : products.length === 0 ? (
           <div className="col-span-full text-center">No products found</div>
         ) : (
-          products.map((product) => {
-            const priceInfo = formatPriceDisplay(product);
-            return (
-              <motion.div
-                key={product._id}
-                className="bg-white shadow rounded-xl p-4 flex flex-col"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Link to={`/ProductDetailsById/${product._id}`} className="group">
-                  <div className="relative w-full h-48 flex justify-center overflow-hidden">
-                    <img
-                      src={product.images[0]?.url || '/placeholder.png'}
-                      alt={product.name}
-                      className="object-cover transition-transform group-hover:scale-110"
-                    />
-                    {product.stock <= 0 && (
-                      <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                        Out of Stock
-                      </div>
-                    )}
-                    {priceInfo.hasDiscount && (
-                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                        {priceInfo.discountPercentage}% OFF
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-center mt-4">
-                    <h3 className="font-semibold text-sm group-hover:text-green-600 transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
-                    <div className="text-sm mt-2">
-                      {priceInfo.hasDiscount ? (
-                        <div className="flex flex-col items-center">
-                          <span className="font-bold text-green-600">₹{priceInfo.displayPrice}</span>
-                          <span className="text-gray-500 line-through text-xs">₹{priceInfo.originalPrice}</span>
-                        </div>
-                      ) : (
-                        <span className="font-bold">₹{priceInfo.displayPrice}</span>
-                      )}
+          products.map((product) => (
+            <motion.div
+              key={product._id}
+              className="bg-white shadow rounded-xl p-4 flex flex-col"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link to={`/ProductDetailsById/${product._id}`} className="group">
+                <div className="relative w-full h-48 flex justify-center overflow-hidden">
+                  <img
+                    src={product.images[0]?.url || '/placeholder.png'}
+                    alt={product.name}
+                    className="object-cover transition-transform group-hover:scale-110"
+                  />
+                  {product.stock <= 0 && (
+                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                      Out of Stock
                     </div>
+                  )}
+                </div>
+                <div className="text-center mt-4">
+                  <h3 className="font-semibold text-sm group-hover:text-green-600 transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
+                  <div className="text-sm mt-2">
+
+                  {/* discounted price */}
+                  <PriceDisplay product={product} />
+                  {/* {
+                    product.discountPrice ? (
+                      <div className="flex justify-center mb-3  flex-col items-center ">
+                        
+                        <span className="text-green-600  font-bold text-lg">
+                        
+                        ₹{product.discountPrice}
+                        </span>
+                        <span className=" text-gray-500 line-through">₹{product.price}</span>
+
+                        <span className="text-green-600 text-sm">
+                          {calculateDiscount(product.price, product.discountPrice)}% off
+                        </span>
+
+                       
+
+                      </div>
+                    ) : (
+                      <span className="font-bold">₹{product.price}</span>
+                    )
+                  } */}
+                  {/* <span className="font-bold">₹{product.price}</span> */}
+                  
+                    {/* <span className="font-bold">₹{product.price}</span> */}
                   </div>
-                </Link>
-                <button
-                  className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
-                  onClick={() => {
-                    if (!checkIfUserIsLoggedIn()) {
-                    navigate("/login")
-                    return;
-                    }
-                    addToCart(product);
-                  }}
-                  disabled={product.stock <= 0}
-                >
-                  {product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
-                </button>
-              </motion.div>
-            );
-          })
+                </div>
+              </Link>
+              <button
+                className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
+                onClick={() => {
+                  if (!checkIfUserIsLoggedIn()) {
+                  navigate("/login")
+                  return;
+                  }
+                  addToCart(product);
+                }}
+                disabled={product.stock <= 0}
+              >
+                {product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
+              </button>
+            </motion.div>
+          ))
         )}
       </div>
     </div>

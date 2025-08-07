@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* hide scrollbar in all browsers    */
+::-webkit-scrollbar {   
+  display: none;
+}
+
+/* hide scrollbar in all browsers    */
+::-webkit-scrollbar-track {   
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {   
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {   
+  background: transparent;
+}
+
+
+
+

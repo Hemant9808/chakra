@@ -30,7 +30,7 @@ const Header = () => {
 
   const navLinks = [
     { path: "/", label: "Home" },
-    { path: "/shop", label: "Shop" },
+    { path: "/shop/all", label: "Shop" },
     { path: "/quiz", label: "Wellness Test" },
    
     { path: "/contact", label: "Contact" },

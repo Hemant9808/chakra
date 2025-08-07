@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { productService, formatPriceDisplay } from "../../../services/productService";
+import { productService } from "../../../services/productService";
 const FeaturedProduct = () => {
   const navigate = useNavigate();
 
@@ -8,7 +8,7 @@ const FeaturedProduct = () => {
     name: "Himalayan Shilajit",
     tagline: "Strength, Vitality & Endurance",
     description:
-      "Boost stamina, improve recovery, and power your performance with purified Shilajit resin. Trusted by men's wellness experts.",
+      "Boost stamina, improve recovery, and power your performance with purified Shilajit resin. Trusted by men’s wellness experts.",
     image: "/ResourseImages/4.png",
     price: 999,
     oldPrice: 1349,
@@ -51,6 +51,10 @@ useEffect(() => {
 
   fetchProducts();
 }, []);
+
+console.log("bestSeller", bestSeller);
+
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -69,8 +73,7 @@ useEffect(() => {
     const secs = seconds % 60;
     return `${mins}m ${secs < 10 ? "0" : ""}${secs}s`;
   };
-
-  const priceInfo = bestSeller ? formatPriceDisplay(bestSeller) : null;
+  if(!bestSeller) return <></>;
 
   return (
     <section className="bg-[#f6fdf5] py-16 px-6 md:px-12">
@@ -78,6 +81,7 @@ useEffect(() => {
         {/* Image */}
         <div className="md:w-1/2 w-full relative">
           <img
+          
             src={bestSeller?.images[0]?.url || product.image}
             alt={product.name}
             className="w-full max-h-[420px] object-contain rounded-2xl shadow-xl"
@@ -85,11 +89,9 @@ useEffect(() => {
           <span className="absolute top-4 left-4 bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
             Bestseller
           </span>
-          {priceInfo?.hasDiscount && (
-            <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md animate-pulse">
-              {priceInfo.discountPercentage}% OFF
-            </span>
-          )}
+          <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md animate-pulse">
+            25% OFF
+          </span>
         </div>
 
         {/* Text Content */}
@@ -105,60 +107,24 @@ useEffect(() => {
     .join(" ") + (bestSeller?.description?.split(" ").length > 30 ? "..." : "")}
 </p>
 
-          {/* Price Section */}
-          <div className="mb-6">
-            {priceInfo?.hasDiscount ? (
-              <div className="flex items-center justify-center md:justify-start space-x-3 mb-2">
-                <span className="text-3xl font-bold text-green-600">₹{priceInfo.displayPrice}</span>
-                <span className="text-xl text-gray-500 line-through">₹{priceInfo.originalPrice}</span>
-                <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded-full">
-                  Save ₹{priceInfo.originalPrice - priceInfo.displayPrice}
-                </span>
-              </div>
-            ) : (
-              <div className="text-3xl font-bold text-gray-800 mb-2">
-                ₹{priceInfo?.displayPrice || product.price}
-              </div>
-            )}
-            <p className="text-sm text-gray-600">Free shipping on orders above ₹499</p>
-          </div>
 
           {/* Timer */}
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">Limited Time Offer</p>
-            <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg inline-block">
-              <span className="font-bold">{formatTime(timeLeft)}</span> left
-            </div>
+          <div className="mb-4 text-sm text-red-600 font-medium">
+            Limited Time Offer: <span className="font-bold">{formatTime(timeLeft)}</span> left
           </div>
 
-          {/* Benefits */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Key Benefits:</h3>
-            <ul className="space-y-2">
-              {product.benefits.map((benefit, index) => (
-                <li key={index} className="flex items-center text-sm text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <button
+            onClick={() =>
+            navigate(`/ProductDetailsById/${bestSeller?._id}`, {
+              state: { product: bestSeller },
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={() => navigate(`/ProductDetailsById/${bestSeller?._id}`)}
-              className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-            >
-              View Details
-            </button>
-            <button
-              onClick={() => navigate("/shop")}
-              className="border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition-colors"
-            >
-              Shop All
-            </button>
-          </div>
+          
+               })
+            }
+            className="bg-green-700 hover:bg-green-800 text-white px-6 py-2 rounded-full font-semibold shadow transition hover:scale-105"
+          >
+            Shop Now →
+          </button>
         </div>
       </div>
     </section>

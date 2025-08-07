@@ -7,7 +7,6 @@ import orderService from '../../services/orderService';
 import paymentService from '../../services/paymentService';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
-import { formatPriceDisplay } from '../../services/productService';
 
 import { FaLock, FaTruck, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
 
@@ -40,14 +39,11 @@ const Checkout = () => {
   const renderProductInfo = (item) => {
     // Check if productId exists and has the required properties
     if (item.productId && item.productId._id) {
-      const priceInfo = formatPriceDisplay(item.productId);
       return {
         id: item.productId._id,
         name: item.productId.name || 'Product Name Not Available',
         image: item.productId.images?.[0]?.url || '/placeholder.png',
-        price: priceInfo.displayPrice || 0,
-        originalPrice: priceInfo.originalPrice || 0,
-        hasDiscount: priceInfo.hasDiscount,
+        price: item.price || 0,
         quantity: item.quantity || 1
       };
     }
@@ -57,8 +53,6 @@ const Checkout = () => {
       name: 'Product Name Not Available',
       image: '/placeholder.png',
       price: item.price || 0,
-      originalPrice: item.price || 0,
-      hasDiscount: false,
       quantity: item.quantity || 1
     };
   };
@@ -119,15 +113,15 @@ const Checkout = () => {
       };
       console.log("options", options)
        const razor = new window.Razorpay(options)
-      
-      
-      razor.open()
 
-      
+      razor.open()
+ 
     } catch (error) {
       console.error("error", error.message) 
       toast.error("Payment initialization failed. Please try again.");
     } finally {
+      navigate("/order-success");
+      
       setLoading(false);
     }
   };
@@ -215,21 +209,10 @@ const Checkout = () => {
                 <div>
                   <p>{product.name}</p>
                   <p className="text-gray-500">Qty: {product.quantity}</p>
-                  {product.hasDiscount && (
-                    <p className="text-green-600 text-xs">Discounted Price</p>
-                  )}
                 </div>
+
               </div>
-              <div className="text-right">
-                {product.hasDiscount ? (
-                  <div>
-                    <p className="text-green-600 font-semibold">₹{product.price * product.quantity}</p>
-                    <p className="text-gray-400 line-through text-xs">₹{product.originalPrice * product.quantity}</p>
-                  </div>
-                ) : (
-                  <p>₹{product.price * product.quantity}</p>
-                )}
-              </div>
+              <p>₹{product.price * product.quantity}</p>
             </div>
           );
         })}
@@ -273,150 +256,7 @@ const Checkout = () => {
       </div>
     </div>
   </div>
-    // <div className="min-h-screen bg-black text-white px-4 sm:px-6 lg:px-20 py-10">
-    //   <motion.h2
-    //     className="text-3xl font-semibold text-[#e5dac3] mb-6"
-    //     initial={{ opacity: 0, y: -20 }}
-    //     animate={{ opacity: 1, y: 0 }}
-    //     transition={{ duration: 0.5 }}
-    //   >
-    //     Checkout
-    //   </motion.h2>
-
-    //   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    //     {/* Shipping Information */}
-    //     <motion.div
-    //       className="bg-gray-900 p-6 rounded-lg"
-    //       initial={{ opacity: 0, x: -20 }}
-    //       animate={{ opacity: 1, x: 0 }}
-    //       transition={{ duration: 0.5 }}
-    //     >
-    //       <h3 className="text-xl font-semibold mb-4">Shipping Information</h3>
-    //       <form className="space-y-4">
-    //         <div>
-    //           <label className="block text-sm font-medium mb-1">Full Name</label>
-    //           <input
-    //             type="text"
-    //             name="name"
-    //             value={formData.name}
-    //             onChange={handleChange}
-    //             className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //             required
-    //           />
-    //         </div>
-    //         <div>
-    //           <label className="block text-sm font-medium mb-1">Email</label>
-    //           <input
-    //             type="email"
-    //             name="email"
-    //             value={formData.email}
-    //             onChange={handleChange}
-    //             className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //             required
-    //           />
-    //         </div>
-    //         <div>
-    //           <label className="block text-sm font-medium mb-1">Phone</label>
-    //           <input
-    //             type="tel"
-    //             name="phone"
-    //             value={formData.phone}
-    //             onChange={handleChange}
-    //             className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //             required
-    //           />
-    //         </div>
-    //         <div>
-    //           <label className="block text-sm font-medium mb-1">Address</label>
-    //           <textarea
-    //             name="address"
-    //             value={formData.address}
-    //             onChange={handleChange}
-    //             className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //             required
-    //           />
-    //         </div>
-    //         <div className="grid grid-cols-2 gap-4">
-    //           <div>
-    //             <label className="block text-sm font-medium mb-1">City</label>
-    //             <input
-    //               type="text"
-    //               name="city"
-    //               value={formData.city}
-    //               onChange={handleChange}
-    //               className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //               required
-    //             />
-    //           </div>
-    //           <div>
-    //             <label className="block text-sm font-medium mb-1">State</label>
-    //             <input
-    //               type="text"
-    //               name="state"
-    //               value={formData.state}
-    //               onChange={handleChange}
-    //               className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //               required
-    //             />
-    //           </div>
-    //         </div>
-    //         <div>
-    //           <label className="block text-sm font-medium mb-1">Pincode</label>
-    //           <input
-    //             type="text"
-    //             name="pincode"
-    //             value={formData.pincode}
-    //             onChange={handleChange}
-    //             className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:border-[#96d569] focus:outline-none"
-    //             required
-    //           />
-    //         </div>
-    //       </form>
-    //     </motion.div>
-
-    //     {/* Order Summary */}
-    //     <motion.div
-    //       className="bg-gray-900 p-6 rounded-lg"
-    //       initial={{ opacity: 0, x: 20 }}
-    //       animate={{ opacity: 1, x: 0 }}
-    //       transition={{ duration: 0.5 }}
-    //     >
-    //       <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
-    //       <div className="space-y-4">
-    //         {cartItems.map((item) => (
-    //           <div key={item.productId._id} className="flex justify-between items-center">
-    //             <div className="flex items-center space-x-4">
-    //               <img
-    //                 src={item.productId.images[0]?.url}
-    //                 alt={item.productId.name}
-    //                 className="w-16 h-16 rounded-md object-cover"
-    //               />
-    //               <div>
-    //                 <h4 className="font-medium">{item.productId.name}</h4>
-    //                 <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
-    //               </div>
-    //             </div>
-    //             <p className="font-medium">₹{item.price * item.quantity}</p>
-    //           </div>
-    //         ))}
-    //         <div className="border-t border-gray-700 pt-4">
-    //           <div className="flex justify-between text-lg font-semibold">
-    //             <span>Total</span>
-    //             <span>₹{getTotalPrice()}</span>
-    //           </div>
-    //         </div>
-    //         <button
-    //           onClick={handlePayment}
-    //           className="w-full bg-[#96d569] text-black py-3 rounded-md font-semibold hover:bg-[#d4be9b] transition duration-300"
-    //           disabled={loading}
-    //         >
-    //           {loading ? 'Processing...' : 'Pay Now'}
-    //         </button>
-            
-    //       </div>
-    //     </motion.div>
-    //   </div>
-    // </div>
+   
   );
 };
 

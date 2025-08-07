@@ -107,7 +107,7 @@ const VideoSlider = () => {
         </AnimatePresence>
 
         {/* Navigation Buttons */}
-        <button
+        {/* <button
           onClick={handlePrev}
           className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full opacity-80 hover:opacity-100"
         >
@@ -117,8 +117,8 @@ const VideoSlider = () => {
           onClick={handleNext}
           className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full opacity-80 hover:opacity-100"
         >
-          <ChevronRight />
-        </button>
+          <ChevronRight /> */}
+        {/* </button> */}
       </div>
     </div>
   );

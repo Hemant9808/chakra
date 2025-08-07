@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FaInstagram,
@@ -7,8 +7,26 @@ import {
   FaEnvelope,
   FaCheckCircle,
 } from "react-icons/fa";
+import { productService } from "../../services/productService";
 
 const Footer = () => {
+
+  //get all categories from the database
+  const [categories, setCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    const [ categoriesData] = await Promise.all([
+     
+      productService.getAllCategories()
+    ]);
+    setCategories(categoriesData);
+  };
+
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+console.log("categories.........", categories);
   return (
     <footer
       className="relative bg-[#0c0c0c] text-white pt-12 pb-8"
@@ -45,7 +63,29 @@ const Footer = () => {
           </div>
 
           {/* Categories Section */}
-          <div>
+
+         
+              <div className="flex flex-col gap-4">
+              <h3 className="font-bold  text-lg  text-[#f4e9da]">Categories</h3>
+              {categories.map((category) => (
+            <div key={category._id}>
+             
+              <ul className="text-sm space-y-2 text-gray-300">
+                
+                  <li key={category._id}>
+                    <Link to={`/shop/${category.name}`} className="hover:text-yellow-400 transition">
+                      {category.name}
+                    </Link>
+                  </li>
+               
+              </ul>
+            </div>
+          ))}
+                
+              </div>
+         
+
+          {/* <div>
             <h3 className="font-bold text-lg mb-4 text-[#f4e9da]">Categories</h3>
             <ul className="text-sm space-y-2 text-gray-300">
               {[
@@ -62,7 +102,7 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Useful Links Section */}
           <div>
