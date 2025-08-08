@@ -20,7 +20,7 @@ const ProductDetailsById = () => {
   const [showAgePopup, setShowAgePopup] = useState(false);
   const location = useLocation();
  const  whyChoose = [
-        "High-potency Ashwagandha extract for maximum benefits",
+        "High-potency extract form Capsules for maximum benefits",
         "Lab-tested for purity & safety",
         "Available in easy-to-consume capsules, powder, or liquid extract",
         "Trusted by Ayurvedic experts",
