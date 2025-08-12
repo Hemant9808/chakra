@@ -9,6 +9,7 @@ import Contact from './components/Contact/Contact';
 import Login from './components/Login/Login';
 import Quiz from './components/Quiz/Quiz';
 import Cart from './components/Cart/Cart';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // import ProductDetails from './components/Home/HomeComponents/ProductDetails';
 import ProfilePage from './components/UserProfile/ProfilePage';
@@ -27,12 +28,14 @@ import RefundPolicy from './components/refund/RefundPolicy';
 import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
 import ProductDetailsById from './components/Shop/productDetials';
+import OrderSuccess from './components/Shop/ShopComponents/orderSuccess';
 
 function AppRoutes() {
   useAuthMiddleware();
 
   return (
     <>
+      <ScrollToTop />
       <Toaster position="top-right" />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -45,7 +48,7 @@ function AppRoutes() {
           <Route path="blogs/:id" element={<BlogDetail />} />
           {/* <Route path="product/:id" element={<ProductDetails />} /> */}
           <Route path="ProductDetailsById/:id" element={<ProductDetailsById />} />
-          <Route path="shop" element={<Shop />} />
+          <Route path="/shop/:id" element={<Shop />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
@@ -77,8 +80,10 @@ function AppRoutes() {
           />
           <Route path="/orders" element={<OrderInfoPage/>} />
           <Route path="/profile" element={<Profile />} />
+
           {/* <Route path="chat" element={<ChatPage />} /> */}
-          
+          <Route path="/order-success" element={<OrderSuccess />} />
+
         </Route>
       </Routes>
     </>

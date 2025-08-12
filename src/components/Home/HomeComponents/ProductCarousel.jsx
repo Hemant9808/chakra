@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../../../Store/useCartStore";
 import { useNavigate } from "react-router-dom";
-import { productService, formatPriceDisplay } from "../../../services/productService";
+import { productService } from "../../../services/productService";
 import { toast } from "react-hot-toast";
 import '../../../Styles/global.css'
+import { PriceDisplay } from "../../../utils/priceUtils";
 
 const ProductSkeleton = () => (
   <div className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center">
@@ -50,7 +51,7 @@ const ProductCarousel = () => {
       setProducts(featuredProducts);
       setCategories(categoriesData);
     } catch (error) {
-      toast.error(error.message);
+      // toast.error("lsfmgsekmdv");
     } finally {
       setLoading(false);
     }
@@ -74,7 +75,7 @@ const ProductCarousel = () => {
         const featuredProducts = categoryProducts.filter(product => product.isFeatured);
         setProducts(featuredProducts);
       } catch (error) {
-        toast.error(error.message);
+        // toast.error("lwemfs");
       } finally {
         setLoading(false);
       }
@@ -134,13 +135,14 @@ const ProductCarousel = () => {
       )}
 
       {/* Product Carousel */}
-      <div className="relative max-w-7xl mx-auto">
-        <button
+      
+      <div className="relative   overflow-hidden  max-w-7xl mx-auto">
+        {/* <button
           onClick={handlePrev}
           className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
         >
           <ChevronLeft size={24} />
-        </button>
+        </button> */}
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -149,7 +151,7 @@ const ProductCarousel = () => {
           className="overflow-hidden"
         >
           <div
-            className={`flex gap-4 px-6 sm:px-10 overflow-scroll ${
+            className={`flex gap-4 overflow-x-scroll scrollbar-hide px-6 sm:px-10  ${
               products.length <= 3 ? "justify-center" : "justify-start"
             }`}
           >
@@ -159,72 +161,46 @@ const ProductCarousel = () => {
                 <ProductSkeleton key={index} />
               ))
             ) : (
-              products.map((product) => {
-                const priceInfo = formatPriceDisplay(product);
-                return (
-                  <motion.div
-                    key={product._id}
-                    className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
+              
+              products.slice(currentIndex, currentIndex + 3).map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-white shadow-md p-4 overflow-hidden rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
+                  // onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
+                >
+                  <img
+                    src={product.images[0]?.url || '/placeholder.png'}
+                    alt={product.name}
+                    className="w-[100%] max-h-[15rem] object-contain rounded-md"
+                  />
+                  <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
+                  <p className="text-gray-700 text-xs mb-2">Brand: {product.brand}</p>
+                  <PriceDisplay product={product} />
+                  {/* <p className="text-green-600 font-bold text-lg mt-2">
+                    ₹{product.price}
+                  </p> */}
+                  <button
+                    className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
+                    onClick={(e) => {
+                      // e.stopPropagation();
+                     navigate(`/ProductDetailsById/${product._id}`)
+                      // addToCart(product);
+                    }}
                   >
-                    <div
-                      className="cursor-pointer transform hover:scale-105 transition duration-300"
-                      onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
-                    >
-                      <img
-                        src={product.images?.[0]?.url || "/placeholder.png"}
-                        alt={product.name}
-                        className="w-40 h-40 object-contain rounded-md"
-                      />
-                      <h3 className="text-sm font-semibold mt-3 text-center text-gray-800">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-500 text-sm text-center mt-1">
-                        {product.brand}
-                      </p>
-                      <div className="text-center mt-2">
-                        {priceInfo.hasDiscount ? (
-                          <div className="flex flex-col items-center">
-                            <span className="text-green-600 font-bold text-lg">₹{priceInfo.displayPrice}</span>
-                            <span className="text-gray-500 line-through text-sm">₹{priceInfo.originalPrice}</span>
-                            <span className="text-red-600 text-xs font-medium mt-1">
-                              {priceInfo.discountPercentage}% OFF
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-gray-800 font-bold text-lg">₹{priceInfo.displayPrice}</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <button
-                      className="bg-green-600 text-white px-4 py-2 rounded-md mt-4 hover:bg-green-700 transition w-full"
-                      onClick={() => {
-                        if (!checkIfUserIsLoggedIn()) {
-                          navigate("/login");
-                          return;
-                        }
-                        addToCart(product);
-                      }}
-                      disabled={product.stock <= 0}
-                    >
-                      {product.stock <= 0 ? 'OUT OF STOCK' : 'Add to Cart'}
-                    </button>
-                  </motion.div>
-                );
-              })
+                    Buy Now
+                  </button>
+                </div>
+              ))
             )}
           </div>
         </motion.div>
-
+{/* 
         <button
           onClick={handleNext}
           className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
         >
           <ChevronRight size={24} />
-        </button>
+        </button> */}
       </div>
 
       <div className="text-center mt-10">
