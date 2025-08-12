@@ -10,11 +10,11 @@ const ProductBanner = () => {
             A network of experts to answer
             <br /> your wellness-related questions.
           </h2>
-          <p className="text-lg text-brown mb-6">Feel Free To Talk.</p>
+          {/* <p className="text-lg text-brown mb-6">Feel Free To Talk.</p> */}
           <div className="bg-brown text-black py-2 px-6 inline-block text-lg font-medium rounded-md">
-            Dr. Ravi Ranjan
+            {/* Dr. Ravi Ranjan */}
           </div>
-          <p className="text-brown mt-2">Senior Ayurvedic Doctor, Wellvas</p>
+          {/* <p className="text-brown mt-2">Senior Ayurvedic Doctor, Wellvas</p> */}
         </div>
 
         {/* Image Section */}

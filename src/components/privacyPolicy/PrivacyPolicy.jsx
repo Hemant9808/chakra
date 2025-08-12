@@ -53,7 +53,7 @@ const PrivacyPolicy = () => {
       </p>
 
       <p className="mb-6">
-        This Privacy Policy is governed by the laws of India. Any disputes related to this policy shall be subject to the exclusive jurisdiction of the courts located in Bhagalpur, Bihar.
+        This Privacy Policy is governed by the laws of India. Any disputes related to this policy shall be subject to the exclusive jurisdiction of the courts located in Delhi, India.
       </p>
 
       <p className="mb-6">
@@ -63,7 +63,7 @@ const PrivacyPolicy = () => {
       <div className="mb-10">
         
         <p><strong>Email:</strong> <a href="mailto:support@wellvas.com" className="text-blue-600 underline">support@wellvas.com</a></p>
-        <p><strong>Phone:</strong> [8271442413]</p>
+        <p><strong>Phone:</strong> [8799722636]</p>
       </div>
 
       <p className="text-center text-sm text-gray-500">
