@@ -4,11 +4,13 @@ import { FiEdit2, FiUser, FiMail, FiPhone, FiLogOut } from 'react-icons/fi';
 import useAuthStore from '../../Store/useAuthStore';
 import { toast } from 'react-hot-toast';
 import OrderHistory from '../Profile/OrderHistory';
+import { useNavigate } from 'react-router-dom'; // 🆕 Added
 
 const ProfilePage = () => {
   const user = useAuthStore(state => state.user);
   const updateProfile = useAuthStore(state => state.updateProfile);
-  const logout = useAuthStore(state => state.logout); // 🆕 Added logout
+  const logout = useAuthStore(state => state.logout);
+  const navigate = useNavigate(); // 🆕 For navigation
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,6 +55,7 @@ const ProfilePage = () => {
   const handleLogout = () => {
     logout();
     toast.success('Logged out successfully');
+    navigate('/'); // 🆕 Redirect to home after logout
   };
 
   return (
