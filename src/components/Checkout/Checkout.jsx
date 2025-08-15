@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { toast } from 'react-hot-toast';
-import { useCartStore } from '../../Store/useCartStore';
-import orderService from '../../services/orderService';
-import paymentService from '../../services/paymentService';
-import LoadingSpinner from '../common/LoadingSpinner';
-import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
+import { useCartStore } from "../../Store/useCartStore";
+import orderService from "../../services/orderService";
+import paymentService from "../../services/paymentService";
+import LoadingSpinner from "../common/LoadingSpinner";
+import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 
-import { FaLock, FaTruck, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
+import { FaLock, FaTruck, FaCreditCard, FaShieldAlt } from "react-icons/fa";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { cartItems, getTotalPrice, clearCart } = useCartStore();
-  console.log("cart item on checkout page", cartItems)
+  console.log("cart item on checkout page", cartItems);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
   });
   const [emailOpen, setEmailOpen] = useState(true);
   const [shippingOpen, setShippingOpen] = useState(false);
   useEffect(() => {
     if (cartItems.length === 0) {
-      navigate('/cart');
+      navigate("/cart");
     }
   }, [cartItems, navigate]);
 
@@ -41,19 +41,19 @@ const Checkout = () => {
     if (item.productId && item.productId._id) {
       return {
         id: item.productId._id,
-        name: item.productId.name || 'Product Name Not Available',
-        image: item.productId.images?.[0]?.url || '/placeholder.png',
+        name: item.productId.name || "Product Name Not Available",
+        image: item.productId.images?.[0]?.url || "/placeholder.png",
         price: item.price || 0,
-        quantity: item.quantity || 1
+        quantity: item.quantity || 1,
       };
     }
     // Fallback for items without productId
     return {
       id: item._id,
-      name: 'Product Name Not Available',
-      image: '/placeholder.png',
+      name: "Product Name Not Available",
+      image: "/placeholder.png",
       price: item.price || 0,
-      quantity: item.quantity || 1
+      quantity: item.quantity || 1,
     };
   };
 
@@ -68,29 +68,27 @@ const Checkout = () => {
       const totalAmount = getTotalPrice();
 
       const key = await paymentService.getRazorpayKey();
-      console.log("razorpay key", key) 
+      console.log("razorpay key", key);
 
       const order = await paymentService.createPaymentOrder(totalAmount);
-      console.log("razorpay order", order)
-      
-      
+      console.log("razorpay order", order);
+
       const orderResponse = await orderService.createOrder({
         items: cartItems,
         totalPrice: totalAmount,
         shippingPrice: 0,
         shippingAddress: formData,
-        razorpay_order_id : order.order.id,
+        razorpay_order_id: order.order.id,
       });
 
-
       const options = {
-        key:key.key,
+        key: key.key,
         amount: order.order.amount,
         currency: "INR",
-        name: "Hemant Kumar",
+        name: "Wellvas Healthcare",
         description: "RazorPay",
-        image:
-          "https://avatars.githubusercontent.com/u/143936287?s=400&u=b0405682c50a0ca7f98e02b46db96e91520df3b5&v=4",
+        // image:
+        //   "https://avatars.githubusercontent.com/u/143936287?s=400&u=b0405682c50a0ca7f98e02b46db96e91520df3b5&v=4",
         order_id: order.order.id,
         // callback_url: "https://medimart-nayg.onrender.com/payment/paymentverification",
         prefill: {
@@ -110,18 +108,55 @@ const Checkout = () => {
           netbanking: true,
           wallet: true,
         },
-      };
-      console.log("options", options)
-       const razor = new window.Razorpay(options)
+        handler: function (response) {
+          toast.success("Payment successful! Order placed successfully.");
+          navigate("/order-success");
+          console.log("payment successful", response);  
+        },
+        modal: {
+          ondismiss: function (resp) {
+            console.log("payment window closed",resp);
+          },
+        },
 
-      razor.open()
- 
+      };
+      console.log("options", options);
+      const razor = new window.Razorpay(options);
+
+      razor.open();
+
+      
+      // Handle payment failures
+      razor.on("payment.failed", function (resp) {
+        console.log("payment failed", resp);
+        // handlePaymentFailure(resp.error);
+      });
+
+      // Handle payment cancellations
+      razor.on("payment.cancelled", function () {
+        console.log("payment cancelled");
+        toast.info("Payment was cancelled. You can try again.");
+        setLoading(false);
+      });
+
+      // Handle when user closes payment window
+      razor.on("modal.close", function () {
+        console.log("payment window closed");
+        toast.info("Payment window was closed. You can try again.");
+        setLoading(false);
+      });
+      razor.on("payment.success", function (resp) {
+        toast.success("Payment successful! Order placed successfully.");
+        navigate("/order-success");
+        setLoading(false);
+      });
+
     } catch (error) {
-      console.error("error", error.message) 
+      console.error("error", error.message);
       toast.error("Payment initialization failed. Please try again.");
     } finally {
-      navigate("/order-success");
-      
+     
+
       setLoading(false);
     }
   };
@@ -133,7 +168,6 @@ const Checkout = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* Left Column */}
         <div className="md:col-span-2 space-y-6">
-
           {/* Email Section */}
           <div className="border border-gray-200 rounded-md shadow-sm">
             <div
@@ -146,12 +180,17 @@ const Checkout = () => {
 
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={emailOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+              animate={
+                emailOpen
+                  ? { height: "auto", opacity: 1 }
+                  : { height: 0, opacity: 0 }
+              }
               transition={{ duration: 0.3 }}
               className="overflow-hidden px-6 pb-6"
             >
               <p className="text-sm mb-2 text-gray-600">
-                New customers get <span className="font-bold">10% off</span> their first order.
+                New customers get <span className="font-bold">10% off</span>{" "}
+                their first order.
               </p>
               <input
                 type="email"
@@ -176,17 +215,69 @@ const Checkout = () => {
 
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={shippingOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+              animate={
+                shippingOpen
+                  ? { height: "auto", opacity: 1 }
+                  : { height: 0, opacity: 0 }
+              }
               transition={{ duration: 0.3 }}
               className="overflow-hidden px-6 pb-6"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
-                <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
-                <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="md:col-span-2 border px-4 py-2 rounded-md" required />
-                <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
-                <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} className="border px-4 py-2 rounded-md" required />
-                <input type="text" name="pincode" placeholder="Pincode" value={formData.pincode} onChange={handleChange} className="md:col-span-2 border px-4 py-2 rounded-md" required />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="border px-4 py-2 rounded-md"
+                  required
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="border px-4 py-2 rounded-md"
+                  required
+                />
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="md:col-span-2 border px-4 py-2 rounded-md"
+                  required
+                />
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="border px-4 py-2 rounded-md"
+                  required
+                />
+                <input
+                  type="text"
+                  name="state"
+                  placeholder="State"
+                  value={formData.state}
+                  onChange={handleChange}
+                  className="border px-4 py-2 rounded-md"
+                  required
+                />
+                <input
+                  type="text"
+                  name="pincode"
+                  placeholder="Pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  className="md:col-span-2 border px-4 py-2 rounded-md"
+                  required
+                />
               </div>
             </motion.div>
           </div>
@@ -194,70 +285,89 @@ const Checkout = () => {
           {/* Payment Method Section (Non-collapsible) */}
           <div className="border border-gray-200 rounded-md p-6 shadow-sm">
             <h3 className="font-semibold text-lg mb-2">3. Payment Method</h3>
-            <p className="text-sm text-gray-600">You'll be redirected to payment after clicking "Place Order".</p>
+            <p className="text-sm text-gray-600">
+              You'll be redirected to payment after clicking "Place Order".
+            </p>
           </div>
         </div>
-      {/* Right: Order Summary */}
-      <div className="border border-gray-200 rounded-md p-6 shadow-sm space-y-6">
-        <h3 className="font-semibold text-lg">Cart ({cartItems.length})</h3>
-        {cartItems.map((item) => {
-          const product = renderProductInfo(item);
-          return (
-            <div key={product.id} className="flex justify-between items-center text-sm">
-              <div className="flex items-center gap-4">
-                <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded" />
-                <div>
-                  <p>{product.name}</p>
-                  <p className="text-gray-500">Qty: {product.quantity}</p>
+        {/* Right: Order Summary */}
+        <div className="border border-gray-200 rounded-md p-6 shadow-sm space-y-6">
+          <h3 className="font-semibold text-lg">Cart ({cartItems.length})</h3>
+          {cartItems.map((item) => {
+            const product = renderProductInfo(item);
+            return (
+              <div
+                key={product.id}
+                className="flex justify-between items-center text-sm"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                  <div>
+                    <p>{product.name}</p>
+                    <p className="text-gray-500">Qty: {product.quantity}</p>
+                  </div>
                 </div>
-
+                <p>₹{product.price * product.quantity}</p>
               </div>
-              <p>₹{product.price * product.quantity}</p>
-            </div>
-          );
-        })}
+            );
+          })}
 
-        <div>
-          <input
-            type="text"
-            placeholder="Gift or promo code"
-            className="w-full border px-4 py-2 rounded-md text-sm"
-          />
-          <button className="mt-2 w-full bg-gray-200 py-2 rounded-md text-sm font-medium text-gray-600 cursor-not-allowed" disabled>
-            Apply
+          <div>
+            <input
+              type="text"
+              placeholder="Gift or promo code"
+              className="w-full border px-4 py-2 rounded-md text-sm"
+            />
+            <button
+              className="mt-2 w-full bg-gray-200 py-2 rounded-md text-sm font-medium text-gray-600 cursor-not-allowed"
+              disabled
+            >
+              Apply
+            </button>
+          </div>
+
+          <div className="text-sm border-t border-gray-200 pt-4 space-y-2">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹{getTotalPrice()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Estimated Shipping</span>
+              <span>Free</span>
+            </div>
+            <div className="flex justify-between font-semibold">
+              <span>Total</span>
+              <span>₹{getTotalPrice()}</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Final tax and shipping calculated after shipping step is complete.
+            </p>
+          </div>
+
+          <button
+            onClick={handlePayment}
+            className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"
+            disabled={
+              loading ||
+              !formData.name ||
+              !formData.email ||
+              !formData.phone ||
+              !formData.address ||
+              !formData.city ||
+              !formData.state ||
+              !formData.pincode
+            }
+          >
+            {loading ? "Processing..." : "Place Order"}
           </button>
         </div>
-
-        <div className="text-sm border-t border-gray-200 pt-4 space-y-2">
-          <div className="flex justify-between">
-            <span>Subtotal</span>
-            <span>₹{getTotalPrice()}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Estimated Shipping</span>
-            <span>Free</span>
-          </div>
-          <div className="flex justify-between font-semibold">
-            <span>Total</span>
-            <span>₹{getTotalPrice()}</span>
-          </div>
-          <p className="text-xs text-gray-500 mt-1">
-            Final tax and shipping calculated after shipping step is complete.
-          </p>
-        </div>
-
-        <button
-          onClick={handlePayment}
-          className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"
-          disabled={loading || !formData.name || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.state || !formData.pincode}
-        >
-          {loading ? 'Processing...' : 'Place Order'}
-        </button>
       </div>
     </div>
-  </div>
-   
   );
 };
 
-export default Checkout; 
+export default Checkout;

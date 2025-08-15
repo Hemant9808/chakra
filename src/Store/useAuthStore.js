@@ -48,7 +48,35 @@ const useAuthStore = create(
       signup: async (userData) => {
         set({ loading: true, error: null });
         try {
-          const response = await axiosInstance.post("/auth/signup", userData);
+          const response = await axiosInstance.post("/auth/generate-signup-otp", userData);
+
+          const { token, user } = response.data;
+
+          set({
+            user,
+            token,
+            isAuthenticated: true,
+            loading: false,
+            error: null,
+          });
+
+          return response.data;
+        } catch (error) {
+          set({
+            loading: false,
+            error: error.response?.data?.message || "Signup failed",
+            user: null,
+            token: null,
+            isAuthenticated: false,
+          });
+          throw error;
+        }
+      },
+
+      verifySignupOTP: async (userData) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await axiosInstance.post("/auth/verify-signup-otp", userData);
 
           const { token, user } = response.data;
 
@@ -97,6 +125,7 @@ const useAuthStore = create(
           isAuthenticated: false,
           error: null,
         });
+        localStorage.removeItem("auth-storage");
       },
 
       updateProfile: async (userData) => {
@@ -120,6 +149,18 @@ const useAuthStore = create(
           throw error;
         }
       },
+      deleteAccount: async (email) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await axiosInstance.post("/auth/deleteAccount", { email });
+          localStorage.removeItem("auth-storage");
+          logout();
+          return response.data;
+        } catch (error) {
+          set({ loading: false, error: error.response?.data?.message || "Failed to delete account" });
+          throw error;
+        }
+      }
     }),
     {
       name: "auth-storage",

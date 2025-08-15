@@ -5,14 +5,18 @@ import useAuthStore from '../../Store/useAuthStore';
 import { format } from 'date-fns';
 import { toast } from 'react-hot-toast';
 import OrderHistory from '../Profile/OrderHistory';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   // const { user, updateProfile } = useAuthStore(state => ({
   //   user: state.user,
   //   updateProfile: state.updateProfile
   // }));
+  const navigate = useNavigate();
   const user = useAuthStore(state => state.user);
   const updateProfile = useAuthStore(state => state.updateProfile);
+  const deleteAccount = useAuthStore(state => state.deleteAccount);
+  const logout = useAuthStore(state => state.logout);
   
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -52,17 +56,34 @@ const ProfilePage = () => {
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (error) {
+      console.log("error while updating profile",error);
       toast.error('Failed to update profile');
     }
   };
 
-  // const formatDate = (dateString) => {
+  const handleDelete = async()=>{
+    try{
+       await deleteAccount(user?.email);
+      toast.success('Account deleted successfully!');
+      navigate("/login");
+    }catch(error){
+      // toast.error('Failed to delete account');
+    }
+  }
+
+  const handleLogout = ()=>{
+    logout();
+    navigate("/login");
+    toast.success('Logged out successfully!');
+  }
+// const formaauthtDate = (dateString) => {
   //   return format(new Date(dateString || Date), 'MMMM dd, yyyy');
   // };
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
+      
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,7 +100,10 @@ const ProfilePage = () => {
                   <h1 className="text-2xl font-bold text-white">
                     {user?.firstName} {user?.lastName}
                   </h1>
-                  <p className="text-green-100">{user?.role}</p>
+                  <div className='flex items-center gap-2'>
+                    <p className="text-green-100">{user?.role}</p>
+                    <button onClick={handleLogout} className='bg-red-100 p-2 cursor-pointer rounded-xl mt-2 font-bold text-green-600'>Logout</button>
+                  </div>
                 </div>
               </div>
               <button
@@ -241,6 +265,17 @@ const ProfilePage = () => {
             <h2 className="text-xl font-semibold mb-4">Saved Addresses</h2>
             {/* Add your addresses component here */}
             <p className="text-gray-500">No saved addresses</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white p-6 text-center rounded-lg shadow-lg"
+          >
+          {/* delete button */}
+          <button onClick={handleDelete} className='bg-red-200 p-3 rounded-xl font-bold text-red-600'>Delete Account</button>
+          
           </motion.div>
         </div>
       </div>

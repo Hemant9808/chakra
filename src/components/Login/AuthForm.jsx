@@ -64,9 +64,10 @@ const error = useAuthStore((state) => state.error);
         }
 
         await signup(formData);
+
         toast.success("Account created successfully!");
       }
-      navigate("/");
+      navigate("/otp-verification",{state:{email:formData.email}});
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }

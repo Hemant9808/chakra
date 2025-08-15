@@ -29,6 +29,7 @@ import TermsAndConditions from './components/T&C/TermsAndConditions';
 import Faqs from './components/FaQs/Faqs';
 import ProductDetailsById from './components/Shop/productDetials';
 import OrderSuccess from './components/Shop/ShopComponents/orderSuccess';
+import OtpVerification from './pages/Otp-verification';
 
 function AppRoutes() {
   useAuthMiddleware();
@@ -82,6 +83,7 @@ function AppRoutes() {
           <Route path="/profile" element={<Profile />} />
           <Route path="chat" element={<ChatPage />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/otp-verification" element={<OtpVerification />} />
         </Route>
       </Routes>
     </>
