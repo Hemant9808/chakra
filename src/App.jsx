@@ -21,7 +21,7 @@ import Checkout from './components/Checkout/Checkout';
 import Gallery from './components/Gallery/Gallery';
 import BlogSection from './components/Blogs/BlogSection';
 import BlogDetail from './components/Blogs/BlogDetail';
-import ChatPage from './pages/ChatPage';
+// import ChatPage from './pages/ChatPage';
 import OrderInfoPage from './components/OrdersInfo/OrderInfoPage';
 import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 import RefundPolicy from './components/refund/RefundPolicy';
@@ -81,7 +81,8 @@ function AppRoutes() {
           />
           <Route path="/orders" element={<OrderInfoPage/>} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="chat" element={<ChatPage />} />
+
+          {/* <Route path="chat" element={<ChatPage />} /> */}
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
         </Route>

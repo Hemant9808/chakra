@@ -79,7 +79,7 @@ export const PriceDisplay = ({ product, className = "" }) => {
   const calculateDiscount = (price, discountPrice) => {
     //deciaml to 2 decimal places
     const discount = ((price - discountPrice) / price) * 100;
-    return discount.toFixed(2);
+    return discount.toFixed(0);
   }
 
   return (

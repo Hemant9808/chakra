@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiEdit2, FiUser, FiMail, FiPhone, FiCalendar } from 'react-icons/fi';
+import { FiEdit2, FiUser, FiMail, FiPhone, FiLogOut } from 'react-icons/fi';
 import useAuthStore from '../../Store/useAuthStore';
-import { format } from 'date-fns';
 import { toast } from 'react-hot-toast';
 import OrderHistory from '../Profile/OrderHistory';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +25,7 @@ const ProfilePage = () => {
     email: '',
     phone: ''
   });
-  
+
   // 🛠️ Update form data only when user is loaded or edit mode toggled on
   useEffect(() => {
     if (user && isEditing) {
@@ -39,7 +38,6 @@ const ProfilePage = () => {
       });
     }
   }, [user, isEditing]);
-  
 
   const handleChange = (e) => {
     setFormData({
@@ -51,7 +49,6 @@ const ProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Assuming you have an updateProfile function in your auth store
       await updateProfile(formData);
       setIsEditing(false);
       toast.success('Profile updated successfully!');
@@ -106,13 +103,23 @@ const ProfilePage = () => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="bg-white text-green-600 px-4 py-2 rounded-lg flex items-center hover:bg-green-50 transition-colors"
-              >
-                <FiEdit2 className="mr-2" />
-                {isEditing ? 'Cancel' : 'Edit Profile'}
-              </button>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="bg-white text-green-600 px-4 py-2 rounded-lg flex items-center hover:bg-green-50 transition-colors"
+                >
+                  <FiEdit2 className="mr-2" />
+                  {isEditing ? 'Cancel' : 'Edit Profile'}
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-red-600 transition-colors"
+                >
+                  <FiLogOut className="mr-2" />
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
 
@@ -226,16 +233,6 @@ const ProfilePage = () => {
                     label="Phone"
                     value={user?.phone}
                   />
-                  {/* <ProfileItem
-                    icon={<FiCalendar />}
-                    label="Member Since"
-                    value={formatDate(user?.createdAt)}
-                  />
-                  <ProfileItem
-                    icon={<FiCalendar />}
-                    label="Last Updated"
-                    value={formatDate(user?.updatedAt)}
-                  /> */}
                 </div>
               </div>
             )}
@@ -251,9 +248,7 @@ const ProfilePage = () => {
             className="bg-white p-6 rounded-lg shadow-lg"
           >
             <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
-            {/* Add your orders component here */}
-            <OrderHistory/>
-            {/* <p className="text-gray-500">No recent orders</p> */}
+            <OrderHistory />
           </motion.div>
 
           <motion.div
@@ -263,7 +258,6 @@ const ProfilePage = () => {
             className="bg-white p-6 rounded-lg shadow-lg"
           >
             <h2 className="text-xl font-semibold mb-4">Saved Addresses</h2>
-            {/* Add your addresses component here */}
             <p className="text-gray-500">No saved addresses</p>
           </motion.div>
 

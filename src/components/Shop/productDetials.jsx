@@ -20,7 +20,7 @@ const ProductDetailsById = () => {
   const [showAgePopup, setShowAgePopup] = useState(false);
   const location = useLocation();
  const  whyChoose = [
-        "High-potency Ashwagandha extract for maximum benefits",
+        "High-potency extract form Capsules for maximum benefits",
         "Lab-tested for purity & safety",
         "Available in easy-to-consume capsules, powder, or liquid extract",
         "Trusted by Ayurvedic experts",
@@ -102,6 +102,11 @@ const ProductDetailsById = () => {
   </div>
   )
 
+   const calculateDiscount = (price, discountPrice) => {
+    //deciaml to 2 decimal places
+    const discount = ((price - discountPrice) / price) * 100;
+    return discount.toFixed(0);
+  }
 
   // if (loading) return <LoadingSpinner />;
   // if (error) return <div className="text-center text-red-500 mt-8">{error}</div>;
@@ -150,7 +155,22 @@ const ProductDetailsById = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="text-2xl font-bold text-gray-900">₹{product.price}</span>
+            <div className="flex items-center space-x-3">
+              {/* Original Price */}
+                <span className="text-lg text-gray-500 line-through">
+                  ₹{product.price}
+                </span>
+                
+                {/* Discounted Price */}
+                <span className="text-2xl font-bold text-green-600">
+                  ₹{product.discountPrice}
+                </span>
+                
+              </div>
+              <span className="text-green-600 text-sm">
+                      {calculateDiscount(product.price, product.discountPrice)}% off
+                </span>
+
             {product.stock > 0 ? (
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 In Stock ({product.stock})
@@ -180,7 +200,7 @@ const ProductDetailsById = () => {
             <h3 className="text-sm font-medium text-gray-900">Details</h3>
             <div className="mt-4 space-y-3">
               <p className="text-sm text-gray-600">
-                <span className="font-medium">Manufacturer:</span> {product.manufacturer}
+                {/* <span className="font-medium">Manufacturer:</span> {product.manufacturer} */}
               </p>
               <p className="text-sm text-gray-600">
                 <span className="font-medium">Categories:</span>{' '}

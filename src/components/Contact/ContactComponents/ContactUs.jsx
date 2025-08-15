@@ -164,7 +164,7 @@ export default function ContactUs() {
       <div className="mt-8 text-center text-gray-600">
         <p><strong>Address:</strong> E-46/3, Mohan Baba Nagar, Nearby - S K Payal Public School, Badarpur, New Delhi 110044</p>
         <p><strong>Email:</strong> support@wellvas.com</p>
-        <p><strong>Phone:</strong> +91-8271442413</p>
+        <p><strong>Phone:</strong> +91-8799722636</p>
         <div className="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
           <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>

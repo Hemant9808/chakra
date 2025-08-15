@@ -139,7 +139,7 @@ console.log("categories.........", categories);
               </button>
             </div>
             <div className="mt-4 text-sm flex items-center space-x-2 text-gray-300">
-              <FaPhone /> <span>+91 8271442413</span>
+              <FaPhone /> <span>+91 8799722636</span>
             </div>
             <div className="mt-2 text-sm flex items-center space-x-2 text-gray-300">
               <FaEnvelope /> <span>support@wellvas.com</span>
