@@ -9,12 +9,14 @@ import { toast } from "react-hot-toast";
 import { clearLocalStorage } from "../../middleware/middleware";
 import logo from "../../../public/ResourseImages/logo.png";
 
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { cartItems, getTotalItems, getTotalPrice } = useCartStore();
+  const { getUserDetails } = useAuthStore();
 
   const userStorage = localStorage.getItem("auth-storage");
   const token = JSON.parse(userStorage)?.state?.token;
@@ -50,6 +52,8 @@ const Header = () => {
     toast.success("Logged out successfully");
   };
 
+
+
   useEffect(() => {
     if(token){
       const userDetails = getUserDetails(authUser.id);
@@ -61,6 +65,8 @@ const Header = () => {
       
     }
   }, [token]);
+
+
 
   return (
     <header
