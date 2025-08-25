@@ -1,23 +1,28 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import useAuthStore from "../Store/useAuthStore";
 
 
 const OtpVerification = () => {
     const { verifySignupOTP } = useAuthStore();
+    const navigate = useNavigate();
     const { email } = useLocation()?.state || {};
+    
     const handleSubmit = async (e) => {
         try{
         e.preventDefault();
         const otp = e.target.otp.value;
         const response = await verifySignupOTP({ otp, email });
         if(response.success){
+            console.log("response.......",response);
             toast.success("OTP verified successfully");
-            navigate("/");
+            navigate("/");  
         }
         } catch (error) {
             toast.error(error.response?.data?.message || error.message);
         }
     }
+
     return (
         <div>
         

@@ -10,7 +10,6 @@ const useAuthStore = create(
       isAuthenticated: false,
       loading: false,
       error: null,
-
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),
 
@@ -52,12 +51,16 @@ const useAuthStore = create(
 
           const { token, user } = response.data;
 
+          console.log("user....................",token,user);
+
           set({
+
             user,
             token,
-            isAuthenticated: true,
+            isAuthenticated: false,
             loading: false,
             error: null,
+
           });
 
           return response.data;
@@ -158,6 +161,24 @@ const useAuthStore = create(
           return response.data;
         } catch (error) {
           set({ loading: false, error: error.response?.data?.message || "Failed to delete account" });
+          throw error;
+        }
+      },
+      getUserDetails: async (userId) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await axiosInstance.post("/auth/getUserDetails", { userId });
+          const { token, user } = response.data;
+          set({
+            user,
+            token,
+            isAuthenticated: true,
+            loading: false,
+            error: null,
+          });
+          return response.data;
+        } catch (error) {
+          set({ loading: false, error: error.response?.data?.message || "Failed to get user details" });
           throw error;
         }
       }

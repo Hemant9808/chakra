@@ -33,27 +33,26 @@ const FeaturedProduct = () => {
 
   // Timer logic
   const [timeLeft, setTimeLeft] = useState(3600); // 1 hour in seconds
- const [bestSeller, setBestSeller] = useState();
- console.log("bestSeller", bestSeller);
-useEffect(() => {
-  async function fetchProducts() {
-    try {
-      const products = await productService.getAllProducts();
-      console.log("products", products);
-      const best = products.find((product) => product.isBestSelling);
-      if (best) {
-        setBestSeller(best);
+  const [bestSeller, setBestSeller] = useState();
+  console.log("bestSeller", bestSeller);
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const products = await productService.getAllProducts();
+        console.log("products....................", products);
+        const best = products && products?.find((product) => product.isBestSelling);
+        if (best) {
+          setBestSeller(best);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
       }
-    } catch (error) {
-      console.error("Error fetching products:", error);
     }
-  }
 
-  fetchProducts();
-}, []);
+    fetchProducts();
+  }, []);
 
-console.log("bestSeller", bestSeller);
-
+  console.log("bestSeller", bestSeller);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -73,7 +72,7 @@ console.log("bestSeller", bestSeller);
     const secs = seconds % 60;
     return `${mins}m ${secs < 10 ? "0" : ""}${secs}s`;
   };
-  if(!bestSeller) return <></>;
+  if (!bestSeller) return <></>;
 
   return (
     <section className="bg-[#f6fdf5] py-16 px-6 md:px-12">
@@ -81,7 +80,6 @@ console.log("bestSeller", bestSeller);
         {/* Image */}
         <div className="md:w-1/2 w-full relative">
           <img
-          
             src={bestSeller?.images[0]?.url || product.image}
             alt={product.name}
             className="w-full max-h-[420px] object-contain rounded-2xl shadow-xl"
@@ -101,25 +99,21 @@ console.log("bestSeller", bestSeller);
           </h2>
           <p className="text-lg text-gray-600 italic mb-4">{product.tagline}</p>
           <p className="text-gray-700 text-sm md:text-base mb-6">
-  {bestSeller?.description
-    ?.split(" ")
-    .slice(0, 30)
-    .join(" ") + (bestSeller?.description?.split(" ").length > 30 ? "..." : "")}
-</p>
-
+            {bestSeller?.description?.split(" ").slice(0, 30).join(" ") +
+              (bestSeller?.description?.split(" ").length > 30 ? "..." : "")}
+          </p>
 
           {/* Timer */}
           <div className="mb-4 text-sm text-red-600 font-medium">
-            Limited Time Offer: <span className="font-bold">{formatTime(timeLeft)}</span> left
+            Limited Time Offer:{" "}
+            <span className="font-bold">{formatTime(timeLeft)}</span> left
           </div>
 
           <button
             onClick={() =>
-            navigate(`/ProductDetailsById/${bestSeller?._id}`, {
-              state: { product: bestSeller },
-
-          
-               })
+              navigate(`/ProductDetailsById/${bestSeller?._id}`, {
+                state: { product: bestSeller },
+              })
             }
             className="bg-green-700 hover:bg-green-800 text-white px-6 py-2 rounded-full font-semibold shadow transition hover:scale-105"
           >

@@ -50,6 +50,18 @@ const Header = () => {
     toast.success("Logged out successfully");
   };
 
+  useEffect(() => {
+    if(token){
+      const userDetails = getUserDetails(authUser.id);
+
+      if(!userDetails.success){
+        handleLogout();
+        navigate("/login");
+      }
+      
+    }
+  }, [token]);
+
   return (
     <header
       className="shadow sticky top-0 z-50 text-white bg-cover bg-center"
