@@ -34,7 +34,7 @@ export const useCartStore = create((set) => ({
     try {
       console.log("product",product)
       set({ loading: true, error: null });
-      const cart = await cartService.addToCart(product._id, 1, product.price);
+      const cart = await cartService.addToCart(product._id, 1, product.price, product.discountPrice);
       const items = cart.items || [];
       set({ cartItems: items, loading: false });
       localStorage.setItem('cartItems', JSON.stringify(items));
@@ -91,7 +91,15 @@ export const useCartStore = create((set) => ({
     );
   },
 
+  getTotalDiscountPrice: () => {
+    return useCartStore.getState().cartItems.reduce(
+      (total, item) => total + item.discountPrice * item.quantity,
+      0
+    );
+  },
+
   getTotalPrice: () => {
+    
     return useCartStore.getState().cartItems.reduce(
       (total, item) => total + item.price * item.quantity,
       0

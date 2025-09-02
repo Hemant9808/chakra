@@ -24,6 +24,8 @@ const Header = () => {
   const authUser = useAuthStore((state) => state.user);
   const authLogout = useAuthStore((state) => state.logout);
 
+  console.log("authUser in header ....................",authUser);
+
   const totalCartItems = getTotalItems();
   const totalPrice = getTotalPrice();
 
@@ -54,17 +56,17 @@ const Header = () => {
 
 
 
-  useEffect(() => {
-    if(token){
-      const userDetails = getUserDetails(authUser.id);
+  // useEffect(() => {
+  //   if(token){
+  //     const userDetails = getUserDetails(authUser.id);
 
-      if(!userDetails.success){
-        handleLogout();
-        navigate("/login");
-      }
+  //     if(!userDetails.success){
+  //       handleLogout();
+  //       navigate("/login");
+  //     }
       
-    }
-  }, [token]);
+  //   }
+  // }, [token]);
 
 
 

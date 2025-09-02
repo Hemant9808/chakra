@@ -25,7 +25,7 @@ const cartService = {
   },
 
   // Add item to cart
-  addToCart: async (productId, quantity, price) => {
+  addToCart: async (productId, quantity, price,discountPrice) => {
     console.log("fasgs")
     // console.log(checkIfUserIsLoggedIn())
     try {
@@ -43,7 +43,7 @@ const cartService = {
       // }
       const response = await axiosInstance.post(
         `${API_URL}/addToCart`,
-        { productId, quantity, price },
+        { productId, quantity, price,discountPrice },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`,

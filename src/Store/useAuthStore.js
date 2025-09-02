@@ -82,6 +82,7 @@ const useAuthStore = create(
           const response = await axiosInstance.post("/auth/verify-signup-otp", userData);
 
           const { token, user } = response.data;
+          console.log("user in verify opt store ....................",token,user);
 
           set({
             user,

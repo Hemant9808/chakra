@@ -12,7 +12,8 @@ import { FaLock, FaTruck, FaCreditCard, FaShieldAlt } from "react-icons/fa";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cartItems, getTotalPrice, clearCart } = useCartStore();
+  const { cartItems, getTotalPrice, clearCart, getTotalDiscountPrice } =
+    useCartStore();
   console.log("cart item on checkout page", cartItems);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -66,11 +67,15 @@ const Checkout = () => {
         return;
       }
       const totalAmount = getTotalPrice();
+      const totalDiscountPrice = getTotalDiscountPrice();
+      console.log("total discount price", totalDiscountPrice, totalAmount);
 
       const key = await paymentService.getRazorpayKey();
       console.log("razorpay key", key);
 
-      const order = await paymentService.createPaymentOrder(totalAmount);
+      const order = await paymentService.createPaymentOrder(
+        totalDiscountPrice || totalAmount
+      );
       console.log("razorpay order", order);
 
       const orderResponse = await orderService.createOrder({
@@ -79,6 +84,7 @@ const Checkout = () => {
         shippingPrice: 0,
         shippingAddress: formData,
         razorpay_order_id: order.order.id,
+        totalDiscountPrice: Number(totalDiscountPrice),
       });
 
       const options = {
@@ -111,21 +117,19 @@ const Checkout = () => {
         handler: function (response) {
           toast.success("Payment successful! Order placed successfully.");
           navigate("/order-success");
-          console.log("payment successful", response);  
+          console.log("payment successful", response);
         },
         modal: {
           ondismiss: function (resp) {
-            console.log("payment window closed",resp);
+            console.log("payment window closed", resp);
           },
         },
-
       };
       console.log("options", options);
       const razor = new window.Razorpay(options);
 
       razor.open();
 
-      
       // Handle payment failures
       razor.on("payment.failed", function (resp) {
         console.log("payment failed", resp);
@@ -150,13 +154,10 @@ const Checkout = () => {
         navigate("/order-success");
         setLoading(false);
       });
-
     } catch (error) {
       console.error("error", error.message);
       toast.error("Payment initialization failed. Please try again.");
     } finally {
-     
-
       setLoading(false);
     }
   };
@@ -339,9 +340,20 @@ const Checkout = () => {
               <span>Estimated Shipping</span>
               <span>Free</span>
             </div>
-            <div className="flex justify-between font-semibold">
+            <div className="flex  justify-between font-semibold">
               <span>Total</span>
-              <span>₹{getTotalPrice()}</span>
+              <span className="font-semibold flex flex-col ">
+                <span className="font-semibold ml-3 text-green-500">
+                  ₹{getTotalDiscountPrice() || getTotalPrice()}
+                </span>
+              
+              {getTotalDiscountPrice() > 0 &&
+                getTotalDiscountPrice() < getTotalPrice() && (
+                  <span className="text-gray-500 ml-2 line-through text-sm">
+                    ₹{getTotalPrice()}
+                  </span>
+                )}
+                </span>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Final tax and shipping calculated after shipping step is complete.

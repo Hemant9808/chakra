@@ -72,7 +72,8 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
       ) : (
         <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
           <button
-            onClick={() => setActiveTab("ALL PRODUCTS")}
+            // onClick={() => setActiveTab("ALL PRODUCTS")}
+            onClick={() => navigate(`/shop/all`)}
             className={`px-4 cursor-pointer py-2 font-semibold border-b-2 ${
               id === "all"
                 ? "border-black text-black"

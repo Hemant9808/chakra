@@ -22,6 +22,8 @@ const CartComponent = () => {
   }, [fetchCart]);
    console.log("cart items on cart page", cartItems)
 
+   const totaldiscountedPrice = cartItems.reduce((total, item) => total + item.discountPrice * item.quantity, 0);
+
 
   if (loading) return <LoadingSpinner className="bg-black"/>;
   if (error) return <div className="text-red-500 text-center mt-8">{error}</div>;
@@ -36,6 +38,7 @@ const CartComponent = () => {
         name: item.productId.name || 'Product Name Not Available',
         image: item.productId.images?.[0]?.url || '/placeholder.png',
         price: item.price || 0,
+        discountPrice: item.discountPrice || null,
         quantity: item.quantity || 1
       };
     }
@@ -45,8 +48,17 @@ const CartComponent = () => {
       name: 'Product Name Not Available',
       image: '/placeholder.png',
       price: item.price || 0,
+      discountPrice: item.discountPrice || null,
       quantity: item.quantity || 1
     };
+  };
+
+  // Helper function to get effective price (discount if available and less than original, otherwise original)
+  const getEffectivePrice = (item) => {
+    if (item.discountPrice && item.discountPrice > 0 && item.discountPrice < item.price) {
+      return item.discountPrice;
+    }
+    return item.price;
   };
 
   return (
@@ -111,7 +123,16 @@ const CartComponent = () => {
                       >
                         {product.name}
                       </h4>
-                      <p className="text-sm text-gray-400 mt-1">₹{product.price} each</p>
+                      <div className="text-sm text-gray-400 mt-1">
+                        {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? (
+                          <div className="flex items-center gap-2">
+                            <span className="text-green-400">₹{product.discountPrice}</span>
+                            <span className="text-gray-500 line-through">₹{product.price}</span>
+                          </div>
+                        ) : (
+                          <span>₹{product.price} each</span>
+                        )}
+                      </div>
 
                       <div className="flex items-center mt-3 space-x-3">
                         <button
@@ -130,9 +151,16 @@ const CartComponent = () => {
                       </div>
 
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="font-semibold text-sm">
-                          ₹{product.price * product.quantity}
-                        </span>
+                        <div className="font-semibold text-sm">
+                          {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? (
+                            <div className="flex items-center gap-2">
+                              <span className="text-green-400">₹{product.discountPrice * product.quantity}</span>
+                              <span className="text-gray-500 line-through text-xs">₹{product.price * product.quantity}</span>
+                            </div>
+                          ) : (
+                            <span>₹{product.price * product.quantity}</span>
+                          )}
+                        </div>
                         <button
                           onClick={() => removeItem(product.id)}
                           className="text-red-500 cursor-pointer hover:text-red-700"
@@ -155,7 +183,7 @@ const CartComponent = () => {
                   <th className="py-3">Product</th>
                   <th className="py-3">Price</th>
                   <th className="py-3">Quantity</th>
-                  <th className="py-3">Total</th>
+               
                   <th className="py-3">Action</th>
                 </tr>
               </thead>
@@ -182,7 +210,16 @@ const CartComponent = () => {
                             {product.name}
                           </span>
                         </td>
-                        <td className="py-4">₹{product.price}</td>
+                        <td className="py-4">
+                          {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? (
+                            <div className="flex flex-col">
+                              <span className="text-green-400">₹{product.discountPrice}</span>
+                              <span className="text-gray-500 line-through text-sm">₹{product.price}</span>
+                            </div>
+                          ) : (
+                            <span>₹{product.price}</span>
+                          )}
+                        </td>
                         <td className="py-4">
                           <div className="flex items-center space-x-2">
                             <button
@@ -200,7 +237,7 @@ const CartComponent = () => {
                             </button>
                           </div>
                         </td>
-                        <td className="py-4">₹{product.price * product.quantity}</td>
+                      
                         <td className="py-4">
                           <button
                             onClick={() => removeItem(product.id)}
@@ -228,7 +265,10 @@ const CartComponent = () => {
         >
         
           <div className="flex flex-col lg:flex-row items-center gap-4">
-            <h3 className="text-2xl font-semibold">Total: ₹{totalPrice}</h3>
+            <h3 className="text-2xl font-semibold">Total: ₹
+            {totaldiscountedPrice < totalPrice ? totaldiscountedPrice : totalPrice}
+           { totaldiscountedPrice > 0 && totaldiscountedPrice < totalPrice && <span className="text-gray-500 ml-2 line-through text-sm">₹{totalPrice}</span>}
+            </h3>
             {/* <button
               onClick={clearCart}
               className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300"
