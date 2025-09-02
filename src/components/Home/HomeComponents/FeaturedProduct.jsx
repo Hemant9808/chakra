@@ -87,9 +87,9 @@ const FeaturedProduct = () => {
           <span className="absolute top-4 left-4 bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
             Bestseller
           </span>
-          <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md animate-pulse">
+          {/* <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md animate-pulse">
             25% OFF
-          </span>
+          </span> */}
         </div>
 
         {/* Text Content */}

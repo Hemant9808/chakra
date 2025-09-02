@@ -162,7 +162,7 @@ const ProductCarousel = () => {
               ))
             ) : (
               
-              products.slice(currentIndex, currentIndex + 3).map((product) => (
+              products.map((product) => (
                 <div
                   key={product._id}
                   className="bg-white shadow-md p-4 overflow-hidden rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
@@ -174,7 +174,7 @@ const ProductCarousel = () => {
                     className="w-[100%] max-h-[15rem] object-contain rounded-md"
                   />
                   <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
-                  <p className="text-gray-700 text-xs mb-2">Brand: {product.brand}</p>
+                  <p className="text-gray-700 text-xs mb-2">{product.brand}</p>
                   <PriceDisplay product={product} />
                   {/* <p className="text-green-600 font-bold text-lg mt-2">
                     ₹{product.price}

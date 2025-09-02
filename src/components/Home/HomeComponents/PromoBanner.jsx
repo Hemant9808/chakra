@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 const slides = [
   {
     id: 1,
-    image: "/ResourseImages/1.png",
+    image: "/ResourseImages/page1.png",
     button: "Shop Now",
   },
   {
     id: 2,
-    image: "/ResourseImages/2.png",
+    image: "/ResourseImages/page2.jpg",
     button:"Shop Now",
   },
   {
     id: 3,
-    image: "/ResourseImages/3.png",
+    image: "/ResourseImages/page3.jpg",
     button: "Shop Now",
   },
 ];
@@ -30,7 +30,7 @@ export default function PromoBanner() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto h-[220px] md:h-[400px] mt-6 md:mt-16 px-2 ">
+    <div className="relative w-full max-w-7xl mx-auto h-[220px] md:h-[500px] mt-6 md:mt-16 px-2 ">
       <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-lg">
         {slides.map((slide, index) => (
           <div
@@ -46,7 +46,7 @@ export default function PromoBanner() {
             />
             <div className="absolute inset-0 bg-black/30 flex items-end justify-center pb-4 md:pb-6 px-4 text-white rounded-2xl">
                <Link
-               to="/shop"
+               to="/shop/all"
               className="bg-white text-black px-5 py-2 rounded-full text-sm md:text-base font-semibold hover:bg-gray-200 transition inline-block"
               >
              {slide.button}

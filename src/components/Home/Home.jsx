@@ -18,11 +18,11 @@ import FrequentlyBoughtTogether from "./HomeComponents/FrequentlyBoughtTogether.
 function Home() {
   return (
     <div className="">
-      <MarqueeBanner />
+      {/* <MarqueeBanner /> */}
       <PromoBanner />
 
       <ProductCarousel />
-      <VideoSlider />
+      {/* <VideoSlider /> */}
 
       <FrequentlyBoughtTogether />
       <Testimonials />
