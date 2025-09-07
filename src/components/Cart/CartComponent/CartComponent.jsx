@@ -152,14 +152,14 @@ const CartComponent = () => {
 
                       <div className="mt-3 flex items-center justify-between">
                         <div className="font-semibold text-sm">
-                          {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? (
+                          {/* {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? (
                             <div className="flex items-center gap-2">
                               <span className="text-green-400">₹{product.discountPrice * product.quantity}</span>
                               <span className="text-gray-500 line-through text-xs">₹{product.price * product.quantity}</span>
                             </div>
                           ) : (
                             <span>₹{product.price * product.quantity}</span>
-                          )}
+                          )} */}
                         </div>
                         <button
                           onClick={() => removeItem(product.id)}

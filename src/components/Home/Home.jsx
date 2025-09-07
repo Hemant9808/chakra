@@ -25,8 +25,9 @@ function Home() {
       {/* <VideoSlider /> */}
 
       <FrequentlyBoughtTogether />
-      <Testimonials />
       <FeaturedProduct />
+      <Testimonials />
+      
       <BlogHighlights />
       <WhyWellvas />
       <LoudAndProud />

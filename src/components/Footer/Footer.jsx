@@ -145,7 +145,7 @@ console.log("categories.........", categories);
               <FaEnvelope /> <span>support@wellvas.com</span>
             </div>
             <div className="mt-5 flex space-x-3">
-              <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/wellvashealthcare/" target="_blank" rel="noopener noreferrer">
                 <FaInstagram className="text-yellow-400 text-xl cursor-pointer hover:scale-110 transition-transform" />
               </a>
               <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer">

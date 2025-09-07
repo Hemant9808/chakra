@@ -167,7 +167,7 @@ export default function ContactUs() {
         <p><strong>Phone:</strong> +91-8799722636</p>
         <div className="flex justify-center space-x-4 mt-4 text-xl">
           <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-          <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+          <a href="https://www.instagram.com/wellvashealthcare/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
           {/* <a href="mailto:support@wellvas.com"><FaEnvelope /></a>
           <a href="tel:+918271442413"><FaPhone /></a> */}
         </div>
