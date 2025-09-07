@@ -146,20 +146,20 @@ const ProductCarousel = () => {
   >
     <div
       className={`min-w-[90%] flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x px-4 ${
-        products.length <= 3 ? "justify-start" : "justify-center"
+        products.length <= 3 ? "justify-start" : "justify-start"
       }`}
     >
       {loading ? (
         // Show 3 skeleton products while loading
-        Array(3).fill(null).map((_, index) => (
-          <ProductSkeleton key={index} />
-        ))
+        Array(3)
+          .fill(null)
+          .map((_, index) => <ProductSkeleton key={index} />)
       ) : (
         products.map((product) => (
           <div
             key={product._id}
+            onClick={() => navigate(`/ProductDetailsById/${product._id}`)} // 👈 card click → details
             className="bg-white min-w-[90%] sm:min-w-auto shadow-md p-4 overflow-hidden rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer snap-start"
-            // onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
           >
             <img
               src={product.images[0]?.url || "/placeholder.png"}
@@ -174,7 +174,9 @@ const ProductCarousel = () => {
             <button
               className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
               onClick={(e) => {
-                navigate(`/ProductDetailsById/${product._id}`);
+                e.stopPropagation(); // prevent parent click
+                addToCart(product); // 👈 add to cart
+                navigate(`/ProductDetailsById/${product._id}`); // 👈 then navigate
               }}
             >
               Buy Now
@@ -184,8 +186,6 @@ const ProductCarousel = () => {
       )}
     </div>
   </motion.div>
-
-
 {/* 
         <button
           onClick={handleNext}

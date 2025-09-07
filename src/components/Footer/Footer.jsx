@@ -48,10 +48,10 @@ console.log("categories.........", categories);
             <h3 className="font-bold text-lg mb-4 text-[#f4e9da]">Products</h3>
             <ul className="text-sm space-y-2 text-gray-300">
               {[
-                { name: "Ashwazen Max", path: "/products/ashwazen-max" },
-                { name: "EVAS Pro", path: "/products/evas-pro" },
-                { name: "Liver Detox Bolts", path: "/products/liver-detox" },
-                { name: "Multivitamin CMC", path: "/products/multivitamin-cmc" },
+                { name: "AshwaZen X", path: "/ProductDetailsById/68bdc188f56e1a004b70616d" },
+                { name: "Evas Neo", path: "/ProductDetailsById/68bdc4d9f56e1a004b7061a1" },
+                { name: "Anti Addiction Drops", path: "/ProductDetailsById/68b73127347f29004bac86de" },
+                { name: "Multivitamin", path: "/ProductDetailsById/68b5df334c20870055bf94a6" },
               ].map((item, index) => (
                 <li key={index}>
                   <Link to={item.path} className="hover:text-yellow-400 transition">
