@@ -4,20 +4,23 @@ import { motion } from "framer-motion";
 const testimonials = [
   {
     id: 1,
-    name: "Sarah M.",
-    text: "Improved sleep quality and reduced anxiety thanks to Wellvas Ashwagandha.",
+    name: "Ankit Sharma",
+    text: "I've tried multiple wellness brands, but Wellvas stands out. Their products feel authentic and effective!",
+    rating: 5,
     align: "left",
   },
   {
     id: 2,
-    name: "John B.",
-    text: "Noticeable positive difference in my digestion using Triphala supplements.",
+    name: "Meera Joshi",
+    text: "As someone who follows Ayurveda, I love the balance of tradition and modern science in their formulas.",
+    rating: 4,
     align: "right",
   },
   {
     id: 3,
-    name: "Priya K.",
-    text: "Turmeric formula helped ease my joint inflammation and boost immunity.",
+    name: "Rahul Verma",
+    text: "The liver detox Tablets actually made a difference. Subtle yet powerful!",
+    rating: 5,
     align: "left",
   },
 ];

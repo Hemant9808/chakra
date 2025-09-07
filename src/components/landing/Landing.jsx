@@ -1,17 +1,16 @@
 import AyurvedaSection from "./AyurvedaSection";
-import FeaturedProducts from "./FeaturedProducts";
 import CTA from "./WellnessCallToAction";
 import SustainabilitySection from "./SustainabilitySection";
 import TestimonialsTimeline from "./TestimonialsTimeline";
-
 import React from 'react'
+import FeaturedProduct from "../Home/HomeComponents/FeaturedProduct";
 
 function Landing() {
   return (
     <div>
         <AyurvedaSection />
         <TestimonialsTimeline />
-        <FeaturedProducts />
+        <FeaturedProduct />
         <SustainabilitySection />
         <CTA />
     </div>

@@ -14,7 +14,7 @@ export default function WellnessCallToAction() {
           className="w-full md:w-1/2"
         >
           <img
-            src="/ResourseImages/1.png"
+            src="/ResourseImages/page3.jpg"
             alt="Meditation at Sunset"
             className="rounded-lg shadow-lg w-full"
           />
@@ -38,7 +38,7 @@ export default function WellnessCallToAction() {
             deeper insights, explore our blog filled with Ayurvedic wisdom and
             tips.
           </p>
-          <button onClick={() => window.location.href = 'https://www.wellvas.com/shop/all'} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded shadow-md">
+          <button onClick={() => window.location.href = '/shop/all'} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded shadow-md">
             Shop Now and Transform Your Health
           </button>
         </motion.div>

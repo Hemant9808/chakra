@@ -15,7 +15,7 @@ const testimonials = [
   },
   {
     name: "Rahul Verma",
-    text: "The liver detox drops actually made a difference. Subtle yet powerful!",
+    text: "The liver detox Tablets actually made a difference. Subtle yet powerful!",
     rating: 5,
   },
 ];

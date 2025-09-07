@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export default function AyurvedaSection() {
+  const navigate = useNavigate();
+
   return (
     <>
       <section className="bg-[#141b29] text-white py-16 px-6">
@@ -17,11 +20,22 @@ export default function AyurvedaSection() {
               ✨ Empowering Wellness Through Ayurveda ✨
             </h1>
             <p className="text-lg text-blue-100">
-              Premium, science-backed Ayurvedic supplements crafted to restore your balance and boost vitality.
+              Premium, science-backed Ayurvedic supplements crafted to restore
+              your balance and boost vitality.
             </p>
-            <button  className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded transition">
+
+            {/* Animated Shop Now Button */}
+            <motion.button
+              onClick={() => navigate("/shop/all")}
+              className="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.1, boxShadow: "0px 0px 15px rgba(59,130,246,0.6)" }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+            >
               Shop Now
-            </button>
+            </motion.button>
           </motion.div>
 
           <motion.div
@@ -31,7 +45,7 @@ export default function AyurvedaSection() {
             viewport={{ once: true }}
           >
             <img
-              src="/wellcore.jpg"
+              src="/ResourseImages/page1.png"
               alt="Ayurvedic Ingredients"
               className="rounded-xl shadow-lg w-full"
             />
@@ -54,14 +68,16 @@ export default function AyurvedaSection() {
             <div className="bg-[#2a2f38] p-6 rounded-lg">
               <h3 className="font-semibold text-lg mb-1">Ancient Wisdom</h3>
               <p className="text-gray-300 text-sm">
-                A 5,000-year-old holistic healing system from India focused on natural balance.
+                A 5,000-year-old holistic healing system from India focused on
+                natural balance.
               </p>
             </div>
 
             <div className="bg-[#2a2f38] p-6 rounded-lg">
               <h3 className="font-semibold text-lg mb-1">Mind, Body & Spirit</h3>
               <p className="text-gray-300 text-sm">
-                Ayurveda nurtures harmony among your physical, mental, and spiritual health.
+                Ayurveda nurtures harmony among your physical, mental, and
+                spiritual health.
               </p>
             </div>
 
@@ -82,7 +98,7 @@ export default function AyurvedaSection() {
             viewport={{ once: true }}
           >
             <img
-              src="/Anti.jpg"
+              src="/ResourseImages/page2.jpg"
               alt="Ayurvedic Background"
               className="rounded-xl shadow-xl w-full"
             />
@@ -113,19 +129,22 @@ export default function AyurvedaSection() {
             <div>
               <h3 className="font-semibold text-xl mb-2">Ashwagandha Research</h3>
               <p className="text-sm">
-                Clinical studies reveal it reduces stress by up to 69%, enhancing calm and focus.
+                Clinical studies reveal it reduces stress by up to 69%, enhancing
+                calm and focus.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-xl mb-2">Turmeric Benefits</h3>
               <p className="text-sm">
-                Curcumin, the active compound, offers potent anti-inflammatory and antioxidant effects supported by numerous trials.
+                Curcumin, the active compound, offers potent anti-inflammatory and
+                antioxidant effects supported by numerous trials.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-xl mb-2">Trusted Science</h3>
               <p className="text-sm">
-                Our formulas combine traditional knowledge with modern clinical evidence for effective wellness support.
+                Our formulas combine traditional knowledge with modern clinical
+                evidence for effective wellness support.
               </p>
             </div>
           </motion.div>
