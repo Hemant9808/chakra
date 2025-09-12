@@ -280,7 +280,6 @@ const CartComponent = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 to="/checkout"
-                
               >
               <button className="bg-[#499611] text-white px-6 py-3 rounded-md hover:bg-[#499611] cursor-pointer transition duration-300">
                 Proceed to Checkout
