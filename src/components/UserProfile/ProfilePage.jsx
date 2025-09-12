@@ -99,12 +99,12 @@ const ProfilePage = () => {
                   </h1>
                   <div className='flex items-center gap-2'>
                     <p className="text-green-100">{user?.role}</p>
-                    <button onClick={handleLogout} className='bg-red-100 p-2 cursor-pointer rounded-xl mt-2 font-bold text-green-600'>Logout</button>
+                    {/* <button onClick={handleLogout} className='bg-red-100 p-2 cursor-pointer rounded-xl mt-2 font-bold text-green-600'>Logout</button> */}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-col sm:flex-row overflow-hidden">
                 <button
                   onClick={() => setIsEditing(!isEditing)}
                   className="bg-white text-green-600 px-4 py-2 rounded-lg flex items-center hover:bg-green-50 transition-colors"
@@ -114,7 +114,7 @@ const ProfilePage = () => {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-red-600 transition-colors"
+                  className="bg-red-500 hidden text-white px-4 py-2 rounded-lg md:flex items-center justify-center hover:bg-red-600 transition-colors"
                 >
                   <FiLogOut className="mr-2" />
                   Logout

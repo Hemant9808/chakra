@@ -38,7 +38,7 @@ function Shop() {
 
   return (
     <div>
-      <MarqueeBanner />
+    
       <DiscountBanner />
       <ProductTabs products={products} categories={categories} loading={loading} />
     </div>

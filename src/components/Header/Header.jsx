@@ -32,7 +32,7 @@ const Header = () => {
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/shop/all", label: "Shop" },
-    { path: "/quiz", label: "Wellness Test" },
+    // { path: "/quiz", label: "Wellness Test" },
     { path: "/contact", label: "Contact" },
     { path: "/about", label: "About" },
     { path: "/blogs", label: "Blogs" },
@@ -72,7 +72,7 @@ const Header = () => {
 
   return (
     <header
-      className="shadow sticky top-0 z-50 text-white bg-cover bg-center"
+      className="md:pt-3 md:h-25 shadow sticky top-0 z-50 text-white bg-cover bg-center"
       style={{
         backgroundImage: "url('/ResourseImages/bg.png')",
         backgroundColor: "rgba(0, 0, 0, 0.7)",
@@ -88,7 +88,7 @@ const Header = () => {
         </div>
 
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2 ">
           <img
             src={logo}
             alt="Wellvas Logo"

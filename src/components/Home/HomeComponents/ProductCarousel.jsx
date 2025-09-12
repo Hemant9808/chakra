@@ -136,64 +136,56 @@ const ProductCarousel = () => {
 
       {/* Product Carousel */}
       
-      <div className="relative   overflow-hidden  max-w-7xl mx-auto">
-        {/* <button
-          onClick={handlePrev}
-          className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all"
-        >
-          <ChevronLeft size={24} />
-        </button> */}
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="overflow-hidden"
-        >
+     
+<div className="relative overflow-hidden max-w-7xl mx-auto">
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.5 }}
+    className="overflow-hidden"
+  >
+    <div
+      className={`min-w-[90%] flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x px-4 ${
+        products.length <= 3 ? "justify-start" : "justify-start"
+      }`}
+    >
+      {loading ? (
+        // Show 3 skeleton products while loading
+        Array(3)
+          .fill(null)
+          .map((_, index) => <ProductSkeleton key={index} />)
+      ) : (
+        products.map((product) => (
           <div
-            className={`flex gap-4 overflow-x-scroll scrollbar-hide px-6 sm:px-10  ${
-              products.length <= 3 ? "justify-center" : "justify-start"
-            }`}
+            key={product._id}
+            onClick={() => navigate(`/ProductDetailsById/${product._id}`)} // 👈 card click → details
+            className="bg-white min-w-[90%] sm:min-w-auto shadow-md p-4 overflow-hidden rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer snap-start"
           >
-            {loading ? (
-              // Show 3 skeleton products while loading
-              Array(3).fill(null).map((_, index) => (
-                <ProductSkeleton key={index} />
-              ))
-            ) : (
-              
-              products.slice(currentIndex, currentIndex + 3).map((product) => (
-                <div
-                  key={product._id}
-                  className="bg-white shadow-md p-4 overflow-hidden rounded-xl w-52 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer"
-                  // onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
-                >
-                  <img
-                    src={product.images[0]?.url || '/placeholder.png'}
-                    alt={product.name}
-                    className="w-[100%] max-h-[15rem] object-contain rounded-md"
-                  />
-                  <h3 className="text-lg font-semibold mt-3 text-center">{product.name}</h3>
-                  <p className="text-gray-700 text-xs mb-2">Brand: {product.brand}</p>
-                  <PriceDisplay product={product} />
-                  {/* <p className="text-green-600 font-bold text-lg mt-2">
-                    ₹{product.price}
-                  </p> */}
-                  <button
-                    className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
-                    onClick={(e) => {
-                      // e.stopPropagation();
-                     navigate(`/ProductDetailsById/${product._id}`)
-                      // addToCart(product);
-                    }}
-                  >
-                    Buy Now
-                  </button>
-                </div>
-              ))
-            )}
+            <img
+              src={product.images[0]?.url || "/placeholder.png"}
+              alt={product.name}
+              className="w-[100%] max-h-[15rem] object-contain rounded-md"
+            />
+            <h3 className="text-lg font-semibold mt-3 text-center">
+              {product.name}
+            </h3>
+            <p className="text-gray-700 text-xs mb-2">{product.brand}</p>
+            <PriceDisplay product={product} />
+            <button
+              className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
+              onClick={(e) => {
+                e.stopPropagation(); // prevent parent click
+                addToCart(product); // 👈 add to cart
+                navigate(`/ProductDetailsById/${product._id}`); // 👈 then navigate
+              }}
+            >
+              Buy Now
+            </button>
           </div>
-        </motion.div>
+        ))
+      )}
+    </div>
+  </motion.div>
 {/* 
         <button
           onClick={handleNext}
@@ -205,7 +197,7 @@ const ProductCarousel = () => {
 
       <div className="text-center mt-10">
         <button
-          onClick={() => navigate("/shop")}
+          onClick={() => navigate("/shop/all")}
           className="bg-[#355425] text-white px-6 py-3 rounded-full text-sm sm:text-base font-semibold hover:bg-[#c71e65] transition"
         >
           View All Products

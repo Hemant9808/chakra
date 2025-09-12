@@ -55,7 +55,7 @@ const ContactSocialMedia = () => {
               <a href="https://www.facebook.com/share/16dWmZixuF/" target="_blank" rel="noopener noreferrer" className="text-blue-600 text-3xl hover:scale-110 transition">
                 <FaFacebook />
               </a>
-              <a href="https://www.instagram.com/wellvascare?igsh=MW01eng5NDc1emN6Yw==" target="_blank" rel="noopener noreferrer" className="text-pink-500 text-3xl hover:scale-110 transition">
+              <a href="https://www.instagram.com/wellvashealthcare/" target="_blank" rel="noopener noreferrer" className="text-pink-500 text-3xl hover:scale-110 transition">
                 <FaInstagram />
               </a>
             </div>
