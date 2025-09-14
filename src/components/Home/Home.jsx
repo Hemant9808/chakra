@@ -14,6 +14,7 @@ import Testimonials from "./HomeComponents/Testimonials.jsx";
 import BlogHighlights from "./HomeComponents/BlogPreview.jsx";
 import FeaturedProduct from "./HomeComponents/FeaturedProduct.jsx";
 import FrequentlyBoughtTogether from "./HomeComponents/FrequentlyBoughtTogether.jsx";
+import BenefitsOfAyurveda from "./HomeComponents/BenefitsOfAyurveda.jsx";
 
 function Home() {
   return (
@@ -23,6 +24,7 @@ function Home() {
 
       <ProductCarousel />
       {/* <VideoSlider /> */}
+      <BenefitsOfAyurveda />
 
       <FrequentlyBoughtTogether />
       <FeaturedProduct />

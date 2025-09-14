@@ -166,19 +166,47 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
                   </div>
                 </div>
               </Link>
-              <button
-                className="bg-black text-white text-sm mt-3 px-4 py-2 rounded hover:bg-gray-800 disabled:bg-gray-300"
-                onClick={() => {
-                  if (!checkIfUserIsLoggedIn()) {
-                  navigate("/login")
-                  return;
-                  }
-                  addToCart(product);
-                }}
-                disabled={product.stock <= 0}
-              >
-                {product.stock <= 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
-              </button>
+<button
+  onClick={() => {
+    if (!checkIfUserIsLoggedIn()) {
+      navigate("/login");
+      return;
+    }
+    addToCart(product);
+  }}
+  disabled={product.stock <= 0}
+  className="group relative mt-3 mx-auto w-[180px] h-[54px] flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-not-allowed"
+>
+  {/* Background */}
+  <div
+    className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-out 
+      group-hover:scale-110 ${product.stock <= 0 ? "opacity-50" : ""}`}
+    style={{
+      backgroundImage: "url('/ResourseImages/bg.png')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
+      WebkitMaskRepeat: "no-repeat",
+      WebkitMaskSize: "cover",
+      WebkitMaskPosition: "center",
+      maskImage: "url('/ResourseImages/buttonShape2.png')",
+      maskRepeat: "no-repeat",
+      maskSize: "cover",
+      maskPosition: "center",
+    }}
+  />
+
+  {/* Text */}
+  <span
+    className={`relative z-10 text-white font-semibold text-sm ${
+      product.stock <= 0 ? "opacity-70" : ""
+    }`}
+  >
+    {product.stock <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
+  </span>
+</button>
+
+
             </motion.div>
           ))
         )}

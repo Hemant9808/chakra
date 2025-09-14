@@ -172,15 +172,39 @@ const ProductCarousel = () => {
             <p className="text-gray-700 text-xs mb-2">{product.brand}</p>
             <PriceDisplay product={product} />
             <button
-              className="bg-green-600 text-white px-4 py-2 rounded-md mt-3 hover:bg-green-700 transition"
-              onClick={(e) => {
-                e.stopPropagation(); // prevent parent click
-                addToCart(product); // 👈 add to cart
-                navigate(`/ProductDetailsById/${product._id}`); // 👈 then navigate
-              }}
-            >
-              Buy Now
-            </button>
+  onClick={(e) => {
+    e.stopPropagation(); // keep existing behaviour
+    addToCart(product);
+    navigate(`/ProductDetailsById/${product._id}`);
+  }}
+  className="relative mt-3 w-[180px] h-[54px] flex items-center justify-center px-3 py-0 overflow-visible cursor-pointer"
+  aria-label={`Buy ${product.name}`}
+>
+  {/* ✅ Background with masking */}
+  <div
+  className="absolute inset-0 w-full h-full transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-1"
+  style={{
+    backgroundImage: "url('/ResourseImages/bg.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
+    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskSize: "cover",
+    WebkitMaskPosition: "center",
+    maskImage: "url('/ResourseImages/buttonShape2.png')",
+    maskRepeat: "no-repeat",
+    maskSize: "cover",
+    maskPosition: "center",
+  }}
+/>
+
+  {/* ✅ Text */}
+  <span className="relative z-10 text-white font-semibold text-sm">
+    Buy Now
+  </span>
+</button>
+
+
           </div>
         ))
       )}

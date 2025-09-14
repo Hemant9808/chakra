@@ -14,6 +14,10 @@ import {
   ArrowRightCircle,
   CheckCircle2,
 } from "lucide-react";
+import BenefitsSection from "./BenefitsSection";
+import BenifitsRight from "./BenifitsRight";
+import FrequentlyBoughtTogether from "../Home/HomeComponents/FrequentlyBoughtTogether";
+
 
 const ProductDetailsById = () => {
   const navigate = useNavigate();
@@ -60,6 +64,7 @@ const ProductDetailsById = () => {
 
   if (showAgePopup) {
     return (
+  
       <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
           <h2 className="text-lg font-semibold mb-2">Are you over 18?</h2>
@@ -105,6 +110,7 @@ const ProductDetailsById = () => {
   };
 
   return (
+    <div>
     <motion.div
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
       initial={{ opacity: 0 }}
@@ -130,7 +136,7 @@ const ProductDetailsById = () => {
           </motion.div>
 
           {/* Thumbnails */}
-          <div className="flex gap-3 overflow-x-auto">
+          <div className="flex gap-3 overflow-scroll scrollbar-hide">
             {product.images.map((image, index) => (
               <motion.button
                 key={index}
@@ -164,7 +170,27 @@ const ProductDetailsById = () => {
               </motion.button>
             ))}
           </div>
+          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
+            <h3 className="text-xl font-semibold text-black">
+              Why Choose {product.brand}?
+            </h3>
+            <ul className="list-none mt-3 space-y-2 text-gray-600 text-sm">
+              {whyChoose.map((point, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center gap-2"
+                >
+                  <CheckCircle size={16} className="text-green-500" /> {point}
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
+
+        
 
         {/* --- Product Info Section --- */}
         <motion.div
@@ -228,74 +254,84 @@ const ProductDetailsById = () => {
           </motion.div>
 
           {/* Description */}
-<motion.div
-  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-  className="space-y-2"
->
-  <h3 className="text-lg font-medium text-gray-900">Description</h3>
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    className="relative bg-gray-50 p-4 rounded-lg text-gray-600 text-sm leading-relaxed shadow-inner 
-               border-l-4 border-green-500 hover:border-green-600 transition-all duration-300"
-  >
-    {product.description.split("\n").map((line, idx) => (
-      <p key={idx} className="mb-2">
-        {line}
-      </p>
-    ))}
-  </motion.div>
+        <motion.div
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+          className="space-y-2"
+        >
+          <h3 className="text-lg font-medium text-gray-900">Description</h3>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative bg-gray-50 p-4 rounded-lg text-gray-600 text-sm leading-relaxed shadow-inner 
+                      border-l-4 border-green-500 hover:border-green-600 transition-all duration-300"
+          >
+            {product.description.split("\n").map((line, idx) => (
+              <p key={idx} className="mb-2">
+                {line}
+              </p>
+            ))}
+          </motion.div>
 
 
           </motion.div>
 
-          {/* Why Choose */}
-          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-            <h3 className="text-xl font-semibold text-black">
-              Why Choose {product.brand}?
-            </h3>
-            <ul className="list-none mt-3 space-y-2 text-gray-600 text-sm">
-              {whyChoose.map((point, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-2"
-                >
-                  <CheckCircle size={16} className="text-green-500" /> {point}
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+          
 
           {/* Add to Cart Button */}
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            onClick={() => {
-              if (!checkIfUserIsLoggedIn()) {
-                navigate("/login");
-                return;
-              }
-              addToCart(product);
-              toast.success("Added to cart!");
-            }}
-            disabled={product.stock <= 0}
-            className={`w-full py-3 px-8 flex items-center justify-center gap-2 text-lg font-medium rounded-xl shadow-md ${
-              product.stock > 0
-                ? "bg-gradient-to-r from-green-500 to-green-700 text-white hover:shadow-lg"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed"
-            }`}
-          >
-            <ShoppingCart size={20} />
-            {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
-          </motion.button>
+<motion.button
+  whileHover={{ scale: 1.03 }}
+  whileTap={{ scale: 0.95 }}
+  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+  onClick={() => {
+    if (!checkIfUserIsLoggedIn()) {
+      navigate("/login");
+      return;
+    }
+    addToCart(product);
+    toast.success("Added to cart!");
+  }}
+  disabled={product.stock <= 0}
+  className="group relative mt-3 w-full h-[60px] flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-not-allowed"
+>
+  {/* ✅ Background with masking + hover zoom */}
+  <div
+    className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-out 
+      group-hover:scale-110 ${product.stock <= 0 ? "opacity-50" : ""}`}
+    style={{
+      backgroundImage: "url('/ResourseImages/bg.png')", // your textured bg
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
+      WebkitMaskRepeat: "no-repeat",
+      WebkitMaskSize: "100% 100%",   // <-- stretches shape across full width
+      WebkitMaskPosition: "center",
+      maskImage: "url('/ResourseImages/buttonShape2.png')",
+      maskRepeat: "no-repeat",
+      maskSize: "100% 100%",        // <-- same for mask
+      maskPosition: "center",
+    }}
+  />
+
+  {/* ✅ Content on top */}
+  <span
+    className={`relative z-10 flex items-center gap-2 font-semibold text-sm md:text-base ${
+      product.stock <= 0 ? "text-gray-300" : "text-white"
+    }`}
+  >
+    <ShoppingCart size={18} />
+    {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
+  </span>
+</motion.button>
+
+
         </motion.div>
       </div>
     </motion.div>
+    <BenefitsSection />
+    <BenifitsRight />
+    <FrequentlyBoughtTogether />
+    </div>
   );
 };
 

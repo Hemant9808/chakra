@@ -4,18 +4,21 @@ import { Link } from "react-router-dom";
 const slides = [
   {
     id: 1,
-    image: "/ResourseImages/page1.png",
-    button: "Shop Now",
+    imageSmall: "/ResourseImages/page1.png",   // mobile version
+    imageLarge: "/ResourseImages/page1.png",   // desktop version
+    button: "Explore Now",
   },
   {
     id: 2,
-    image: "/ResourseImages/page2.jpg",
-    button:"Shop Now",
+    imageSmall: "/ResourseImages/page2.jpg",
+    imageLarge: "/ResourseImages/page2.jpg",
+    button: "Explore Now",
   },
   {
     id: 3,
-    image: "/ResourseImages/page3.jpg",
-    button: "Shop Now",
+    imageSmall: "/ResourseImages/page3.jpg",
+    imageLarge: "/ResourseImages/page3.jpg",
+    button: "Explore Now",
   },
 ];
 
@@ -30,7 +33,7 @@ export default function PromoBanner() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto h-[220px] md:h-[500px] mt-6 md:mt-16 px-2 ">
+    <div className="relative w-full max-w-7xl mx-auto h-[220px] md:h-[500px] mt-6 md:mt-16 px-2">
       <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-lg">
         {slides.map((slide, index) => (
           <div
@@ -39,17 +42,24 @@ export default function PromoBanner() {
               index === current ? "opacity-100 z-20" : "opacity-0 z-10"
             }`}
           >
-            <img
-              src={slide.image}
-              alt={`slide-${slide.id}`}
-              className=" h-full object-cover w-full max-w-7xl rounded-2xl"
-            />
+            {/* ✅ Responsive images with picture */}
+            <picture>
+              {/* For medium+ screens */}
+              <source srcSet={slide.imageLarge} media="(min-width: 768px)" />
+              {/* Default (small screens) */}
+              <img
+                src={slide.imageSmall}
+                alt={`slide-${slide.id}`}
+                className="h-full w-full object-cover rounded-2xl"
+              />
+            </picture>
+
             <div className="absolute inset-0 bg-black/30 flex items-end justify-center pb-4 md:pb-6 px-4 text-white rounded-2xl">
-               <Link
-               to="/shop/all"
-              className="bg-white text-black px-5 py-2 rounded-full text-sm md:text-base font-semibold hover:bg-gray-200 transition inline-block"
+              <Link
+                to="/shop/all"
+                className="bg-white text-black px-5 py-2 rounded-full text-sm md:text-base font-semibold hover:bg-gray-200 transition inline-block"
               >
-             {slide.button}
+                {slide.button}
               </Link>
             </div>
           </div>
