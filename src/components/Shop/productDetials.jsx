@@ -170,24 +170,7 @@ const ProductDetailsById = () => {
               </motion.button>
             ))}
           </div>
-          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-            <h3 className="text-xl font-semibold text-black">
-              Why Choose {product.brand}?
-            </h3>
-            <ul className="list-none mt-3 space-y-2 text-gray-600 text-sm">
-              {whyChoose.map((point, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-2"
-                >
-                  <CheckCircle size={16} className="text-green-500" /> {point}
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+          
         </div>
 
         
@@ -274,6 +257,25 @@ const ProductDetailsById = () => {
           </motion.div>
 
 
+          </motion.div>
+          {/* Why Choose Section */}
+          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
+            <h3 className="text-xl font-semibold text-black">
+              Why Choose {product.brand}?
+            </h3>
+            <ul className="list-none mt-3 space-y-2 text-gray-600 text-sm">
+              {whyChoose.map((point, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center gap-2"
+                >
+                  <CheckCircle size={16} className="text-green-500" /> {point}
+                </motion.li>
+              ))}
+            </ul>
           </motion.div>
 
           

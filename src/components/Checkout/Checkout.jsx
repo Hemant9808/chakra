@@ -189,10 +189,10 @@ const Checkout = () => {
               transition={{ duration: 0.3 }}
               className="overflow-hidden px-6 pb-6"
             >
-              <p className="text-sm mb-2 text-gray-600">
+              {/* <p className="text-sm mb-2 text-gray-600">
                 New customers get <span className="font-bold">10% off</span>{" "}
                 their first order.
-              </p>
+              </p> */}
               <input
                 type="email"
                 name="email"
