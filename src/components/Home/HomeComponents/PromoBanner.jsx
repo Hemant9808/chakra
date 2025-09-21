@@ -2,22 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const slides = [
+    {
+    id: 4,
+    imageSmall: "/ResourseImages/festive44.jpeg",
+    imageLarge: "/ResourseImages/festive44.jpeg",
+    button: "Explore Now",
+  },
   {
     id: 1,
-    imageSmall: "/ResourseImages/promo1.jpg",   // mobile version
-    imageLarge: "/ResourseImages/promo1.jpg",   // desktop version
+    imageSmall: "/ResourseImages/festive11.png",   // mobile version
+    imageLarge: "/ResourseImages/festive11.png",   // desktop version
     button: "Explore Now",
   },
   {
     id: 2,
-    imageSmall: "/ResourseImages/promo2.jpg",
-    imageLarge: "/ResourseImages/promo2.jpg",
+    imageSmall: "/ResourseImages/festive2.png",
+    imageLarge: "/ResourseImages/festive2.png",
     button: "Explore Now",
   },
   {
     id: 3,
-    imageSmall: "/ResourseImages/promo3.jpg",
-    imageLarge: "/ResourseImages/promo3.jpg",
+    imageSmall: "/ResourseImages/festive3.png",
+    imageLarge: "/ResourseImages/festive3.png",
     button: "Explore Now",
   },
 ];
