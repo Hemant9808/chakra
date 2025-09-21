@@ -52,12 +52,12 @@ const DiscountBanner = () => {
         </div>
 
         {/* Right Side Image */}
-        <div className="sm:w-1/2 w-full flex justify-center p-4">
-          {/* <img
-            src="https://www.daburshop.com/cdn/shop/files/1_90e49e8e-41ac-48a9-91a4-8e9df8402948_1024x1024.png?v=1741673066"
+        <div className="sm:w-1/2 w-full overflow-visible flex justify-center p-4">
+          <img
+            src="/ResourseImages/shopImage.png"
             alt="Discount Product"
-            className="w-48 sm:w-64 md:w-72 object-contain rounded-lg shadow-lg"
-          /> */}
+            className="w-full sm:w-full md:w-full object-contain rounded-lg shadow-lg"
+          />
         </div>
       </motion.div>
     </div>
