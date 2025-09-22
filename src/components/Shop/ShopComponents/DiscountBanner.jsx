@@ -13,7 +13,7 @@ const DiscountBanner = () => {
         {/* Left Side Text */}
         <div className="px-6 py-8 sm:w-1/2 w-full text-center sm:text-left">
           <h2 className="text-2xl sm:text-4xl font-bold leading-snug">
-            <span className="text-yellow-400">We are Giving More than 25% Discount</span> on All Products!
+            <span className="text-yellow-400">Lets Celebrate this Festive Season.</span> Use <span className="text-yellow-400">"FESTIVE10"</span> Code to get 10% instant discount on All Products!
           </h2>
 
           {/* <p className="mt-2 text-sm sm:text-base text-gray-300">

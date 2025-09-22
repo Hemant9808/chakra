@@ -8,13 +8,17 @@ import paymentService from "../../services/paymentService";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 
-import { FaLock, FaTruck, FaCreditCard, FaShieldAlt } from "react-icons/fa";
+// Define promo codes (frontend-only)
+const PROMO_CODES = [
+  { code: "WELCOME10", discount: 10 }, // 10% off
+  { code: "SAVE20", discount: 20 },   // 20% off
+  { code: "FESTIVE10", discount: 10 }, // 30% off
+];
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cartItems, getTotalPrice, clearCart, getTotalDiscountPrice } =
-    useCartStore();
-  console.log("cart item on checkout page", cartItems);
+  const { cartItems, getTotalPrice, clearCart, getTotalDiscountPrice } = useCartStore();
+
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -25,8 +29,14 @@ const Checkout = () => {
     state: "",
     pincode: "",
   });
+    // 👇 Missing states added
   const [emailOpen, setEmailOpen] = useState(true);
-  const [shippingOpen, setShippingOpen] = useState(false);
+  const [shippingOpen, setShippingOpen] = useState(true);
+
+  // Promo code states
+  const [promoInput, setPromoInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/cart");
@@ -37,26 +47,34 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const renderProductInfo = (item) => {
-    // Check if productId exists and has the required properties
-    if (item.productId && item.productId._id) {
-      return {
-        id: item.productId._id,
-        name: item.productId.name || "Product Name Not Available",
-        image: item.productId.images?.[0]?.url || "/placeholder.png",
-        price: item.price || 0,
-        quantity: item.quantity || 1,
-      };
+  // Handle promo apply
+  const handleApplyPromo = () => {
+    const found = PROMO_CODES.find(
+      (promo) => promo.code.toLowerCase() === promoInput.trim().toLowerCase()
+    );
+    if (found) {
+      setAppliedPromo(found);
+      toast.success(`${found.code} applied! You got ${found.discount}% off.`);
+    } else {
+      toast.error("Invalid promo code");
     }
-    // Fallback for items without productId
-    return {
-      id: item._id,
-      name: "Product Name Not Available",
-      image: "/placeholder.png",
-      price: item.price || 0,
-      quantity: item.quantity || 1,
-    };
   };
+
+  // Remove applied promo
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoInput("");
+    toast.success("Promo code removed");
+  };
+
+  // Calculate discounted price (including backend discount logic if any)
+  const subtotal = getTotalPrice();
+  const backendDiscountPrice = getTotalDiscountPrice();
+
+  let total = backendDiscountPrice || subtotal;
+  if (appliedPromo) {
+    total = total - (total * appliedPromo.discount) / 100;
+  }
 
   const handlePayment = async () => {
     try {
@@ -66,25 +84,16 @@ const Checkout = () => {
         toast.error("Razorpay SDK failed to load. Are you online?");
         return;
       }
-      const totalAmount = getTotalPrice();
-      const totalDiscountPrice = getTotalDiscountPrice();
-      console.log("total discount price", totalDiscountPrice, totalAmount);
-
       const key = await paymentService.getRazorpayKey();
-      console.log("razorpay key", key);
+      const order = await paymentService.createPaymentOrder(total);
 
-      const order = await paymentService.createPaymentOrder(
-        totalDiscountPrice || totalAmount
-      );
-      console.log("razorpay order", order);
-
-      const orderResponse = await orderService.createOrder({
+      await orderService.createOrder({
         items: cartItems,
-        totalPrice: totalAmount,
+        totalPrice: subtotal,
         shippingPrice: 0,
         shippingAddress: formData,
         razorpay_order_id: order.order.id,
-        totalDiscountPrice: Number(totalDiscountPrice),
+        totalDiscountPrice: Number(total),
       });
 
       const options = {
@@ -93,10 +102,7 @@ const Checkout = () => {
         currency: "INR",
         name: "Wellvas Healthcare",
         description: "RazorPay",
-        // image:
-        //   "https://avatars.githubusercontent.com/u/143936287?s=400&u=b0405682c50a0ca7f98e02b46db96e91520df3b5&v=4",
         order_id: order.order.id,
-        // callback_url: "https://medimart-nayg.onrender.com/payment/paymentverification",
         prefill: {
           name: formData.name || "John Doe",
           email: formData.email || "john.doe@example.com",
@@ -117,7 +123,6 @@ const Checkout = () => {
         handler: function (response) {
           toast.success("Payment successful! Order placed successfully.");
           navigate("/order-success");
-          console.log("payment successful", response);
         },
         modal: {
           ondismiss: function (resp) {
@@ -125,31 +130,26 @@ const Checkout = () => {
           },
         },
       };
-      console.log("options", options);
-      const razor = new window.Razorpay(options);
 
+      const razor = new window.Razorpay(options);
       razor.open();
 
-      // Handle payment failures
       razor.on("payment.failed", function (resp) {
         console.log("payment failed", resp);
-        // handlePaymentFailure(resp.error);
+        toast.error("Payment failed. Try again.");
       });
 
-      // Handle payment cancellations
       razor.on("payment.cancelled", function () {
-        console.log("payment cancelled");
         toast.info("Payment was cancelled. You can try again.");
         setLoading(false);
       });
 
-      // Handle when user closes payment window
       razor.on("modal.close", function () {
-        console.log("payment window closed");
         toast.info("Payment window was closed. You can try again.");
         setLoading(false);
       });
-      razor.on("payment.success", function (resp) {
+
+      razor.on("payment.success", function () {
         toast.success("Payment successful! Order placed successfully.");
         navigate("/order-success");
         setLoading(false);
@@ -189,10 +189,6 @@ const Checkout = () => {
               transition={{ duration: 0.3 }}
               className="overflow-hidden px-6 pb-6"
             >
-              {/* <p className="text-sm mb-2 text-gray-600">
-                New customers get <span className="font-bold">10% off</span>{" "}
-                their first order.
-              </p> */}
               <input
                 type="email"
                 name="email"
@@ -283,7 +279,7 @@ const Checkout = () => {
             </motion.div>
           </div>
 
-          {/* Payment Method Section (Non-collapsible) */}
+          {/* Payment Method Section */}
           <div className="border border-gray-200 rounded-md p-6 shadow-sm">
             <h3 className="font-semibold text-lg mb-2">3. Payment Method</h3>
             <p className="text-sm text-gray-600">
@@ -291,11 +287,18 @@ const Checkout = () => {
             </p>
           </div>
         </div>
-        {/* Right: Order Summary */}
+
+        {/* Right Column: Order Summary */}
         <div className="border border-gray-200 rounded-md p-6 shadow-sm space-y-6">
           <h3 className="font-semibold text-lg">Cart ({cartItems.length})</h3>
           {cartItems.map((item) => {
-            const product = renderProductInfo(item);
+            const product = {
+              id: item.productId?._id || item._id,
+              name: item.productId?.name || "Product Name Not Available",
+              image: item.productId?.images?.[0]?.url || "/placeholder.png",
+              price: item.price || 0,
+              quantity: item.quantity || 1,
+            };
             return (
               <div
                 key={product.id}
@@ -317,49 +320,68 @@ const Checkout = () => {
             );
           })}
 
+          {/* Promo Code */}
           <div>
             <input
               type="text"
               placeholder="Gift or promo code"
+              value={promoInput}
+              onChange={(e) => setPromoInput(e.target.value)}
               className="w-full border px-4 py-2 rounded-md text-sm"
+              disabled={!!appliedPromo}
             />
-            <button
-              className="mt-2 w-full bg-gray-200 py-2 rounded-md text-sm font-medium text-gray-600 cursor-not-allowed"
-              disabled
-            >
-              Apply
-            </button>
+            {!appliedPromo ? (
+              <button
+                onClick={handleApplyPromo}
+                className="mt-2 w-full bg-black py-2 rounded-md text-sm font-medium text-white hover:opacity-90 transition"
+              >
+                Apply
+              </button>
+            ) : (
+              <button
+                onClick={handleRemovePromo}
+                className="mt-2 w-full bg-red-500 py-2 rounded-md text-sm font-medium text-white hover:opacity-90 transition"
+              >
+                Remove {appliedPromo.code}
+              </button>
+            )}
+            {appliedPromo && (
+              <p className="text-green-600 text-sm mt-2">
+                ✅ Applied <strong>{appliedPromo.code}</strong> (
+                {appliedPromo.discount}% OFF)
+              </p>
+            )}
           </div>
 
+          {/* Totals */}
           <div className="text-sm border-t border-gray-200 pt-4 space-y-2">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>₹{getTotalPrice()}</span>
+              <span>₹{subtotal}</span>
             </div>
             <div className="flex justify-between">
               <span>Estimated Shipping</span>
               <span>Free</span>
             </div>
-            <div className="flex  justify-between font-semibold">
+            <div className="flex justify-between font-semibold">
               <span>Total</span>
-              <span className="font-semibold flex flex-col ">
+              <span className="font-semibold flex flex-col">
                 <span className="font-semibold ml-3 text-green-500">
-                  ₹{getTotalDiscountPrice() || getTotalPrice()}
+                  ₹{total.toFixed(2)}
                 </span>
-              
-              {getTotalDiscountPrice() > 0 &&
-                getTotalDiscountPrice() < getTotalPrice() && (
+                {total < subtotal && (
                   <span className="text-gray-500 ml-2 line-through text-sm">
-                    ₹{getTotalPrice()}
+                    ₹{subtotal}
                   </span>
                 )}
-                </span>
+              </span>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Final tax and shipping calculated after shipping step is complete.
             </p>
           </div>
 
+          {/* Place Order Button */}
           <button
             onClick={handlePayment}
             className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"

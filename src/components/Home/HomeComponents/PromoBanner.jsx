@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 const slides = [
     {
     id: 4,
-    imageSmall: "/ResourseImages/festive44.jpeg",
-    imageLarge: "/ResourseImages/festive44.jpeg",
+    imageSmall: "/ResourseImages/festive44.png",
+    imageLarge: "/ResourseImages/festive44.png",
     button: "Explore Now",
   },
   {
@@ -16,14 +16,14 @@ const slides = [
   },
   {
     id: 2,
-    imageSmall: "/ResourseImages/festive2.png",
-    imageLarge: "/ResourseImages/festive2.png",
+    imageSmall: "/ResourseImages/festive22.png",
+    imageLarge: "/ResourseImages/festive22.png",
     button: "Explore Now",
   },
   {
     id: 3,
-    imageSmall: "/ResourseImages/festive3.png",
-    imageLarge: "/ResourseImages/festive3.png",
+    imageSmall: "/ResourseImages/festive33.png",
+    imageLarge: "/ResourseImages/festive33.png",
     button: "Explore Now",
   },
 ];
