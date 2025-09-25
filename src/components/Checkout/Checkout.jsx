@@ -7,6 +7,7 @@ import orderService from "../../services/orderService";
 import paymentService from "../../services/paymentService";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+import cartService from "../../services/cartService";
 
 // Define promo codes (frontend-only)
 const PROMO_CODES = [
@@ -168,7 +169,7 @@ const Checkout = () => {
     try {
       console.log("order",cartItems )
       setLoading(true);
-        await orderService.createOrder({
+        const response = await orderService.createOrder({
         items: cartItems,
         totalPrice: subtotal,
         shippingPrice: 0,
@@ -178,6 +179,13 @@ const Checkout = () => {
         authorised: true,
         
       });
+      console.log("response.................................................................",response )
+      if(response.success == true){
+        // remove cart from local storage
+        cartService.clearCart();
+
+        navigate("/order-success");
+      }
 
     }
       catch (error) {
