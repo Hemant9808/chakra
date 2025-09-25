@@ -15,6 +15,7 @@ import BlogHighlights from "./HomeComponents/BlogPreview.jsx";
 import FeaturedProduct from "./HomeComponents/FeaturedProduct.jsx";
 import FrequentlyBoughtTogether from "./HomeComponents/FrequentlyBoughtTogether.jsx";
 import BenefitsOfAyurveda from "./HomeComponents/BenefitsOfAyurveda.jsx";
+import TrustSection from "./HomeComponents/TrustSection.jsx";
 
 function Home() {
   return (
@@ -33,6 +34,8 @@ function Home() {
       <BlogHighlights />
       <WhyWellvas />
       <LoudAndProud />
+      <TrustSection />
+      
     </div>
   );
 }

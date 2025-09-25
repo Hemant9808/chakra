@@ -47,7 +47,7 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle promo apply
+  
   const handleApplyPromo = () => {
     const found = PROMO_CODES.find(
       (promo) => promo.code.toLowerCase() === promoInput.trim().toLowerCase()
@@ -161,6 +161,31 @@ const Checkout = () => {
       setLoading(false);
     }
   };
+
+  const handleCod = async () => {
+    console.log("COD order processing");
+    
+    try {
+      console.log("order",cartItems )
+      setLoading(true);
+        await orderService.createOrder({
+        items: cartItems,
+        totalPrice: subtotal,
+        shippingPrice: 0,
+        shippingAddress: formData,
+        razorpay_order_id: "",
+        totalDiscountPrice: Number(total),
+        authorised: true,
+        
+      });
+
+    }
+      catch (error) {
+      }
+      finally {
+        setLoading(false);
+      }
+    }
 
   if (loading) return <LoadingSpinner />;
 
@@ -396,7 +421,23 @@ const Checkout = () => {
               !formData.pincode
             }
           >
-            {loading ? "Processing..." : "Place Order"}
+            {loading ? "Processing..." : "Pay Now"}
+          </button>
+          <button
+            onClick={handleCod}
+            className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"
+            disabled={
+              loading ||
+              !formData.name ||
+              !formData.email ||
+              !formData.phone ||
+              !formData.address ||
+              !formData.city ||
+              !formData.state ||
+              !formData.pincode
+            }
+          >
+            {loading ? "Processing..." : "Cash on Delivery"}
           </button>
         </div>
       </div>

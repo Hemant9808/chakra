@@ -7,6 +7,7 @@ const orderService = {
   // Create a new order
   createOrder: async (orderData) => {
     try {
+      console.log("Creating order with data:", orderData);
       const response = await axiosInstance.post('/order/createOrder', orderData);
       return response.data;
     } catch (error) {
