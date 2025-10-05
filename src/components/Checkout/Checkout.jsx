@@ -95,6 +95,7 @@ const Checkout = () => {
         shippingAddress: formData,
         razorpay_order_id: order.order.id,
         totalDiscountPrice: Number(total),
+        couponCode: appliedPromo?.code || null,
       });
 
       const options = {
@@ -177,6 +178,7 @@ const Checkout = () => {
         razorpay_order_id: "",
         totalDiscountPrice: Number(total),
         authorised: true,
+        couponCode: appliedPromo?.code || null,
         
       });
       console.log("response.................................................................",response )
