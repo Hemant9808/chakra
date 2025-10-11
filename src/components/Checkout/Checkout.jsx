@@ -16,7 +16,7 @@ const PROMO_CODES = [
   { code: "FESTIVE10", discount: 10 }, // 30% off
   {code : "MONU10",discount:10},
   {code : "MONNA10",discount:10},
-
+  {code : "HARIOM",discount:100},
 ];
 
 const Checkout = () => {
