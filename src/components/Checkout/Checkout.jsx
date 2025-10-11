@@ -12,11 +12,11 @@ import cartService from "../../services/cartService";
 // Define promo codes (frontend-only)
 const PROMO_CODES = [
   { code: "WELCOME10", discount: 10 }, // 10% off
-  { code: "SAVE20", discount: 20 },   // 20% off
   { code: "FESTIVE10", discount: 10 }, // 30% off
   {code : "MONU10",discount:10},
-  {code : "MONNA10",discount:10},
   {code : "HARIOM",discount:100},
+  {code : "PARAS10",discount:10},
+  {code : "SHIVANI10",discount:10},
 ];
 
 const Checkout = () => {
