@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 import { useCartStore } from "../../../Store/useCartStore";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +16,8 @@ const CartComponent = () => {
     clearCart,
     getTotalPrice,
   } = useCartStore();
+   const navigate = useNavigate()
+
 
   useEffect(() => {
     fetchCart();
@@ -61,6 +63,7 @@ const CartComponent = () => {
     return item.price;
   };
 
+ 
   return (
     <div className="min-h-screen bg-black text-white px-4 sm:px-6 lg:px-20 py-10">
     <div className="flex justify-between">
@@ -200,8 +203,12 @@ const CartComponent = () => {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <td className="py-4 flex items-center space-x-4">
+                        <td 
+                        onClick={()=>  {navigate(`/ProductDetailsById/${product.id}`)}}
+
+                         className="py-4 flex cursor-pointer items-center space-x-4">
                           <img
+                          onClick={()=>  {navigate(`/product/${product.id}`)}}
                             src={product.image}
                             alt={product.name}
                             className="w-16 h-16 rounded-md object-cover"
@@ -210,6 +217,7 @@ const CartComponent = () => {
                             {product.name}
                           </span>
                         </td>
+
                         <td className="py-4">
                           {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? (
                             <div className="flex flex-col">

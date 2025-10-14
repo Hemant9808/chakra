@@ -11,10 +11,11 @@ import cartService from "../../services/cartService";
 
 // Define promo codes (frontend-only)
 const PROMO_CODES = [
-  { code: "WELCOME10", discount: 10 }, // 10% off
-  { code: "SAVE20", discount: 20 },   // 20% off
-  { code: "FESTIVE10", discount: 10 }, // 30% off
-  { code: "BEASTAMIT10", discount: 10 },
+
+  {code : "MONU10",discount:10},
+  {code : "HARIOM",discount:100},
+  {code : "PARAS10",discount:10},
+  {code : "SHIVANI10",discount:10},
 ];
 
 const Checkout = () => {
@@ -96,6 +97,7 @@ const Checkout = () => {
         shippingAddress: formData,
         razorpay_order_id: order.order.id,
         totalDiscountPrice: Number(total),
+        couponCode: appliedPromo?.code || null,
       });
 
       const options = {
@@ -178,6 +180,7 @@ const Checkout = () => {
         razorpay_order_id: "",
         totalDiscountPrice: Number(total),
         authorised: true,
+        couponCode: appliedPromo?.code || null,
         
       });
       console.log("response.................................................................",response )
