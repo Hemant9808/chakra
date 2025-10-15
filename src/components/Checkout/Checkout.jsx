@@ -17,6 +17,7 @@ const PROMO_CODES = [
   {code : "PARAS10",discount:10},
   {code : "SHIVANI10",discount:10},
   {code : "BEASTAMIT10",discount:10},
+  {code : "AFG10",discount:10},
 ];
 
 const Checkout = () => {

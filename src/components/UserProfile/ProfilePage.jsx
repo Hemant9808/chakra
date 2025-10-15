@@ -251,7 +251,7 @@ const ProfilePage = () => {
             <OrderHistory />
           </motion.div>
 
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -259,18 +259,18 @@ const ProfilePage = () => {
           >
             <h2 className="text-xl font-semibold mb-4">Saved Addresses</h2>
             <p className="text-gray-500">No saved addresses</p>
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="bg-white p-6 text-center rounded-lg shadow-lg"
           >
-          {/* delete button */}
-          <button onClick={handleDelete} className='bg-red-200 p-3 rounded-xl font-bold text-red-600'>Delete Account</button>
+          {/* delete button
+          <button onClick={handleDelete} className='bg-red-200 p-3 rounded-xl font-bold text-red-600'>Delete Account</button> */}
           
-          </motion.div>
+          {/* </motion.div> */}
         </div>
       </div>
     </div>

@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const slides = [
-    {
-    id: 4,
-    imageSmall: "/ResourseImages/festive4.png",
-    imageLarge: "/ResourseImages/festive4.png",
-    button: "Explore Now",
-  },
   {
     id: 1,
     imageSmall: "/ResourseImages/festive3.png",   // mobile version
