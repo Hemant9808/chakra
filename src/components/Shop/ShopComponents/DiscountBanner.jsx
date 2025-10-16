@@ -13,7 +13,7 @@ const DiscountBanner = () => {
         {/* Left Side Text */}
         <div className="px-6 py-8 sm:w-1/2 w-full text-center sm:text-left">
           <h2 className="text-2xl sm:text-4xl font-bold leading-snug">
-            <span className="text-yellow-400">Lets Celebrate this Festive Season.</span> Use <span className="text-yellow-400">"FESTIVE10"</span> Code to get 10% instant discount on All Products!
+            <span className="text-yellow-400">Lets Celebrate this Festive Season.</span> With <span className="text-yellow-400">WELLVAS HEALTHCARE !</span>
           </h2>
 
           {/* <p className="mt-2 text-sm sm:text-base text-gray-300">
@@ -21,8 +21,7 @@ const DiscountBanner = () => {
             Applicable on orders above ₹1500.
           </p> */}
            <p className="mt-2 text-sm sm:text-base text-gray-300">
-            We are in Launching Month of Wellvas Healthcare <br />
-            Applicable on all orders.
+            "Choose Wellvas and make your family healthier every day." <br />
           </p>
 
           <div className="flex flex-wrap justify-center sm:justify-start gap-6 mt-6 text-base sm:text-lg">
