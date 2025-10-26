@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 const slides = [
   {
     id: 1,
-    imageSmall: "/ResourseImages/festive3.png",   // mobile version
-    imageLarge: "/ResourseImages/festive3.png",   // desktop version
+    imageSmall: "/ResourseImages/promo4Mob.jpg",   // mobile version
+    imageLarge: "/ResourseImages/promo1.jpg",   // desktop version
     button: "Explore Now",
   },
   {
     id: 2,
-    imageSmall: "/ResourseImages/festive2.png",
-    imageLarge: "/ResourseImages/festive2.png",
+    imageSmall: "/ResourseImages/promo1Mob.jpg",
+    imageLarge: "/ResourseImages/promo2.jpg",
     button: "Explore Now",
   },
   {
     id: 3,
-    imageSmall: "/ResourseImages/festive1.png",
-    imageLarge: "/ResourseImages/festive1.png",
+    imageSmall: "/ResourseImages/promo2Mob.jpg",
+    imageLarge: "/ResourseImages/promo3.jpg",
     button: "Explore Now",
   },
 ];

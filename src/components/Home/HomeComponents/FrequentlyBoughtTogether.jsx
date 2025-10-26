@@ -143,7 +143,7 @@ const FrequentlyBoughtTogether = () => {
                   <div
                     className="absolute inset-0 w-full h-full transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-1"
                     style={{
-                      backgroundImage: "url('/ResourseImages/bg.png')",
+                      backgroundImage: "url('/ResourseImages/bgOrignal.png')",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",

@@ -8,7 +8,6 @@ import OfficeMap from "./HomeComponents/OfficeMap";
 import HeroSlider from "./HomeComponents/ProductCarousel";
 import PromoBanner from "./HomeComponents/PromoBanner";
 import Hero from "./HomeComponents/Hero";
-import MarqueeBanner from "../Shop/ShopComponents/MarqueeBanner";
 import WhyWellvas from "./HomeComponents/WhyWellvas";
 import Testimonials from "./HomeComponents/Testimonials.jsx";
 import BlogHighlights from "./HomeComponents/BlogPreview.jsx";
@@ -16,6 +15,9 @@ import FeaturedProduct from "./HomeComponents/FeaturedProduct.jsx";
 import FrequentlyBoughtTogether from "./HomeComponents/FrequentlyBoughtTogether.jsx";
 import BenefitsOfAyurveda from "./HomeComponents/BenefitsOfAyurveda.jsx";
 import TrustSection from "./HomeComponents/TrustSection.jsx";
+import CBDSection from "./HomeComponents/CBDSection.jsx";
+import MarqueeBanner from "./HomeComponents/MarqueeBanner.jsx";
+
 
 function Home() {
   return (
@@ -29,6 +31,8 @@ function Home() {
 
       <FrequentlyBoughtTogether />
       <FeaturedProduct />
+      <MarqueeBanner />
+      {/* <CBDSection /> */}
       <Testimonials />
       
       <BlogHighlights />

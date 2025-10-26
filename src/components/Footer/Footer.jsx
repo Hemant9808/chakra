@@ -31,7 +31,7 @@ console.log("categories.........", categories);
     <footer
       className="relative bg-[#0c0c0c] text-white pt-12 pb-8"
       style={{
-        backgroundImage: `url('/ResourseImages/bg.png')`, // Replace with your image path
+        backgroundImage: `url('/ResourseImages/bgOrignal.png')`, // Replace with your image path
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

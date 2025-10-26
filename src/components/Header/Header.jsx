@@ -74,7 +74,7 @@ const Header = () => {
     <header
       className="md:pt-3 md:h-25 shadow sticky top-0 z-50 text-white bg-cover bg-center"
       style={{
-        backgroundImage: "url('/ResourseImages/bg.png')",
+        backgroundImage: "url('/ResourseImages/bgOrignal.png')",
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         backgroundBlendMode: "darken",
       }}

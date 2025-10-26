@@ -182,7 +182,7 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
     className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-out 
       group-hover:scale-110 ${product.stock <= 0 ? "opacity-50" : ""}`}
     style={{
-      backgroundImage: "url('/ResourseImages/bg.png')",
+      backgroundImage: "url('/ResourseImages/bgOrignal.png')",
       backgroundSize: "cover",
       backgroundPosition: "center",
       WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
