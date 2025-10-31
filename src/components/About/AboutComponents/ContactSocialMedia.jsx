@@ -37,7 +37,7 @@ const ContactSocialMedia = () => {
             transition={{ duration: 0.8, delay: 0.2 }}>
             <h3 className="text-2xl font-semibold mb-3">📞 Contact Us</h3>
             <p className="text-gray-600 flex items-center justify-center gap-2">
-              <FaPhone className="text-blue-500" /> +91-8271442413
+              <FaPhone className="text-blue-500" /> +91-8799722636
             </p>
             <p className="text-gray-600 flex items-center justify-center gap-2 mt-2">
               <FaEnvelope className="text-red-500" /> support@wellvas.com

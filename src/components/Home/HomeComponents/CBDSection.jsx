@@ -86,7 +86,7 @@ export default function WellcoreBenefits() {
           transition={{ duration: 0.8 }}
         >
           <img
-            src="/ResourseImages/multi.png" // Placeholder image for your product
+            src="/ResourseImages/Wellcore.png" // Placeholder image for your product
             alt="Wellcore 360 Multivitamin Capsules Bottle"
             className="w-48 sm:w-56 md:w-full mx-auto drop-shadow-lg" // Reverted shadow
           />

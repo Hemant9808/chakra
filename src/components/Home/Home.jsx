@@ -32,7 +32,7 @@ function Home() {
       <FrequentlyBoughtTogether />
       <FeaturedProduct />
       <MarqueeBanner />
-      {/* <CBDSection /> */}
+      <CBDSection />
       <Testimonials />
       
       <BlogHighlights />
