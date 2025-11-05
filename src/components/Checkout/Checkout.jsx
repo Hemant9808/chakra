@@ -19,6 +19,10 @@ const PROMO_CODES = [
   {code : "BEASTAMIT10",discount:10},
   {code : "AFG10",discount:10},
   {code : "ARVIND10",discount:10},
+  {code : "SUNDAY10",discount:10},
+  {code : "AARTI10",discount:10},
+  {code : "DEVA",discount:1},
+  {code : "BOSS",discount:0.1},
 ];
 
 const Checkout = () => {

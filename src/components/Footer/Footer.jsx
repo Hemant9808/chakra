@@ -51,7 +51,7 @@ console.log("categories.........", categories);
                 { name: "AshwaZen X", path: "/ProductDetailsById/68bdc188f56e1a004b70616d" },
                 { name: "Evas Neo", path: "/ProductDetailsById/68bdc4d9f56e1a004b7061a1" },
                 { name: "Anti Addiction Drops", path: "/ProductDetailsById/68b73127347f29004bac86de" },
-                { name: "Multivitamin", path: "/ProductDetailsById/68b5df334c20870055bf94a6" },
+                { name: "Multivitamin", path: "/ProductDetailsById/690387573021eca611495027" },
               ].map((item, index) => (
                 <li key={index}>
                   <Link to={item.path} className="hover:text-yellow-400 transition">
