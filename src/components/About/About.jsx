@@ -13,7 +13,7 @@ function About(){
         <HeroSection />
         <MissionVision />
         <WhatWeOffer />
-        <MeetOurTeam />
+        {/* <MeetOurTeam /> */}
         <WhyChooseUs />
         <ContactSocialMedia />
         <Note />

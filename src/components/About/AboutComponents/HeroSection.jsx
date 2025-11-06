@@ -25,7 +25,7 @@ const HeroSection = () => {
         </motion.p>
 
         <motion.a 
-          href="/shop"
+          href="/shop/all"
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}

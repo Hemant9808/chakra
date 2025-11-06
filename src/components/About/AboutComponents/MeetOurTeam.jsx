@@ -10,7 +10,7 @@ const teamMembers = [
   { name: "Satyam Kumar", role: "Sales Head", image: "/ResourseImages/satyam.png" },
   { name: "Ravi Ranjan", role: "Chief Advisor", image: "/ResourseImages/team/Ravi.png" },
 { name: "Dev Jyoti", role: "Managing Director", image: "/ResourseImages/team/Dev.png" },
-{ name: "Akash Kumar", role: "Managing Director", image: "/ResourseImages/team/Rikku.png" },
+{ name: "Akash Sinha", role: "Managing Director", image: "/ResourseImages/team/Rikku.png" },
 
 ];
 
