@@ -21,8 +21,7 @@ const PROMO_CODES = [
   {code : "ARVIND10",discount:10},
   {code : "SUNDAY10",discount:10},
   {code : "AARTI10",discount:10},
-  {code : "DEVA",discount:1},
-  {code : "BOSS",discount:0.1},
+  {code : "SADDAM10",discount:10},
 ];
 
 const Checkout = () => {

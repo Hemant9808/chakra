@@ -17,6 +17,7 @@ import BenefitsOfAyurveda from "./HomeComponents/BenefitsOfAyurveda.jsx";
 import TrustSection from "./HomeComponents/TrustSection.jsx";
 import CBDSection from "./HomeComponents/CBDSection.jsx";
 import MarqueeBanner from "./HomeComponents/MarqueeBanner.jsx";
+import InfluencerVideoSync from "./HomeComponents/InfluencerVideoSync.jsx";
 
 
 function Home() {
@@ -34,7 +35,7 @@ function Home() {
       <MarqueeBanner />
       <CBDSection />
       <Testimonials />
-      
+      <InfluencerVideoSync />
       <BlogHighlights />
       <WhyWellvas />
       <LoudAndProud />
