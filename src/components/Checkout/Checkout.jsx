@@ -22,6 +22,8 @@ const PROMO_CODES = [
   {code : "SUNDAY10",discount:10},
   {code : "AARTI10",discount:10},
   {code : "SADDAM10",discount:10},
+  {code : "RONNY10",discount:10},
+  {code : "ATHLETE10",discount:10},
 ];
 
 const Checkout = () => {

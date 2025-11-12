@@ -301,7 +301,7 @@ const ProductDetailsById = () => {
     className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-out 
       group-hover:scale-110 ${product.stock <= 0 ? "opacity-50" : ""}`}
     style={{
-      backgroundImage: "url('/ResourseImages/bg.png')", // your textured bg
+      backgroundImage: "url('/ResourseImages/bgOrignal.png')", // your textured bg
       backgroundSize: "cover",
       backgroundPosition: "center",
       WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
