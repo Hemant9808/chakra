@@ -32,6 +32,8 @@ import OrderSuccess from './components/Shop/ShopComponents/orderSuccess';
 import OtpVerification from './pages/Otp-verification';
 import Landing from './components/landing/Landing';
 import EvasHomePage from './components/EvasHomePage/EvasHomePage';
+import LearnMoreCourse from './components/EvasHomePage/EvasHomePageComponents/LearnMoreCourse';
+import Gym from './components/Gym/Gym';
 
 function AppRoutes() {
   useAuthMiddleware();
@@ -89,7 +91,8 @@ function AppRoutes() {
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/evas" element={<EvasHomePage />} />
-          EvasHomePage
+          <Route path="/learnMore" element={<LearnMoreCourse />} />
+          <Route path="/gym" element={<Gym />} />
         </Route>
       </Routes>
     </>

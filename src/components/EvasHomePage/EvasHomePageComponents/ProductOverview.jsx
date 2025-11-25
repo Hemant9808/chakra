@@ -35,7 +35,7 @@ const ProductOverview = () => {
                 </div>
 
                 <motion.a
-                    href="#"
+                    href="/learnMore"
                     className="mt-12 inline-block text-[#0d47a1] border border-[#0d47a1] hover:bg-[#0d47a1] hover:text-white px-10 py-3 rounded-full font-semibold transition"
                     whileHover={{ scale: 1.05 }}
                 >

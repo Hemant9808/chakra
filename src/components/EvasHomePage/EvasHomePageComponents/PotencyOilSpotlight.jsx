@@ -4,7 +4,7 @@ const PotencyOilSpotlight = () => {
     return (
         <section 
             id="potency-oil"
-            className="py-20 bg-[#e3f2fd]"
+            className="py-20 bg-gradient-to-b from-white to-[#e3f2fd]"
             aria-label="Potency Oil - Fast acting performance booster"
         >
             <div className="max-w-7xl mx-auto px-4 lg:px-8 text-center">

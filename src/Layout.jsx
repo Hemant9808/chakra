@@ -4,6 +4,8 @@ import Footer from './components/Footer/Footer'
 import { Outlet, useLocation } from 'react-router-dom'
 // import FabButton from './components/Chat/FabButton'
 import { FaWhatsapp } from 'react-icons/fa';
+import Breadcrumbs from './components/common/Breadcrumbs';
+
 
 function Layout() {
   
@@ -25,6 +27,7 @@ function Layout() {
     <div className="min-h-screen flex flex-col">
       <Header/>
       <div className="flex-1 flex flex-col">
+        {/* <Breadcrumbs /> */}
         <Outlet />
       </div>
       {/* {!hideFab && <FabButton />} */}

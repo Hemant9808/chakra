@@ -1,0 +1,127 @@
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ChevronRight } from "lucide-react";
+import { useCartStore } from "../../../Store/useCartStore";
+import { useNavigate } from "react-router-dom";
+import { productService } from "../../../services/productService";
+import "../../../Styles/global.css";
+import { PriceDisplay } from "../../../utils/priceUtils";
+
+const ProductSkeleton = () => (
+  <div className="bg-white shadow-md p-4 rounded-xl w-72 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center">
+    <div className="w-40 h-40 bg-gray-200 rounded-md animate-pulse" />
+    <div className="w-32 h-6 bg-gray-200 rounded mt-3 animate-pulse" />
+    <div className="w-24 h-4 bg-gray-200 rounded mt-2 animate-pulse" />
+    <div className="w-20 h-6 bg-gray-200 rounded mt-2 animate-pulse" />
+    <div className="w-full h-10 bg-gray-200 rounded-md mt-3 animate-pulse" />
+  </div>
+);
+
+const ProductCarousel = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const navigate = useNavigate();
+
+  /** ⬇️ Fetch only Men’s Wellness featured products */
+  const fetchMenWellnessProducts = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch products under "Men's Wellness" category
+      const menProducts = await productService.getProductsByCategory("Men Wellness");
+
+      // Filter featured ones
+      const featuredMenProducts = menProducts.filter((p) => p.isFeatured);
+
+      setProducts(featuredMenProducts);
+    } catch (error) {
+      console.error("Error loading Men's Wellness products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMenWellnessProducts();
+  }, []);
+
+  return (
+    <section className="bg-white py-16 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto text-center mb-10">
+        <h2 className="text-3xl sm:text-4xl font-bold text-[#355425] mb-4">
+          Men's Wellness Essentials
+        </h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Explore our premium scientifically-backed men's health formulations.
+        </p>
+      </div>
+
+      {/* Product Carousel */}
+      <div className="relative overflow-hidden max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="overflow-hidden"
+        >
+          <div className="min-w-[90%] flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x px-4">
+            {loading ? (
+              Array(3).fill(null).map((_, index) => <ProductSkeleton key={index} />)
+            ) : products.length === 0 ? (
+              <p className="text-center text-gray-500 w-full py-10">
+                No Men's Wellness products available.
+              </p>
+            ) : (
+              products.map((product) => (
+                <div
+                  key={product._id}
+                  onClick={() => navigate(`/ProductDetailsById/${product._id}`)}
+                  className="bg-white min-w-[90%] sm:min-w-[270px] shadow-md p-4 rounded-xl flex-shrink-0 flex flex-col items-center transform hover:scale-105 transition duration-300 cursor-pointer snap-start"
+                >
+                  <img
+                    src={product.images[0]?.url || "/placeholder.png"}
+                    alt={product.name}
+                    className="w-full max-h-[15rem] object-contain rounded-md"
+                  />
+                  <h3 className="text-lg font-semibold mt-3 text-center">
+                    {product.name}
+                  </h3>
+                  <p className="text-gray-700 text-xs mb-2">{product.brand}</p>
+
+                  <PriceDisplay product={product} />
+
+                  {/* Buy Now Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(product);
+                      navigate(`/ProductDetailsById/${product._id}`);
+                    }}
+                    className="relative mt-3 w-[180px] h-[54px] flex items-center justify-center px-3 overflow-visible cursor-pointer"
+                  >
+                    <div
+                      className="absolute inset-0 transition duration-700"
+                      style={{
+                        backgroundImage: "url('/ResourseImages/bgOrignal.png')",
+                        backgroundSize: "cover",
+                        WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
+                        maskImage: "url('/ResourseImages/buttonShape2.png')",
+                        maskSize: "cover",
+                      }}
+                    />
+                    <span className="relative z-10 text-white font-semibold text-sm">
+                      Buy Now
+                    </span>
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default ProductCarousel;

@@ -25,6 +25,7 @@ const PROMO_CODES = [
   {code : "RONNY10",discount:10},
   {code : "ATHLETE10",discount:10},
   {code : "HIMANSHU10",discount:10},
+  {code : "EVAS",discount:10},
 ];
 
 const Checkout = () => {

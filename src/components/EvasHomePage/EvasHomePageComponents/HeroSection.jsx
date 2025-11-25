@@ -30,14 +30,29 @@ const HeroSection = () => {
 
                     {/* CTA */}
                     <motion.a
-                        href="#products"
+                        href="/ProductDetailsById/68fb2ee93021eca611493cac"
                         aria-label="Buy the 90-day wellness transformation trio"
                         className="inline-block px-12 py-4 mt-8 text-xl font-bold text-white bg-[#0d47a1] rounded-full shadow-xl"
                         whileHover={{ scale: 1.07 }}
                         whileTap={{ scale: 0.97 }}
                     >
-                        Get the 90-Day Trio — Save 20%
+                        Get the 90-Day Trio — Save 10% Extra
                     </motion.a>
+                    <motion.div
+  className="mt-4 flex flex-col"
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+>
+  <motion.p
+    className="text-lg py-2 font-semibold text-[#0d47a1] tracking-wide"
+    whileHover={{ scale: 1.07 }}
+    whileTap={{ scale: 0.97 }}
+  >
+    Use Code <span className="font-bold text-[#e91e63]">“EVAS”</span> for 10% Instant Off
+  </motion.p>
+</motion.div>
+
 
                     {/* TRUST SIGNALS */}
                     <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4 text-sm text-gray-600">

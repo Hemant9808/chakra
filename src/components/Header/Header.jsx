@@ -36,6 +36,8 @@ const Header = () => {
     { path: "/contact", label: "Contact" },
     { path: "/about", label: "About" },
     { path: "/blogs", label: "Blogs" },
+    { path: "/evas", label: "Men's Wellness" },
+    // { path: "/evas", label: "Gym" },
   ];
 
   useEffect(() => {

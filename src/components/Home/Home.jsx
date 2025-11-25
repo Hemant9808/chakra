@@ -18,6 +18,7 @@ import TrustSection from "./HomeComponents/TrustSection.jsx";
 import CBDSection from "./HomeComponents/CBDSection.jsx";
 import MarqueeBanner from "./HomeComponents/MarqueeBanner.jsx";
 import InfluencerVideoSync from "./HomeComponents/InfluencerVideoSync.jsx";
+import MensWellnessImage from "./HomeComponents/MensWellnessImage.jsx";
 
 
 function Home() {
@@ -27,10 +28,12 @@ function Home() {
       <PromoBanner />
 
       <ProductCarousel />
+      
       {/* <VideoSlider /> */}
       <BenefitsOfAyurveda />
 
       <FrequentlyBoughtTogether />
+      <MensWellnessImage />
       <FeaturedProduct />
       <MarqueeBanner />
       <CBDSection />
