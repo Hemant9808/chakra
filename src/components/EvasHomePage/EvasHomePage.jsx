@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "./EvasHomePageComponents/HeroSection";
+import HeroSectionEvas from "./EvasHomePageComponents/HeroSectionEvas";
 import ProductOverview from "./EvasHomePageComponents/ProductOverview";
 import PotencyOilSpotlight from "./EvasHomePageComponents/PotencyOilSpotlight";
 import ProductCarousel from "./EvasHomePageComponents/ProductCarousel";
@@ -7,10 +7,11 @@ import AyurvedaWithPotencyMerged from "./EvasHomePageComponents/AyurvedaSolution
 
 
 
+
 function EvasHomePage() {
   return (
     <div className="">
-      <HeroSection />
+      <HeroSectionEvas />
       <ProductOverview />
       <ProductCarousel />
       <AyurvedaWithPotencyMerged />

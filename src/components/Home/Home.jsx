@@ -19,6 +19,7 @@ import CBDSection from "./HomeComponents/CBDSection.jsx";
 import MarqueeBanner from "./HomeComponents/MarqueeBanner.jsx";
 import InfluencerVideoSync from "./HomeComponents/InfluencerVideoSync.jsx";
 import MensWellnessImage from "./HomeComponents/MensWellnessImage.jsx";
+import SelectConcern from "./HomeComponents/SelectConcern.jsx";
 
 
 function Home() {
@@ -26,7 +27,7 @@ function Home() {
     <div className="">
       {/* <MarqueeBanner /> */}
       <PromoBanner />
-
+      {/* <SelectConcern /> */}
       <ProductCarousel />
       
       {/* <VideoSlider /> */}
@@ -36,7 +37,7 @@ function Home() {
       <MensWellnessImage />
       <FeaturedProduct />
       <MarqueeBanner />
-      <CBDSection />
+      {/* <CBDSection /> */}
       <Testimonials />
       <InfluencerVideoSync />
       <BlogHighlights />

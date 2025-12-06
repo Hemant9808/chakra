@@ -7,10 +7,10 @@ const MOCK_VIDEOS = [
   // FIX 1: Corrected local path
   { id: 1, title: "Fitness Motivation", username: "@zishanfailure", url: "/ResourseImages/Videos/Zishan.mp4", profileUrl: "https://www.instagram.com/zishanfailure/" },
   // FIX 2: Your original local path was already correct
-  { id: 2, title: "Healthy Meal Prep", username: "@monufitness07", url: "/ResourseImages/Videos/Monu2.mp4", profileUrl: "https://www.instagram.com/monufitness07/" },
+  { id: 2, title: "Healthy Meal Prep", username: "@monufitness07", url: "/ResourseImages/Videos/Monu1.mp4", profileUrl: "https://www.instagram.com/monufitness07/" },
   // External URLs (These are reliable MP4 streaming links for testing)
   { id: 3, title: "Workout Challenge", username: "@paras0602_", url: "/ResourseImages/Videos/Paras.mp4", profileUrl: "https://www.instagram.com/paras0602_/" },
-  { id: 4, title: "Morning Yoga Flow", username: "@crazy_arvind_", url: "/ResourseImages/Videos/Arvind.mp4", profileUrl: "https://www.instagram.com/crazy_arvind_/" },
+//   { id: 4, title: "Morning Yoga Flow", username: "@crazy_arvind_", url: "/ResourseImages/Videos/Arvind.mp4", profileUrl: "https://www.instagram.com/crazy_arvind_/" },
 ];
 
 // Helper component for managing a single video element

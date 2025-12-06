@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const HeroSection = () => {
+const HeroSectionEvas = () => {
     return (
         <section 
             className="py-20 md:py-28 bg-gradient-to-b from-[#e3f2fd] to-white"
@@ -90,4 +90,4 @@ const TrustSignal = ({ text }) => (
     </div>
 );
 
-export default HeroSection;
+export default HeroSectionEvas;

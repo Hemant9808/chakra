@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const slides = [
-  {
-    id: 1,
-    imageSmall: "/ResourseImages/promo4Mob.jpg", 
-    imageLarge: "/ResourseImages/promo1.jpg", 
-    button: "Explore Now",
-  },
+//   {
+//     id: 1,
+//     imageSmall: "/ResourseImages/promo4Mob.jpg", 
+//     imageLarge: "/ResourseImages/promo1.jpg", 
+//     button: "Explore Now",
+//   },
   {
     id: 2,
     imageSmall: "/ResourseImages/promo1Mob.jpg",

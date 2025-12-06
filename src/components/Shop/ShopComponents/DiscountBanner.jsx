@@ -53,7 +53,7 @@ const DiscountBanner = () => {
         {/* Right Side Image */}
         <div className="sm:w-1/2 w-full overflow-visible flex justify-center p-4">
           <img
-            src="/ResourseImages/shopImage3.png"
+            src="/ResourseImages/shopImage.png"
             alt="Discount Product"
             className="w-full sm:w-full md:w-full object-contain rounded-lg shadow-lg"
           />
