@@ -5,7 +5,7 @@ import { Sparkles, ArrowRight, CheckCircle2, Camera, Copy, Lock, LogIn } from "l
 import { FaWhatsapp } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../../Store/useAuthStore";
-
+// yo yo reward
 // --- Sub-component: Confetti Particle ---
 const ConfettiPiece = ({ delay }) => {
   const randomColor = ["#C17C3A", "#2A3B28", "#FFD700", "#FDFBF7"];
