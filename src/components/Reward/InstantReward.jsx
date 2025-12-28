@@ -61,22 +61,34 @@ const InstantReward = () => {
   const [rewardCode, setRewardCode] = useState("");
   const [cashbackAmount, setCashbackAmount] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // --- CLAIM LIMIT LOGIC ---
   const MAX_CLAIMS = 5;
   const [canClaim, setCanClaim] = useState(true);
 
   useEffect(() => {
+    console.log("InstantReward - User state:", user);
+    console.log("InstantReward - Is user logged in?", !!user);
+
+    setIsLoading(true);
+
     // 1. Check if user is logged in and has reached the limit
     if (user) {
       const storageKey = `ayucan_claims_${user._id || user.id}`;
       const currentClaims = parseInt(localStorage.getItem(storageKey) || "0");
 
+      console.log("InstantReward - Storage Key:", storageKey);
+      console.log("InstantReward - Current Claims:", currentClaims);
+      console.log("InstantReward - Max Claims:", MAX_CLAIMS);
+
       if (currentClaims >= MAX_CLAIMS) {
+        console.log("InstantReward - User has reached claim limit, redirecting...");
         setCanClaim(false);
         toast.error("You have reached the maximum limit of 5 rewards!");
         navigate("/shop/all"); // Redirect away immediately if limit reached
       } else {
+        console.log("InstantReward - Generating reward...");
         // Generate Reward Data ONLY if under limit
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let code = "";
@@ -88,12 +100,18 @@ const InstantReward = () => {
         const randomAmount = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
         setCashbackAmount(randomAmount);
 
+        console.log("InstantReward - Reward Code:", code);
+        console.log("InstantReward - Cashback Amount:", randomAmount);
+
         setShowConfetti(true);
         const timer = setTimeout(() => setShowConfetti(false), 6000);
+        setIsLoading(false);
         return () => clearTimeout(timer);
       }
     } else {
+      console.log("InstantReward - User NOT logged in");
       setShowConfetti(false);
+      setIsLoading(false);
     }
   }, [user, navigate]);
 
@@ -142,6 +160,18 @@ Please transfer the amount to my UPI ID:
 
   // Prevent rendering if user is blocked (limit reached)
   if (!canClaim && user) return null;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#2A3B28] flex items-center justify-center px-4">
+        <div className="bg-[#FDFBF7] rounded-3xl p-12 text-center shadow-2xl">
+          <div className="w-16 h-16 border-4 border-[#C17C3A] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#2A3B28] font-bold">Loading your reward...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     // Background: Deep Green for high contrast celebration
