@@ -1,15 +1,19 @@
 // App.jsx
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useState, useEffect } from 'react';
 import ProtectedRoute from './components/UserProfile/ProtectedRoute';
 import Layout from './Layout';
 import Home from './components/Home/Home';
 import About from './components/About/About';
 import Contact from './components/Contact/Contact';
 import Login from './components/Login/Login';
+import ForgotPassword from './components/Login/ForgotPassword';
+import ResetPassword from './components/Login/ResetPassword';
 import Quiz from './components/Quiz/Quiz';
 import Cart from './components/Cart/Cart';
 import ScrollToTop from './components/common/ScrollToTop';
+import LoadingSpinner from './components/common/LoadingSpinner';
 
 // import ProductDetails from './components/Home/HomeComponents/ProductDetails';
 import ProfilePage from './components/UserProfile/ProfilePage';
@@ -34,6 +38,7 @@ import Landing from './components/landing/Landing';
 import EvasHomePage from './components/EvasHomePage/EvasHomePage';
 import LearnMoreCourse from './components/EvasHomePage/EvasHomePageComponents/LearnMoreCourse';
 import Gym from './components/Gym/Gym';
+import InstantReward from './components/Reward/InstantReward';
 
 function AppRoutes() {
   useAuthMiddleware();
@@ -43,11 +48,14 @@ function AppRoutes() {
       <ScrollToTop />
       <Toaster position="top-right" />
       <Routes>
+        <Route path="/instant-reward" element={<InstantReward />} />
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />  
+          <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           <Route path="quiz" element={<Quiz />} />
           <Route path="blogs" element={<BlogSection />} />
           <Route path="blogs/:id" element={<BlogDetail />} />
@@ -63,7 +71,7 @@ function AppRoutes() {
             path="profile"
             element={
               // <ProtectedRoute>
-                <ProfilePage />
+              <ProfilePage />
               // </ProtectedRoute>
             }
           />
@@ -71,7 +79,7 @@ function AppRoutes() {
             path="cart"
             element={
               // <ProtectedRoute>
-                <Cart />
+              <Cart />
               // </ProtectedRoute>
             }
           />
@@ -79,11 +87,11 @@ function AppRoutes() {
             path="checkout"
             element={
               // <ProtectedRoute>-
-                <Checkout />
+              <Checkout />
               // </ProtectedRoute>
             }
           />
-          <Route path="/orders" element={<OrderInfoPage/>} />
+          <Route path="/orders" element={<OrderInfoPage />} />
           <Route path="/profile" element={<Profile />} />
 
           {/* <Route path="chat" element={<ChatPage />} /> */}
@@ -100,6 +108,21 @@ function AppRoutes() {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Show loading screen for 2 seconds on initial load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Router>
       <AppRoutes />
