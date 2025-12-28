@@ -48,7 +48,6 @@ function AppRoutes() {
       <ScrollToTop />
       <Toaster position="top-right" />
       <Routes>
-        <Route path="/instant-reward" element={<InstantReward />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
@@ -102,6 +101,7 @@ function AppRoutes() {
           <Route path="/learnMore" element={<LearnMoreCourse />} />
           <Route path="/gym" element={<Gym />} />
         </Route>
+        <Route path="/instant-reward" element={<InstantReward />} />
       </Routes>
     </>
   );
