@@ -13,10 +13,14 @@ import {
   CheckCircle,
   ArrowRightCircle,
   CheckCircle2,
+  ShieldCheck,
+  Leaf
 } from "lucide-react";
 import BenefitsSection from "./BenefitsSection";
 import BenifitsRight from "./BenifitsRight";
 import FrequentlyBoughtTogether from "../Home/HomeComponents/FrequentlyBoughtTogether";
+import ReviewsList from "../Reviews/ReviewsList";
+import { useBreadcrumb } from "../../context/BreadcrumbContext";
 
 
 const ProductDetailsById = () => {
@@ -28,13 +32,14 @@ const ProductDetailsById = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const addToCart = useCartStore((state) => state.addToCart);
   const [showAgePopup, setShowAgePopup] = useState(false);
+  const { updateBreadcrumb, resetBreadcrumb } = useBreadcrumb();
 
   const whyChoose = [
-    "High-potency extract form Capsules for maximum benefits",
+    "High-potency extract form for maximum benefits",
     "Lab-tested for purity & safety",
-    "Available in easy-to-consume capsules, powder, or liquid extract",
+    "Available in easy-to-consume formats",
     "Trusted by Ayurvedic experts",
-    "100% Organic & Pure – No fillers, additives, or artificial preservatives",
+    "100% Organic & Pure – No fillers or additives",
   ];
 
   useEffect(() => {
@@ -47,6 +52,8 @@ const ProductDetailsById = () => {
         setLoading(true);
         const data = await productService.getProductById(id);
         setProduct(data);
+        // Update breadcrumb with product name
+        updateBreadcrumb({ productName: data.name });
       } catch (error) {
         setError(error.message);
       } finally {
@@ -54,6 +61,11 @@ const ProductDetailsById = () => {
       }
     };
     fetchProduct();
+
+    // Cleanup: reset breadcrumb on unmount
+    return () => {
+      resetBreadcrumb();
+    };
   }, [id]);
 
   useEffect(() => {
@@ -64,26 +76,26 @@ const ProductDetailsById = () => {
 
   if (showAgePopup) {
     return (
-  
-      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-          <h2 className="text-lg font-semibold mb-2">Are you over 18?</h2>
-          <p className="text-gray-600 mb-6 text-sm">
-            We must verify this before you proceed to our website due to legal
-            obligations.
+
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full text-center border border-[#715036]/10">
+          <ShieldCheck className="mx-auto text-[#C17C3A] mb-4" size={48} />
+          <h2 className="text-xl font-serif font-bold text-[#2A3B28] mb-2">Age Verification</h2>
+          <p className="text-[#715036]/80 mb-8 text-sm leading-relaxed">
+            This product contains potent Ayurvedic herbs. We must verify that you are over 18 years of age to proceed.
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-col gap-3">
             <button
               onClick={() => setShowAgePopup(false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+              className="bg-[#2A3B28] hover:bg-[#C17C3A] text-white font-bold py-3 px-4 rounded-full transition-all uppercase tracking-widest text-xs"
             >
-              VERIFY AGE
+              I am over 18
             </button>
             <button
               onClick={() => navigate("/")}
-              className="bg-black hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded"
+              className="text-[#715036] hover:text-[#2A3B28] font-bold py-2 px-4 rounded transition-all text-xs uppercase tracking-widest"
             >
-              CANCEL
+              Exit
             </button>
           </div>
         </div>
@@ -93,14 +105,8 @@ const ProductDetailsById = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center">
-        <div className="flex h-[80vh] p-8 w-[100%] items-center justify-center gap-4">
-          <div className="w-[40%] h-full flex flex-col gap-4 rounded-lg animate-pulse ">
-            <div className="w-full h-[20rem] bg-[#f0f0f0] rounded-lg animate-pulse "></div>
-            <div className="w-full h-[10rem] bg-[#f0f0f0] rounded-lg animate-pulse "></div>
-          </div>
-          <div className="w-[60%] h-full bg-[#f0f0f0] rounded-lg animate-pulse "></div>
-        </div>
+      <div className="flex justify-center items-center min-h-screen bg-[#FDFBF7]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C17C3A]"></div>
       </div>
     );
 
@@ -110,229 +116,212 @@ const ProductDetailsById = () => {
   };
 
   return (
-    <div>
-    <motion.div
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeInOut" }}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* --- Image Section --- */}
-        <div className="space-y-4">
-          {/* Main Image */}
-          <motion.div
-            key={selectedImage}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="rounded-2xl overflow-hidden shadow-lg"
-          >
-            <img
-              src={product.images[selectedImage]?.url || "/placeholder.png"}
-              alt={product.name}
-              className="w-full max-h-[25rem] object-cover"
-            />
-          </motion.div>
+    <div className="bg-[#FDFBF7] min-h-screen font-sans">
 
-          {/* Thumbnails */}
-          <div className="flex gap-3 overflow-scroll scrollbar-hide">
-            {product.images.map((image, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setSelectedImage(index)}
-                whileTap={{ scale: 0.9 }}
-                animate={selectedImage === index ? { scale: 1.05 } : { scale: 1 }}
-                transition={{ type: "spring", stiffness: 250, damping: 15 }}
-                className={`relative flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-all duration-300 ${
-                  selectedImage === index
-                    ? "border-green-500 shadow-lg"
-                    : "border-gray-200"
-                }`}
-              >
-                <img
-                  src={image.url}
-                  alt={`${product.name} ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute inset-0 flex items-center justify-center bg-black/30 text-white"
-                >
-                  {selectedImage === index ? (
-                    <CheckCircle2 size={22} className="text-green-400 drop-shadow" />
-                  ) : (
-                    <ArrowRightCircle size={22} className="drop-shadow" />
-                  )}
-                </motion.div>
-              </motion.button>
-            ))}
-          </div>
-          
-        </div>
+      <motion.div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+          {/* --- Image Section --- */}
+          <div className="space-y-6">
+            {/* Main Image */}
+            <motion.div
+              key={selectedImage}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="rounded-3xl overflow-hidden shadow-sm border border-[#715036]/10 bg-white relative group"
+            >
+              <div className="absolute top-4 left-4 bg-[#2A3B28] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider z-10">
+                Premium Ayurveda
+              </div>
+              <img
+                src={product.images[selectedImage]?.url || "/placeholder.png"}
+                alt={product.name}
+                className="w-full max-h-[35rem] object-contain p-8 group-hover:scale-105 transition-transform duration-700"
+              />
+            </motion.div>
 
-        
-
-        {/* --- Product Info Section --- */}
-        <motion.div
-          className="space-y-6"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { staggerChildren: 0.15, duration: 0.5 },
-            },
-          }}
-        >
-          {/* Title */}
-          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-            <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
-              {product.name}
-            </h1>
-            <p className="mt-2 text-sm text-gray-500">{product.brand}</p>
-          </motion.div>
-
-          {/* Price & Stock */}
-          <motion.div
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-            className="flex items-center space-x-4"
-          >
-            <Tag className="text-green-600" size={20} />
-            <span className="text-lg text-gray-500 line-through">
-              ₹{product.price}
-            </span>
-            <span className="text-2xl font-bold text-green-600">
-              ₹{product.discountPrice}
-            </span>
-            <span className="text-green-600 text-sm">
-              {calculateDiscount(product.price, product.discountPrice)}% off
-            </span>
-            {product.stock > 0 ? (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                <Package size={14} className="mr-1" /> In Stock
-              </span>
-            ) : (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                Out of Stock
-              </span>
-            )}
-          </motion.div>
-
-          {/* Ratings */}
-          <motion.div
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-            className="flex items-center mt-2"
-          >
-            {Array(5)
-              .fill()
-              .map((_, i) => (
-                <Star key={i} size={18} className="text-yellow-500 fill-yellow-500" />
-              ))}
-            <span className="ml-2 text-gray-500">(11 customer reviews)</span>
-          </motion.div>
-
-          {/* Description */}
-        <motion.div
-          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-          className="space-y-2"
-        >
-          <h3 className="text-lg font-medium text-gray-900">Description</h3>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="relative bg-gray-50 p-4 rounded-lg text-gray-600 text-sm leading-relaxed shadow-inner 
-                      border-l-4 border-green-500 hover:border-green-600 transition-all duration-300"
-          >
-            {product.description.split("\n").map((line, idx) => (
-              <p key={idx} className="mb-2">
-                {line}
-              </p>
-            ))}
-          </motion.div>
-
-
-          </motion.div>
-          {/* Why Choose Section */}
-          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-            <h3 className="text-xl font-semibold text-black">
-              Why Choose {product.brand}?
-            </h3>
-            <ul className="list-none mt-3 space-y-2 text-gray-600 text-sm">
-              {whyChoose.map((point, index) => (
-                <motion.li
+            {/* Thumbnails */}
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+              {product.images.map((image, index) => (
+                <motion.button
                   key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-2"
+                  onClick={() => setSelectedImage(index)}
+                  whileTap={{ scale: 0.9 }}
+                  animate={selectedImage === index ? { scale: 1.05 } : { scale: 1 }}
+                  className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 bg-white ${selectedImage === index
+                    ? "border-[#C17C3A] shadow-md ring-2 ring-[#C17C3A]/20"
+                    : "border-[#715036]/10 hover:border-[#C17C3A]/50"
+                    }`}
                 >
-                  <CheckCircle size={16} className="text-green-500" /> {point}
-                </motion.li>
+                  <img
+                    src={image.url}
+                    alt={`${product.name} ${index + 1}`}
+                    className="w-full h-full object-contain p-2"
+                  />
+                </motion.button>
               ))}
-            </ul>
+            </div>
+
+          </div>
+
+
+
+          {/* --- Product Info Section --- */}
+          <motion.div
+            className="space-y-8"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { staggerChildren: 0.1, duration: 0.5 },
+              },
+            }}
+          >
+            {/* Title & Brand */}
+            <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
+              <span className="text-[#C17C3A] font-bold text-xs uppercase tracking-[0.2em] mb-2 block">
+                {product.brand || "Ayucan Wellness"}
+              </span>
+              <h1 className="text-3xl md:text-5xl font-serif font-bold text-[#2A3B28] leading-tight mb-4">
+                {product.name}
+              </h1>
+
+              {/* Ratings - Now showing actual data */}
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex text-[#C17C3A]">
+                  {Array(5).fill().map((_, i) => (
+                    <Star
+                      key={i}
+                      size={16}
+                      fill={i < Math.round(product.averageRating || 0) ? "currentColor" : "none"}
+                      className={i < Math.round(product.averageRating || 0) ? "" : "opacity-30"}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-[#715036]/60 font-medium">
+                  {product.averageRating > 0
+                    ? `${product.averageRating.toFixed(1)} (${product.totalReviews || 0} ${product.totalReviews === 1 ? 'review' : 'reviews'})`
+                    : 'No reviews yet'
+                  }
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Price & Stock */}
+            <motion.div
+              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+              className="flex items-center flex-wrap gap-4 border-b border-[#715036]/10 pb-8"
+            >
+              <span className="text-4xl font-serif font-bold text-[#2A3B28]">
+                ₹{product.discountPrice}
+              </span>
+              {product.price > product.discountPrice && (
+                <div className="flex flex-col">
+                  <span className="text-lg text-[#715036]/50 line-through decoration-[#C17C3A]">
+                    ₹{product.price}
+                  </span>
+                  <span className="text-[#C17C3A] text-xs font-bold uppercase tracking-wide">
+                    Save {calculateDiscount(product.price, product.discountPrice)}%
+                  </span>
+                </div>
+              )}
+
+              <div className="ml-auto">
+                {product.stock > 0 ? (
+                  <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2A3B28]/10 text-[#2A3B28]">
+                    <Package size={14} className="mr-2" /> In Stock
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-800">
+                    Out of Stock
+                  </span>
+                )}
+              </div>
+            </motion.div>
+
+            {/* Description */}
+            <motion.div
+              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+              className="space-y-4"
+            >
+              <h3 className="text-lg font-serif font-bold text-[#2A3B28]">Description</h3>
+              <div
+                className="text-[#715036]/80 text-sm md:text-base leading-relaxed font-medium space-y-4"
+              >
+                {product.description.split("\n").map((line, idx) => (
+                  <p key={idx}>
+                    {line}
+                  </p>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Why Choose Section */}
+            <motion.div
+              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+              className="bg-white p-6 rounded-2xl border border-[#715036]/10 shadow-sm"
+            >
+              <h3 className="text-lg font-serif font-bold text-[#2A3B28] mb-4 flex items-center gap-2">
+                <Leaf size={18} className="text-[#C17C3A]" /> Why Choose {product.brand}?
+              </h3>
+              <ul className="space-y-3">
+                {whyChoose.map((point, index) => (
+                  <motion.li
+                    key={index}
+                    className="flex items-start gap-3 text-sm text-[#715036]/80 font-medium"
+                  >
+                    <CheckCircle size={16} className="text-[#2A3B28] mt-0.5 flex-shrink-0" />
+                    {point}
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+
+
+
+            {/* Add to Cart Button */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                if (!checkIfUserIsLoggedIn()) {
+                  navigate("/login");
+                  return;
+                }
+                addToCart(product);
+                toast.success("Added to your wellness cart!");
+              }}
+              disabled={product.stock <= 0}
+              className={`w-full py-5 rounded-full font-bold uppercase tracking-widest text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 ${product.stock <= 0
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-[#2A3B28] text-white hover:bg-[#C17C3A]"
+                }`}
+            >
+              <ShoppingCart size={20} />
+              {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
+            </motion.button>
+
+
           </motion.div>
+        </div>
+      </motion.div>
 
-          
+      <BenefitsSection />
+      <BenifitsRight />
+      <FrequentlyBoughtTogether />
 
-          {/* Add to Cart Button */}
-<motion.button
-  whileHover={{ scale: 1.03 }}
-  whileTap={{ scale: 0.95 }}
-  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-  onClick={() => {
-    if (!checkIfUserIsLoggedIn()) {
-      navigate("/login");
-      return;
-    }
-    addToCart(product);
-    toast.success("Added to cart!");
-  }}
-  disabled={product.stock <= 0}
-  className="group relative mt-3 w-full h-[60px] flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-not-allowed"
->
-  {/* ✅ Background with masking + hover zoom */}
-  <div
-    className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-out 
-      group-hover:scale-110 ${product.stock <= 0 ? "opacity-50" : ""}`}
-    style={{
-      backgroundImage: "url('/ResourseImages/bgOrignal.png')", // your textured bg
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
-      WebkitMaskRepeat: "no-repeat",
-      WebkitMaskSize: "100% 100%",   // <-- stretches shape across full width
-      WebkitMaskPosition: "center",
-      maskImage: "url('/ResourseImages/buttonShape2.png')",
-      maskRepeat: "no-repeat",
-      maskSize: "100% 100%",        // <-- same for mask
-      maskPosition: "center",
-    }}
-  />
-
-  {/* ✅ Content on top */}
-  <span
-    className={`relative z-10 flex items-center gap-2 font-semibold text-sm md:text-base ${
-      product.stock <= 0 ? "text-gray-300" : "text-white"
-    }`}
-  >
-    <ShoppingCart size={18} />
-    {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
-  </span>
-</motion.button>
-
-
-        </motion.div>
+      {/* Reviews Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <ReviewsList productId={product?._id} />
       </div>
-    </motion.div>
-    <BenefitsSection />
-    <BenifitsRight />
-    <FrequentlyBoughtTogether />
     </div>
   );
 };

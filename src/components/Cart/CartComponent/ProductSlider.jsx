@@ -1,13 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../../../Store/useCartStore";
+import { getProductUrl } from "../../../utils/productNavigation";
+import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
 
 const ProductSlider = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate();
 
 
-  
+
 
 
 
@@ -188,7 +190,7 @@ const ProductSlider = () => {
       ],
     },
     {
-      id:16,
+      id: 16,
       name: "[Charak] Premium Organic Ashwagandha – The Ultimate Stress & Vitality Booster",
       tagline: "Restore Balance, Energy & Strength Naturally",
       price: 4999,
@@ -306,11 +308,7 @@ const ProductSlider = () => {
             >
               <div
                 className="cursor-pointer"
-                onClick={() =>
-                  navigate(`/product/${product.id}`, {
-                    state: { product },
-                  })
-                }
+                onClick={() => navigate(getProductUrl({ _id: product.id, name: product.name }))}
               >
                 <img
                   src={product.image}
@@ -329,11 +327,11 @@ const ProductSlider = () => {
                 onClick={() => {
 
                   if (!checkIfUserIsLoggedIn()) {
-                  navigate("/login")
-                  return;
+                    navigate("/login")
+                    return;
                   }
                   addToCart(product)
-                  }}
+                }}
               >
                 ADD TO CART
               </button>

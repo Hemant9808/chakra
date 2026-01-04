@@ -73,26 +73,43 @@ const AuthForm = () => {
     }
   };
 
+  // Shared input style classes to keep JSX clean
+  const inputContainerClass = "relative";
+  const inputIconClass = "absolute left-3 top-3.5 text-[#715036]/60"; // Earthy brown icon
+  const inputFieldClass = "w-full pl-10 pr-3 py-2.5 mt-1 bg-white border border-[#715036]/20 text-[#2A3B28] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C17C3A] focus:border-transparent transition-all placeholder-gray-400";
+  const labelClass = "block text-sm font-semibold text-[#715036] tracking-wide";
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] p-4">
+    // Background: Deep Forest Green
+    <div className="flex items-center pt-30 justify-center min-h-screen bg-[#2A3B28] p-4 relative overflow-hidden">
+
+      {/* Decorative background circle (optional aesthetic touch) */}
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-[#C17C3A]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-[#C17C3A]/10 rounded-full blur-3xl pointer-events-none" />
+
       <motion.div
-        className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200"
+        // Card: Cream background with earthy text
+        className="w-full max-w-md bg-[#FDFBF7] rounded-2xl shadow-2xl p-8 border border-[#715036]/10 relative z-10"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <motion.h2
-          className="text-3xl font-bold text-center text-gray-900 mb-6"
+          className="text-3xl font-bold text-center text-[#715036] mb-2 font-serif"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {isLogin ? "Welcome Back 👋" : "Join Wellvas 🌿"}
+          {isLogin ? "Welcome Back" : "Join Ayucan"}
         </motion.h2>
+
+        <p className="text-center text-[#2A3B28]/70 mb-8 text-sm">
+          {isLogin ? "Continue your wellness journey" : "Unlock nature's power today"}
+        </p>
 
         {error && (
           <motion.div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+            className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg relative mb-6 text-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
@@ -100,21 +117,21 @@ const AuthForm = () => {
           </motion.div>
         )}
 
-        <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {!isLogin && (
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className={labelClass}>
                     First Name
                   </label>
-                  <div className="relative">
-                    <FiUser className="absolute left-3 top-3 text-gray-400" />
+                  <div className={inputContainerClass}>
+                    <FiUser className={inputIconClass} />
                     <input
                       type="text"
                       name="firstName"
-                      className="w-full pl-10 pr-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
-                      placeholder="First Name"
+                      className={inputFieldClass}
+                      placeholder="John"
                       value={formData.firstName}
                       onChange={handleChange}
                       required
@@ -122,16 +139,16 @@ const AuthForm = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className={labelClass}>
                     Last Name
                   </label>
-                  <div className="relative">
-                    <FiUser className="absolute left-3 top-3 text-gray-400" />
+                  <div className={inputContainerClass}>
+                    <FiUser className={inputIconClass} />
                     <input
                       type="text"
                       name="lastName"
-                      className="w-full pl-10 pr-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
-                      placeholder="Last Name"
+                      className={inputFieldClass}
+                      placeholder="Doe"
                       value={formData.lastName}
                       onChange={handleChange}
                       required
@@ -140,16 +157,16 @@ const AuthForm = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className={labelClass}>
                   Username
                 </label>
-                <div className="relative">
-                  <FiUser className="absolute left-3 top-3 text-gray-400" />
+                <div className={inputContainerClass}>
+                  <FiUser className={inputIconClass} />
                   <input
                     type="text"
                     name="userName"
-                    className="w-full pl-10 pr-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
-                    placeholder="Username"
+                    className={inputFieldClass}
+                    placeholder="johndoe123"
                     value={formData.userName}
                     onChange={handleChange}
                     required
@@ -157,16 +174,16 @@ const AuthForm = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className={labelClass}>
                   Phone Number
                 </label>
-                <div className="relative">
-                  <FiPhone className="absolute left-3 top-3 text-gray-400" />
+                <div className={inputContainerClass}>
+                  <FiPhone className={inputIconClass} />
                   <input
                     type="tel"
                     name="phone"
-                    className="w-full pl-10 pr-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
-                    placeholder="Phone Number"
+                    className={inputFieldClass}
+                    placeholder="9876543210"
                     value={formData.phone}
                     onChange={handleChange}
                     required
@@ -176,16 +193,16 @@ const AuthForm = () => {
             </>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className={labelClass}>
               Email
             </label>
-            <div className="relative">
-              <FiMail className="absolute left-3 top-3 text-gray-400" />
+            <div className={inputContainerClass}>
+              <FiMail className={inputIconClass} />
               <input
                 type="email"
                 name="email"
-                className="w-full pl-10 pr-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
-                placeholder="Your Email"
+                className={inputFieldClass}
+                placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -193,37 +210,48 @@ const AuthForm = () => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className={labelClass}>
               Password
             </label>
-            <div className="relative">
-              <FiLock className="absolute left-3 top-3 text-gray-400" />
+            <div className={inputContainerClass}>
+              <FiLock className={inputIconClass} />
               <input
                 type="password"
                 name="password"
-                className="w-full pl-10 pr-3 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-green-500"
-                placeholder="Your Password"
+                className={inputFieldClass}
+                placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
             </div>
           </div>
+          {isLogin && (
+            <div className="text-right mt-2">
+              <button
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+                className="text-sm text-[#C17C3A] font-semibold hover:text-[#715036] hover:underline transition-all"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          )}
 
           <motion.button
             type="submit"
-            className={`w-full mt-4 bg-gradient-to-r from-green-600 to-emerald-500 text-white py-2 rounded-md shadow-lg hover:from-green-700 hover:to-emerald-600 transition-all ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            whileHover={{ scale: loading ? 1 : 1.05 }}
-            whileTap={{ scale: loading ? 1 : 0.97 }}
+            // Button: Bronze background with slight earthy hover state
+            className={`w-full mt-6 bg-[#C17C3A] text-white font-bold py-3 rounded-lg shadow-md hover:bg-[#a6662e] transition-all duration-300 ${loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
             disabled={loading}
           >
-            {loading ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
+            {loading ? "Processing..." : isLogin ? "Login" : "Create Account"}
           </motion.button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-700">
+        <p className="mt-8 text-center text-sm text-[#2A3B28]/80">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button
             onClick={() => {
@@ -237,7 +265,8 @@ const AuthForm = () => {
                 password: "",
               });
             }}
-            className="text-green-600 font-semibold hover:underline transition-all"
+            // Link: Bronze/Copper Color
+            className="text-[#C17C3A] font-bold hover:text-[#715036] hover:underline transition-all"
           >
             {isLogin ? "Sign Up" : "Login"}
           </button>

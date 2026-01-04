@@ -6,27 +6,9 @@ import { useCartStore } from "../../Store/useCartStore";
 import orderService from "../../services/orderService";
 import paymentService from "../../services/paymentService";
 import LoadingSpinner from "../common/LoadingSpinner";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaLock, FaShieldAlt } from "react-icons/fa";
 import cartService from "../../services/cartService";
-
-// Define promo codes (frontend-only)
-const PROMO_CODES = [
-
-  {code : "MONU10",discount:10},
-  {code : "HARIOM",discount:100},
-  {code : "PARAS10",discount:10},
-  {code : "SHIVANI10",discount:10},
-  {code : "BEASTAMIT10",discount:10},
-  {code : "AFG10",discount:10},
-  {code : "ARVIND10",discount:10},
-  {code : "SUNDAY10",discount:10},
-  {code : "AARTI10",discount:10},
-  {code : "SADDAM10",discount:10},
-  {code : "RONNY10",discount:10},
-  {code : "ATHLETE10",discount:10},
-  {code : "HIMANSHU10",discount:10},
-  {code : "EVAS",discount:10},
-];
+import axios from "../../axios";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -42,13 +24,15 @@ const Checkout = () => {
     state: "",
     pincode: "",
   });
-    // 👇 Missing states added
+
   const [emailOpen, setEmailOpen] = useState(true);
   const [shippingOpen, setShippingOpen] = useState(true);
 
-  // Promo code states
+  // Coupon states
   const [promoInput, setPromoInput] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponLoading, setCouponLoading] = useState(false);
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -56,38 +40,63 @@ const Checkout = () => {
     }
   }, [cartItems, navigate]);
 
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
-  const handleApplyPromo = () => {
-    const found = PROMO_CODES.find(
-      (promo) => promo.code.toLowerCase() === promoInput.trim().toLowerCase()
-    );
-    if (found) {
-      setAppliedPromo(found);
-      toast.success(`${found.code} applied! You got ${found.discount}% off.`);
-    } else {
-      toast.error("Invalid promo code");
+  // Apply coupon via API
+  const handleApplyPromo = async () => {
+    if (!promoInput.trim()) {
+      toast.error('Please enter a coupon code');
+      return;
+    }
+
+    try {
+      setCouponLoading(true);
+
+      // Prepare cart data for validation - use discounted price
+      const cartData = cartItems.map(item => ({
+        productId: item.productId?._id || item._id,
+        name: item.productId?.name || item.name,
+        price: item.discountPrice || item.price, // Use discounted price if available
+        quantity: item.quantity,
+        category: item.productId?.category
+      }));
+
+      const response = await axios.post('/coupons/validate', {
+        code: promoInput.trim(),
+        cart: cartData,
+        userId: localStorage.getItem('userId') // If you store userId
+      });
+
+      if (response.data.success) {
+        setAppliedCoupon(response.data.coupon);
+        setCouponDiscount(response.data.discount);
+        toast.success(`Coupon applied! You saved ₹${response.data.discount.toFixed(2)}`);
+      }
+    } catch (error) {
+      console.error('Coupon validation error:', error);
+      const message = error.response?.data?.message || 'Invalid coupon code';
+      toast.error(message);
+    } finally {
+      setCouponLoading(false);
     }
   };
 
-  // Remove applied promo
+  // Remove applied coupon
   const handleRemovePromo = () => {
-    setAppliedPromo(null);
+    setAppliedCoupon(null);
+    setCouponDiscount(0);
     setPromoInput("");
-    toast.success("Promo code removed");
+    toast.success("Coupon removed");
   };
 
-  // Calculate discounted price (including backend discount logic if any)
+  // Calculate totals with coupon
   const subtotal = getTotalPrice();
   const backendDiscountPrice = getTotalDiscountPrice();
-
-  let total = backendDiscountPrice || subtotal;
-  if (appliedPromo) {
-    total = total - (total * appliedPromo.discount) / 100;
-  }
+  const baseTotal = backendDiscountPrice || subtotal;
+  const total = baseTotal - couponDiscount;
 
   const handlePayment = async () => {
     try {
@@ -107,14 +116,15 @@ const Checkout = () => {
         shippingAddress: formData,
         razorpay_order_id: order.order.id,
         totalDiscountPrice: Number(total),
-        couponCode: appliedPromo?.code || null,
+        couponCode: appliedCoupon?.code || null,
+        couponDiscount: couponDiscount || 0,
       });
 
       const options = {
         key: key.key,
         amount: order.order.amount,
         currency: "INR",
-        name: "Wellvas Healthcare",
+        name: "Ayucan",
         description: "RazorPay",
         order_id: order.order.id,
         prefill: {
@@ -126,7 +136,7 @@ const Checkout = () => {
           address: formData.address || "Razorpay Corporate Office",
         },
         theme: {
-          color: "#121212",
+          color: "#2A3B28", // Ayucan Green
         },
         method: {
           upi: true,
@@ -178,11 +188,11 @@ const Checkout = () => {
 
   const handleCod = async () => {
     console.log("COD order processing");
-    
+
     try {
-      console.log("order",cartItems )
+      console.log("order", cartItems)
       setLoading(true);
-        const response = await orderService.createOrder({
+      const response = await orderService.createOrder({
         items: cartItems,
         totalPrice: subtotal,
         shippingPrice: 0,
@@ -190,11 +200,12 @@ const Checkout = () => {
         razorpay_order_id: "",
         totalDiscountPrice: Number(total),
         authorised: true,
-        couponCode: appliedPromo?.code || null,
-        
+        couponCode: appliedCoupon?.code || null,
+        couponDiscount: couponDiscount || 0,
+
       });
-      console.log("response.................................................................",response )
-      if(response.success == true){
+      console.log("response.................................................................", response)
+      if (response.success == true) {
         // remove cart from local storage
         cartService.clearCart();
 
@@ -202,28 +213,46 @@ const Checkout = () => {
       }
 
     }
-      catch (error) {
-      }
-      finally {
-        setLoading(false);
-      }
+    catch (error) {
+      toast.error("Failed to place COD order");
     }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  // Styles
+  const inputClasses = "w-full p-3 rounded-lg bg-white border border-[#715036]/20 text-[#2A3B28] placeholder:text-[#715036]/40 focus:outline-none focus:ring-2 focus:ring-[#C17C3A] focus:border-transparent transition-all duration-300 shadow-sm";
+  const sectionHeaderClasses = "flex justify-between items-center p-6 cursor-pointer hover:bg-[#FDFBF7]/50 transition bg-white";
+  const sectionTitleClasses = "font-serif font-bold text-lg text-[#2A3B28] flex items-center gap-2";
 
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="bg-white text-black min-h-screen px-4 py-8 md:px-12 lg:px-24">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* Left Column */}
+    // Background: Cream
+    <div className="pt-30 bg-[#FDFBF7] text-[#2A3B28] min-h-screen px-4 py-12 md:px-12 lg:px-24 font-sans relative overflow-hidden">
+
+      {/* Decorative Background Element */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C17C3A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+
+        {/* Left Column: Forms */}
         <div className="md:col-span-2 space-y-6">
+
+          <h1 className="text-3xl font-serif font-bold text-[#2A3B28] mb-8">Secure Checkout</h1>
+
           {/* Email Section */}
-          <div className="border border-gray-200 rounded-md shadow-sm">
+          <div className="border border-[#715036]/10 rounded-2xl shadow-sm overflow-hidden bg-white">
             <div
               onClick={() => setEmailOpen(!emailOpen)}
-              className="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50 transition"
+              className={sectionHeaderClasses}
             >
-              <h3 className="font-semibold text-lg">1. Enter Your Email</h3>
-              {emailOpen ? <FaChevronDown /> : <FaChevronRight />}
+              <h3 className={sectionTitleClasses}>
+                <span className="w-6 h-6 rounded-full bg-[#2A3B28] text-white flex items-center justify-center text-xs">1</span>
+                Contact Information
+              </h3>
+              {emailOpen ? <FaChevronDown className="text-[#C17C3A]" /> : <FaChevronRight className="text-[#C17C3A]" />}
             </div>
 
             <motion.div
@@ -234,7 +263,7 @@ const Checkout = () => {
                   : { height: 0, opacity: 0 }
               }
               transition={{ duration: 0.3 }}
-              className="overflow-hidden px-6 pb-6"
+              className="overflow-hidden px-6 pb-6 bg-white"
             >
               <input
                 type="email"
@@ -242,19 +271,22 @@ const Checkout = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email Address"
-                className="w-full border px-4 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                className={inputClasses}
               />
             </motion.div>
           </div>
 
           {/* Shipping Section */}
-          <div className="border border-gray-200 rounded-md shadow-sm">
+          <div className="border border-[#715036]/10 rounded-2xl shadow-sm overflow-hidden bg-white">
             <div
               onClick={() => setShippingOpen(!shippingOpen)}
-              className="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50 transition"
+              className={sectionHeaderClasses}
             >
-              <h3 className="font-semibold text-lg">2. Shipping Information</h3>
-              {shippingOpen ? <FaChevronDown /> : <FaChevronRight />}
+              <h3 className={sectionTitleClasses}>
+                <span className="w-6 h-6 rounded-full bg-[#2A3B28] text-white flex items-center justify-center text-xs">2</span>
+                Shipping Address
+              </h3>
+              {shippingOpen ? <FaChevronDown className="text-[#C17C3A]" /> : <FaChevronRight className="text-[#C17C3A]" />}
             </div>
 
             <motion.div
@@ -265,7 +297,7 @@ const Checkout = () => {
                   : { height: 0, opacity: 0 }
               }
               transition={{ duration: 0.3 }}
-              className="overflow-hidden px-6 pb-6"
+              className="overflow-hidden px-6 pb-6 bg-white"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
@@ -274,25 +306,25 @@ const Checkout = () => {
                   placeholder="Full Name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
+                  className={inputClasses}
                   required
                 />
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="Phone"
+                  placeholder="Phone Number"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
+                  className={inputClasses}
                   required
                 />
                 <input
                   type="text"
                   name="address"
-                  placeholder="Address"
+                  placeholder="Address (House No, Building, Street)"
                   value={formData.address}
                   onChange={handleChange}
-                  className="md:col-span-2 border px-4 py-2 rounded-md"
+                  className={`${inputClasses} md:col-span-2`}
                   required
                 />
                 <input
@@ -301,7 +333,7 @@ const Checkout = () => {
                   placeholder="City"
                   value={formData.city}
                   onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
+                  className={inputClasses}
                   required
                 />
                 <input
@@ -310,7 +342,7 @@ const Checkout = () => {
                   placeholder="State"
                   value={formData.state}
                   onChange={handleChange}
-                  className="border px-4 py-2 rounded-md"
+                  className={inputClasses}
                   required
                 />
                 <input
@@ -319,148 +351,223 @@ const Checkout = () => {
                   placeholder="Pincode"
                   value={formData.pincode}
                   onChange={handleChange}
-                  className="md:col-span-2 border px-4 py-2 rounded-md"
+                  className={`${inputClasses} md:col-span-2`}
                   required
                 />
               </div>
             </motion.div>
           </div>
 
-          {/* Payment Method Section */}
-          <div className="border border-gray-200 rounded-md p-6 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">3. Payment Method</h3>
-            <p className="text-sm text-gray-600">
-              You'll be redirected to payment after clicking "Place Order".
-            </p>
+          {/* Payment Method Section (Info Only) */}
+          <div className="border border-[#715036]/10 rounded-2xl p-6 shadow-sm bg-white flex items-start gap-4">
+            <div className="w-6 h-6 rounded-full bg-[#2A3B28] text-white flex items-center justify-center text-xs mt-1 flex-shrink-0">3</div>
+            <div>
+              <h3 className="font-serif font-bold text-lg text-[#2A3B28] mb-2">Payment</h3>
+              <p className="text-sm text-[#715036]/70 flex items-center gap-2">
+                <FaLock size={12} /> All transactions are secure and encrypted. You will select your payment method in the next step.
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Right Column: Order Summary */}
-        <div className="border border-gray-200 rounded-md p-6 shadow-sm space-y-6">
-          <h3 className="font-semibold text-lg">Cart ({cartItems.length})</h3>
-          {cartItems.map((item) => {
-            const product = {
-              id: item.productId?._id || item._id,
-              name: item.productId?.name || "Product Name Not Available",
-              image: item.productId?.images?.[0]?.url || "/placeholder.png",
-              price: item.price || 0,
-              quantity: item.quantity || 1,
-            };
-            return (
-              <div
-                key={product.id}
-                className="flex justify-between items-center text-sm"
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                  <div>
-                    <p>{product.name}</p>
-                    <p className="text-gray-500">Qty: {product.quantity}</p>
+        <div className="border border-[#715036]/10 rounded-2xl p-6 shadow-lg bg-white space-y-6 h-fit sticky top-24">
+          <h3 className="font-serif font-bold text-xl text-[#2A3B28] pb-4 border-b border-[#715036]/10">Order Summary <span className="text-sm font-normal text-[#715036]/60">({cartItems.length} items)</span></h3>
+
+          <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {cartItems.map((item) => {
+              const product = {
+                id: item.productId?._id || item._id,
+                name: item.productId?.name || "Product Name Not Available",
+                image: item.productId?.images?.[0]?.url || "/placeholder.png",
+                price: item.price || 0, // MRP
+                discountPrice: item.discountPrice || item.price || 0, // Discounted price
+                quantity: item.quantity || 1,
+              };
+
+              const hasDiscount = product.price > product.discountPrice;
+
+              return (
+                <div
+                  key={product.id}
+                  className="flex justify-between items-start text-sm pb-4 border-b border-[#715036]/5 last:border-0 last:pb-0"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden border border-[#715036]/10 flex-shrink-0 bg-[#FDFBF7]">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-bold text-[#2A3B28] line-clamp-2">{product.name}</p>
+                      <p className="text-[#715036]/60 text-xs mt-1">Qty: {product.quantity}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {hasDiscount && (
+                      <p className="text-[#715036]/50 line-through text-xs mb-1">
+                        ₹{product.price * product.quantity}
+                      </p>
+                    )}
+                    <p className="font-bold text-[#2A3B28]">
+                      ₹{product.discountPrice * product.quantity}
+                    </p>
                   </div>
                 </div>
-                <p>₹{product.price * product.quantity}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
 
           {/* Promo Code */}
-          <div>
-            <input
-              type="text"
-              placeholder="Gift or promo code"
-              value={promoInput}
-              onChange={(e) => setPromoInput(e.target.value)}
-              className="w-full border px-4 py-2 rounded-md text-sm"
-              disabled={!!appliedPromo}
-            />
-            {!appliedPromo ? (
-              <button
-                onClick={handleApplyPromo}
-                className="mt-2 w-full bg-black py-2 rounded-md text-sm font-medium text-white hover:opacity-90 transition"
-              >
-                Apply
-              </button>
-            ) : (
-              <button
-                onClick={handleRemovePromo}
-                className="mt-2 w-full bg-red-500 py-2 rounded-md text-sm font-medium text-white hover:opacity-90 transition"
-              >
-                Remove {appliedPromo.code}
-              </button>
-            )}
-            {appliedPromo && (
-              <p className="text-green-600 text-sm mt-2">
-                ✅ Applied <strong>{appliedPromo.code}</strong> (
-                {appliedPromo.discount}% OFF)
-              </p>
+          <div className="bg-[#FDFBF7] p-4 rounded-xl border border-[#715036]/10">
+            <label className="text-xs font-bold text-[#715036] uppercase tracking-wider mb-2 block">Promo Code</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Enter Code"
+                value={promoInput}
+                onChange={(e) => setPromoInput(e.target.value)}
+                className="w-full border border-[#715036]/20 px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[#C17C3A] bg-white"
+                disabled={!!appliedCoupon || couponLoading}
+              />
+              {!appliedCoupon ? (
+                <button
+                  onClick={handleApplyPromo}
+                  disabled={couponLoading}
+                  className="bg-[#2A3B28] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#C17C3A] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {couponLoading ? "Verifying..." : "Apply"}
+                </button>
+              ) : (
+                <button
+                  onClick={handleRemovePromo}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-600 transition-colors shadow-sm whitespace-nowrap"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            {appliedCoupon && (
+              <div className="text-green-600 text-xs mt-2 font-bold">
+                <div className="flex items-center gap-1 mb-1">
+                  <FaShieldAlt /> {appliedCoupon.code} applied!
+                </div>
+                <div className="text-[#715036]/70">
+                  {appliedCoupon.description}
+                </div>
+                <div className="text-green-700 mt-1">
+                  💰 You saved ₹{couponDiscount.toFixed(2)}
+                </div>
+              </div>
             )}
           </div>
 
           {/* Totals */}
-          <div className="text-sm border-t border-gray-200 pt-4 space-y-2">
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>₹{subtotal}</span>
+          <div className="text-sm pt-2 space-y-3">
+            {/* MRP Total (if there's a product discount) */}
+            {subtotal > baseTotal && (
+              <div className="flex justify-between text-[#715036]/70">
+                <span>MRP Total</span>
+                <span className="line-through">₹{subtotal.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Product Discount */}
+            {subtotal > baseTotal && (
+              <div className="flex justify-between text-green-600">
+                <span>Product Discount</span>
+                <span className="font-bold">-₹{(subtotal - baseTotal).toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Subtotal (After Product Discount) */}
+            <div className="flex justify-between text-[#715036]">
+              <span className="font-semibold">Subtotal</span>
+              <span className="font-bold">₹{baseTotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Estimated Shipping</span>
-              <span>Free</span>
+
+            {/* Coupon Discount */}
+            {couponDiscount > 0 && (
+              <div className="flex justify-between text-green-600">
+                <span>Coupon Discount ({appliedCoupon?.code})</span>
+                <span className="font-bold">-₹{couponDiscount.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Shipping */}
+            <div className="flex justify-between text-[#715036]">
+              <span>Shipping</span>
+              <span className="text-green-600 font-bold">Free</span>
             </div>
-            <div className="flex justify-between font-semibold">
-              <span>Total</span>
-              <span className="font-semibold flex flex-col">
-                <span className="font-semibold ml-3 text-green-500">
-                  ₹{total.toFixed(2)}
-                </span>
-                {total < subtotal && (
-                  <span className="text-gray-500 ml-2 line-through text-sm">
-                    ₹{subtotal}
+
+            {/* Total Savings Summary */}
+            {(subtotal > baseTotal || couponDiscount > 0) && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-green-700 font-semibold text-xs">Total Savings</span>
+                  <span className="text-green-700 font-bold">₹{((subtotal - baseTotal) + couponDiscount).toFixed(2)}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Final Total */}
+            <div className="flex justify-between items-end border-t border-[#715036]/10 pt-4">
+              <span className="font-serif font-bold text-lg text-[#2A3B28]">Total</span>
+              <div className="text-right">
+                {(subtotal > total || couponDiscount > 0) && (
+                  <span className="text-[#715036]/50 line-through text-xs block mb-1">
+                    ₹{subtotal.toFixed(2)}
                   </span>
                 )}
-              </span>
+                <span className="font-bold text-xl text-[#C17C3A]">
+                  ₹{total.toFixed(2)}
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Final tax and shipping calculated after shipping step is complete.
+
+            <p className="text-[10px] text-[#715036]/50 mt-1 text-center">
+              *Taxes included. By placing this order, you agree to our Terms of Service.
             </p>
           </div>
 
-          {/* Place Order Button */}
-          <button
-            onClick={handlePayment}
-            className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"
-            disabled={
-              loading ||
-              !formData.name ||
-              !formData.email ||
-              !formData.phone ||
-              !formData.address ||
-              !formData.city ||
-              !formData.state ||
-              !formData.pincode
-            }
-          >
-            {loading ? "Processing..." : "Pay Now"}
-          </button>
-          <button
-            onClick={handleCod}
-            className="w-full bg-black cursor-pointer text-white py-3 rounded-md font-semibold hover:opacity-90 transition"
-            disabled={
-              loading ||
-              !formData.name ||
-              !formData.email ||
-              !formData.phone ||
-              !formData.address ||
-              !formData.city ||
-              !formData.state ||
-              !formData.pincode
-            }
-          >
-            {loading ? "Processing..." : "Cash on Delivery"}
-          </button>
+          {/* Action Buttons */}
+          <div className="space-y-3 pt-2">
+            <button
+              onClick={handlePayment}
+              className="w-full bg-[#2A3B28] cursor-pointer text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-[#C17C3A] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+              disabled={
+                loading ||
+                !formData.name ||
+                !formData.email ||
+                !formData.phone ||
+                !formData.address ||
+                !formData.city ||
+                !formData.state ||
+                !formData.pincode
+              }
+            >
+              {loading ? "Processing..." : "Pay Online"}
+            </button>
+            <button
+              onClick={handleCod}
+              className="w-full bg-white border-2 border-[#2A3B28] cursor-pointer text-[#2A3B28] py-3.5 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-[#FDFBF7] transition-all"
+              disabled={
+                loading ||
+                !formData.name ||
+                !formData.email ||
+                !formData.phone ||
+                !formData.address ||
+                !formData.city ||
+                !formData.state ||
+                !formData.pincode
+              }
+            >
+              {loading ? "Processing..." : "Cash on Delivery"}
+            </button>
+          </div>
+
         </div>
       </div>
     </div>

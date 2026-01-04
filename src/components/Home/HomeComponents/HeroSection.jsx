@@ -2,7 +2,7 @@ import { FaLeaf, FaFlask, FaBoxOpen, FaWhatsapp, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
-  
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-white to-gray-100 p-10 md:p-16">
       {/* Decorative Background Blobs */}
@@ -15,13 +15,13 @@ const HeroSection = () => {
           <iframe
             className="w-full h-64 md:h-80 rounded-xl shadow-xl"
             src="https://www.youtube.com/embed/6t1xRzKjRBU"
-            title="Wellvas Overview"
+            title="Ayucan Overview"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
           <div className="absolute bottom-3 left-3 px-4 py-1 bg-black bg-opacity-60 text-white rounded-lg font-semibold">
-            WELLVAS
+            Ayucan
           </div>
         </div>
 
@@ -34,7 +34,7 @@ const HeroSection = () => {
             Discover the power of time-tested Ayurvedic herbs like Ashwagandha, Shilajit, and Safed Musli—expertly formulated and clinically validated for modern well-being.
           </p>
           <p className="text-gray-700 mb-6">
-            At Wellvas, we go beyond just supplements—our mission is to restore balance, enhance performance, and help you feel unstoppable.
+            At Ayucan, we go beyond just supplements—our mission is to restore balance, enhance performance, and help you feel unstoppable.
           </p>
 
           {/* Feature List */}

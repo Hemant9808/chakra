@@ -3,13 +3,13 @@ import axios from "axios";
 // Use Vite's import.meta.env for environment variables
 // const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 // const BACKEND_URL = "https://wellvas-backend.onrender.com";
-const BACKEND_URL = "https://wellvas.in";
+// const BACKEND_URL = "https://wellvas.in";
 
-// const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = "http://localhost:4000";
 
 const axiosInstance = axios.create({
-  
-  baseURL:BACKEND_URL,
+
+  baseURL: BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem("auth-storage")
       ? JSON.parse(localStorage.getItem("auth-storage")).state.token
       : null;
-      console.log("token",token)
+    console.log("token", token)
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

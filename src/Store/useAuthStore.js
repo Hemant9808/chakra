@@ -51,7 +51,7 @@ const useAuthStore = create(
 
           const { token, user } = response.data;
 
-          console.log("user....................",token,user);
+          console.log("user....................", token, user);
 
           set({
 
@@ -82,7 +82,7 @@ const useAuthStore = create(
           const response = await axiosInstance.post("/auth/verify-signup-otp", userData);
 
           const { token, user } = response.data;
-          console.log("user in verify opt store ....................",token,user);
+          console.log("user in verify opt store ....................", token, user);
 
           set({
             user,
@@ -122,6 +122,24 @@ const useAuthStore = create(
         }
       },
 
+      resetPassword: async (token, newPassword) => {
+        set({ loading: true, error: null });
+        try {
+          // Send token as URL path parameter to match backend route: /auth/resetPassword/:token
+          const response = await axiosInstance.post(`/auth/resetPassword/${token}`, {
+            password: newPassword,  // Backend expects 'password' field
+          });
+          set({ loading: false });
+          return response.data;
+        } catch (error) {
+          set({
+            loading: false,
+            error: error.response?.data?.message || "Password reset failed",
+          });
+          throw error;
+        }
+      },
+
       logout: () => {
         set({
           user: null,
@@ -137,13 +155,13 @@ const useAuthStore = create(
         try {
           const response = await axiosInstance.put('/auth/updateProfile', userData);
           const updatedUser = response.data.user;
-          
+
           set((state) => ({
             user: { ...state.user, ...updatedUser },
             loading: false,
             error: null,
           }));
-          
+
           return response.data;
         } catch (error) {
           set({

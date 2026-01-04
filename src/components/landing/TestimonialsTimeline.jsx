@@ -5,7 +5,7 @@ const testimonials = [
   {
     id: 1,
     name: "Ankit Sharma",
-    text: "I've tried multiple wellness brands, but Wellvas stands out. Their products feel authentic and effective!",
+    text: "I've tried multiple wellness brands, but Ayucan stands out. Their products feel authentic and effective!",
     rating: 5,
     align: "left",
   },

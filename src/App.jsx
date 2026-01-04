@@ -59,7 +59,7 @@ function AppRoutes() {
           <Route path="blogs" element={<BlogSection />} />
           <Route path="blogs/:id" element={<BlogDetail />} />
           {/* <Route path="product/:id" element={<ProductDetails />} /> */}
-          <Route path="ProductDetailsById/:id" element={<ProductDetailsById />} />
+          <Route path="product/:id" element={<ProductDetailsById />} />
           <Route path="/shop/:id" element={<Shop />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

@@ -7,11 +7,11 @@ import { useCartStore } from "../../Store/useCartStore";
 import useAuthStore from "../../Store/useAuthStore";
 import { toast } from "react-hot-toast";
 import { clearLocalStorage } from "../../middleware/middleware";
-import logo from "../../../public/ResourseImages/logo.png";
-
+import logo from "../../../public/ResourseImages/logo.png"; // Make sure this is your new Ayucan logo
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const sidebarRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -24,21 +24,25 @@ const Header = () => {
   const authUser = useAuthStore((state) => state.user);
   const authLogout = useAuthStore((state) => state.logout);
 
-  console.log("authUser in header ....................",authUser);
-
   const totalCartItems = getTotalItems();
-  const totalPrice = getTotalPrice();
 
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/shop/all", label: "Shop" },
-    // { path: "/quiz", label: "Wellness Test" },
     { path: "/contact", label: "Contact" },
-    { path: "/about", label: "About" },
-    { path: "/blogs", label: "Blogs" },
+    { path: "/about", label: "Our Roots" }, // Renamed for branding
+    { path: "/blogs", label: "Wellness Journal" }, // Renamed for branding
     { path: "/evas", label: "Men's Wellness" },
-    // { path: "/evas", label: "Gym" },
   ];
+
+  // Handle scroll effect for a sticky glassmorphism look
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -56,56 +60,42 @@ const Header = () => {
     toast.success("Logged out successfully");
   };
 
-
-
-  // useEffect(() => {
-  //   if(token){
-  //     const userDetails = getUserDetails(authUser.id);
-
-  //     if(!userDetails.success){
-  //       handleLogout();
-  //       navigate("/login");
-  //     }
-      
-  //   }
-  // }, [token]);
-
-
-
   return (
     <header
-      className="md:pt-3 md:h-25 shadow sticky top-0 z-50 text-white bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/ResourseImages/bgOrignal.png')",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-        backgroundBlendMode: "darken",
-      }}
+      className={`fixed top-0 left-0 right-0 w-screen z-50 transition-all duration-300 overflow-x-hidden ${scrolled
+        ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-md py-2" // Cream color with blur on scroll
+        : "bg-[#FDFBF7] py-4" // Solid cream when at top
+        }`}
     >
-      <nav className="px-6 lg:px-10 py-4 flex justify-between items-center">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center text-[#2A3B28]">
         {/* Left: Hamburger Icon (Mobile Only) */}
         <div className="lg:hidden">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-2xl text-white">
+          <button onClick={() => setIsOpen(!isOpen)} className="text-2xl text-[#2A3B28] hover:text-[#C17C3A] transition">
             <FaBars />
           </button>
         </div>
 
-        {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2 ">
+        {/* Logo - Centered on Mobile, Left on Desktop */}
+        <Link to="/" className="flex items-center">
           <img
             src={logo}
-            alt="Wellvas Logo"
-            className="h-8 sm:h-10 w-auto object-contain"
+            alt="Ayucan Logo"
+            className={`transition-all duration-300 object-contain ${scrolled ? "h-12" : "h-16"
+              }`}
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex space-x-8 text-sm font-semibold uppercase">
+        <div className="hidden lg:flex space-x-8 text-sm font-bold uppercase tracking-widest">
           {navLinks.map(({ path, label }, index) => (
             <NavLink
               key={index}
               to={path}
               className={({ isActive }) =>
-                `hover:text-gray-400 ${isActive ? "text-[#e5dac3]" : "text-white"}`
+                `transition-colors duration-300 pb-1 border-b-2 ${isActive
+                  ? "text-[#C17C3A] border-[#C17C3A]" // Active: Bronze/Copper
+                  : "text-[#2A3B28] border-transparent hover:text-[#C17C3A] hover:border-[#C17C3A]" // Default: Forest Green
+                }`
               }
             >
               {label}
@@ -114,32 +104,32 @@ const Header = () => {
         </div>
 
         {/* Right-side Icons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-6">
           {token && (
-            <div className="cursor-pointer" onClick={() => navigate("/profile")}>
-              <FaUser className="text-xl hover:text-gray-400" />
+            <div className="cursor-pointer group" onClick={() => navigate("/profile")}>
+              <FaUser className="text-xl text-[#2A3B28] group-hover:text-[#C17C3A] transition" />
             </div>
           )}
-          {token && (
-            <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
-              <FaShoppingCart className="text-xl hover:text-gray-400" />
-              {totalCartItems > 0 && (
-                <motion.span
-                  key={totalCartItems}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  className="absolute -top-2 -right-2 bg-red-500 text-xs px-1 rounded-full"
-                >
-                  {totalCartItems}
-                </motion.span>
-              )}
-            </div>
-          )}
+
+          <div className="relative cursor-pointer group" onClick={() => navigate("/cart")}>
+            <FaShoppingCart className="text-xl text-[#2A3B28] group-hover:text-[#C17C3A] transition" />
+            {totalCartItems > 0 && (
+              <motion.span
+                key={totalCartItems}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                className="absolute -top-2 -right-2 bg-[#C17C3A] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+              >
+                {totalCartItems}
+              </motion.span>
+            )}
+          </div>
+
           {!token && (
             <Link
               to="/login"
-              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              className="hidden sm:block bg-[#2A3B28] text-[#FDFBF7] px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#C17C3A] transition-colors duration-300"
             >
               Login
             </Link>
@@ -148,70 +138,77 @@ const Header = () => {
       </nav>
 
       {/* Sidebar and Blur Overlay */}
-<AnimatePresence>
-  {isOpen && (
-    <>
-      {/* Overlay */}
-      <motion.div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={() => setIsOpen(false)}
-      />
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+            />
 
-      {/* Sidebar */}
-      <motion.nav
-  ref={sidebarRef}
-  initial={{ x: "-100%" }}
-  animate={{ x: 0 }}
-  exit={{ x: "-100%" }}
-  transition={{ duration: 0.3 }}
-  className="fixed top-0 left-0 w-3/4 sm:w-2/4 h-full bg-black text-white flex flex-col justify-start px-6 py-6 z-50"
->
-  {/* Close Icon */}
-  <div className="flex justify-end mb-6">
-    <button
-      onClick={() => setIsOpen(false)}
-      className="text-white text-2xl"
-    >
-      <FaTimes />
-    </button>
-  </div>
+            {/* Sidebar - Deep Green Theme */}
+            <motion.nav
+              ref={sidebarRef}
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 left-0 w-3/4 sm:w-1/2 h-full bg-[#2A3B28] text-[#FDFBF7] flex flex-col px-8 py-8 z-50 shadow-2xl"
+            >
+              {/* Header inside sidebar */}
+              <div className="flex justify-between items-center mb-10">
+                <span className="text-xl font-serif tracking-widest text-[#C17C3A]">AYUCAN</span>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-[#FDFBF7] text-2xl hover:text-[#C17C3A] transition"
+                >
+                  <FaTimes />
+                </button>
+              </div>
 
-  {/* Navigation Links */}
-  <div className="flex flex-col gap-5">
-    {navLinks.map(({ path, label }, index) => (
-      <NavLink
-        key={index}
-        to={path}
-        className="text-base font-medium hover:text-gray-400"
-        onClick={() => setIsOpen(false)}
-      >
-        {label}
-      </NavLink>
-    ))}
-  </div>
+              {/* Navigation Links */}
+              <div className="flex flex-col gap-6">
+                {navLinks.map(({ path, label }, index) => (
+                  <NavLink
+                    key={index}
+                    to={path}
+                    className={({ isActive }) =>
+                      `text-lg font-medium tracking-wide transition-colors ${isActive ? "text-[#C17C3A]" : "text-[#FDFBF7] hover:text-[#C17C3A]"
+                      }`
+                    }
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {label}
+                  </NavLink>
+                ))}
+              </div>
 
-  {/* User Info & Logout - Just below links */}
-  {token && (
-    <div className="mt-8 flex flex-col items-center gap-2">
-      <p className="text-sm text-gray-300">Hi, {authUser?.firstName || "User"}</p>
-      <button
-        onClick={handleLogout}
-        className="bg-red-200 text-red-600 px-4 py-2 rounded-lg text-sm hover:bg-red-300 transition"
-      >
-        Logout
-      </button>
-    </div>
-  )}
-</motion.nav>
-
-    </>
-  )}
-</AnimatePresence>
-
-
+              {/* User Info & Logout */}
+              {token ? (
+                <div className="mt-auto border-t border-[#FDFBF7]/20 pt-8">
+                  <p className="text-sm text-[#FDFBF7]/70 mb-4">Welcome, {authUser?.firstName || "Wellness Seeker"}</p>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full bg-[#C17C3A] text-white px-4 py-3 rounded-lg text-sm font-semibold hover:bg-[#a6662e] transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-auto border-t border-[#FDFBF7]/20 pt-8">
+                  <Link to="/login" onClick={() => setIsOpen(false)} className="block w-full text-center bg-[#FDFBF7] text-[#2A3B28] px-4 py-3 rounded-lg font-bold">
+                    Login / Sign Up
+                  </Link>
+                </div>
+              )}
+            </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

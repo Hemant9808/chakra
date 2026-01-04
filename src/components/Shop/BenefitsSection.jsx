@@ -51,7 +51,7 @@ export default function BenefitsSection() {
           >
             <img
               src="/ResourseImages/Details1.png"
-              alt="Wellvas Wellness"
+              alt="Ayucan Wellness"
               className="rounded-2xl shadow-lg w-full max-w-md"
             />
           </motion.div>

@@ -4,8 +4,8 @@ import "./marquee.css"; // Same custom CSS for animation
 
 const MarqueeBanner = () => {
   const messages = [
-    "⚡ Hello from Team WELLVAS!",
-    "🎉 Use WELLVAS15 to save 15% instantly!",
+    "⚡ Hello from Team Ayucan!",
+    "🎉 Use Ayucan15 to save 15% instantly!",
     "🧠 Take the Men's Wellness Quiz today!",
     "💪 Boost your energy with Ayurvedic care!",
   ];

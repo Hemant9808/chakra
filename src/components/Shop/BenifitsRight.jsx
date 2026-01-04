@@ -35,7 +35,7 @@ export default function BenefitsRight() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <p className="text-[#A0D468] text-sm font-semibold uppercase mb-2">Wellvas.com</p> {/* Small wellvas.com text */}
+          <p className="text-[#A0D468] text-sm font-semibold uppercase mb-2">Ayucan.com</p> {/* Small Ayucan.com text */}
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ancient Wisdom for Modern Health
           </h2>

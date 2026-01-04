@@ -32,7 +32,7 @@ export const useCartStore = create((set) => ({
 
   addToCart: async (product) => {
     try {
-      console.log("product",product)
+      console.log("product", product)
       set({ loading: true, error: null });
       const cart = await cartService.addToCart(product._id, 1, product.price, product.discountPrice);
       const items = cart.items || [];
@@ -59,10 +59,10 @@ export const useCartStore = create((set) => ({
     }
   },
 
-  updateQuantity: async (productId, quantity) => {
+  updateQuantity: async (productId, quantity, price, discountPrice) => {
     try {
       set({ loading: true, error: null });
-      const cart = await cartService.addToCart(productId, quantity);
+      const cart = await cartService.addToCart(productId, quantity, price, discountPrice);
       const items = cart.items || [];
       set({ cartItems: items, loading: false });
       localStorage.setItem('cartItems', JSON.stringify(items));
@@ -99,7 +99,7 @@ export const useCartStore = create((set) => ({
   },
 
   getTotalPrice: () => {
-    
+
     return useCartStore.getState().cartItems.reduce(
       (total, item) => total + item.discountPrice * item.quantity,
       0

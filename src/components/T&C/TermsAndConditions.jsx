@@ -8,17 +8,17 @@ const TermsAndConditions = () => {
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">Terms and Conditions</h1>
 
       <p className="mb-6">
-        This document outlines the terms and conditions ("Terms") applicable to your use of the Wellvas website (
-        <a href="https://www.wellvas.com" className="text-blue-600 underline">www.wellvas.com</a>) and associated services
-        (“Platform”), operated by Wellvas Wellness Private Limited (“Wellvas”, “we”, “us”, “our”). By accessing or using the Platform,
+        This document outlines the terms and conditions ("Terms") applicable to your use of the Ayucan website (
+        <a href="https://www.ayucan.com" className="text-blue-600 underline">www.ayucan.com</a>) and associated services
+        (“Platform”), operated by Ayucan Wellness Private Limited (“Ayucan”, “we”, “us”, “our”). By accessing or using the Platform,
         you agree to these Terms and our Privacy Policy. If you do not agree with these Terms, please do not use the Platform.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">1. General</h2>
       <p className="mb-6">
-        Wellvas.com is an e-commerce platform offering wellness, health, and personal care products. The use of the Platform is
+        Ayucan.com is an e-commerce platform offering wellness, health, and personal care products. The use of the Platform is
         governed by Indian law, including the Information Technology Act, 2000. These Terms form a legally binding agreement between
-        you ("User", "you", or "your") and Wellvas. You agree that you are competent to enter into a binding contract under Indian law.
+        you ("User", "you", or "your") and Ayucan. You agree that you are competent to enter into a binding contract under Indian law.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">2. User Obligations</h2>
@@ -30,7 +30,7 @@ const TermsAndConditions = () => {
 
       <h2 className="text-2xl font-semibold mb-4">3. Purchases & Payments</h2>
       <p className="mb-6">
-        All purchases on Wellvas.com are subject to product availability and acceptance of your order. Prices are inclusive of all
+        All purchases on Ayucan.com are subject to product availability and acceptance of your order. Prices are inclusive of all
         applicable taxes unless stated otherwise. You agree to provide accurate and complete payment information. We reserve the
         right to refuse or cancel any order at our discretion. For information on cancellations, returns, and refunds, please refer
         to our <a href="/refund-policy" className="text-blue-600 underline">Returns & Refund Policy</a>.
@@ -38,28 +38,28 @@ const TermsAndConditions = () => {
 
       <h2 className="text-2xl font-semibold mb-4">4. Communications</h2>
       <p className="mb-6">
-        By registering or purchasing from Wellvas, you consent to receive communications via email, SMS, or WhatsApp related to your
+        By registering or purchasing from Ayucan, you consent to receive communications via email, SMS, or WhatsApp related to your
         account or order. You may unsubscribe from promotional communications at any time via the unsubscribe link or by contacting us
-        at <a href="mailto:support@wellvas.com" className="text-blue-600 underline">support@wellvas.com</a>.
+        at <a href="mailto:support@ayucan.com" className="text-blue-600 underline">support@ayucan.com</a>.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">5. Intellectual Property</h2>
       <p className="mb-6">
         All content on the Platform, including but not limited to logos, graphics, product images, descriptions, and software code is
-        the property of Wellvas Wellness Private Limited and is protected under applicable intellectual property laws. You may not
+        the property of Ayucan Wellness Private Limited and is protected under applicable intellectual property laws. You may not
         reproduce, distribute, or use our content without prior written consent.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">6. Limitation of Liability</h2>
       <p className="mb-6">
-        To the maximum extent permitted by law, Wellvas shall not be liable for any indirect, incidental, special, consequential, or
+        To the maximum extent permitted by law, Ayucan shall not be liable for any indirect, incidental, special, consequential, or
         punitive damages arising out of your access or use of the Platform or from any information or content available on the Platform.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">7. Termination</h2>
       <p className="mb-6">
         We reserve the right to suspend or terminate your access to the Platform at any time, without notice, for conduct that we
-        believe violates these Terms or is otherwise harmful to other users or the business interests of Wellvas.
+        believe violates these Terms or is otherwise harmful to other users or the business interests of Ayucan.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">8. Governing Law</h2>
@@ -74,7 +74,7 @@ const TermsAndConditions = () => {
       </p>
 
       <div className="mb-10">
-        <p><strong>Email:</strong> <a href="mailto:support@wellvas.com" className="text-blue-600 underline">support@wellvas.com</a></p>
+        <p><strong>Email:</strong> <a href="mailto:support@ayucan.com" className="text-blue-600 underline">support@ayucan.com</a></p>
         <p><strong>Phone:</strong> [8271442413]</p>
       </div>
 

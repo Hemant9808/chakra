@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
       <p className="mb-6 text-sm text-gray-500">Effective Date: [01 May 2025]</p>
 
       <p className="mb-6">
-        This Privacy Policy governs your use of the Wellvas website (<a href="https://www.wellvas.com" className="text-blue-600 underline">www.wellvas.com</a>), mobile applications, and other associated services operated by Wellvas (“Company”, “we”, “us”, or “our”). It explains how we collect, use, store, disclose, and protect your personal information when you access or use our platform. By continuing to use our services, you agree to the terms outlined in this Privacy Policy.
+        This Privacy Policy governs your use of the Ayucan website (<a href="https://www.ayucan.com" className="text-blue-600 underline">www.ayucan.com</a>), mobile applications, and other associated services operated by Ayucan (“Company”, “we”, “us”, or “our”). It explains how we collect, use, store, disclose, and protect your personal information when you access or use our platform. By continuing to use our services, you agree to the terms outlined in this Privacy Policy.
       </p>
 
       <p className="mb-6">
@@ -61,8 +61,8 @@ const PrivacyPolicy = () => {
       </p>
 
       <div className="mb-10">
-        
-        <p><strong>Email:</strong> <a href="mailto:support@wellvas.com" className="text-blue-600 underline">support@wellvas.com</a></p>
+
+        <p><strong>Email:</strong> <a href="mailto:support@ayucan.com" className="text-blue-600 underline">support@ayucan.com</a></p>
         <p><strong>Phone:</strong> [8799722636]</p>
       </div>
 

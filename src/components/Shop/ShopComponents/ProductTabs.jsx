@@ -6,48 +6,40 @@ import { toast } from "react-hot-toast";
 import { productService } from "../../../services/productService";
 import { checkIfUserIsLoggedIn } from "../../../middleware/middleware";
 import { PriceDisplay } from "../../../utils/priceUtils";
-
+import { FaShoppingBag } from "react-icons/fa";
 
 const ProductSkeleton = () => (
-  <div className="bg-white shadow rounded-xl p-4 flex flex-col">
-    <div className="relative w-full h-48 flex justify-center overflow-hidden">
-      <div className="w-full h-full bg-gray-200 animate-pulse rounded-md" />
+  <div className="bg-white shadow-sm border border-[#715036]/10 p-4 rounded-2xl flex flex-col">
+    <div className="w-full h-48 bg-[#715036]/10 rounded-xl animate-pulse" />
+    <div className="mt-4 flex flex-col items-center gap-2">
+      <div className="h-4 w-32 bg-[#715036]/10 animate-pulse rounded" />
+      <div className="h-3 w-24 bg-[#715036]/10 animate-pulse rounded" />
+      <div className="h-4 w-20 bg-[#715036]/10 animate-pulse rounded" />
     </div>
-    <div className="text-center mt-4">
-      <div className="h-4 w-32 bg-gray-200 animate-pulse rounded mx-auto" />
-      <div className="h-3 w-24 bg-gray-200 animate-pulse rounded mx-auto mt-2" />
-      <div className="h-4 w-20 bg-gray-200 animate-pulse rounded mx-auto mt-2" />
-    </div>
-    <div className="h-10 bg-gray-200 animate-pulse rounded mt-3" />
+    <div className="h-10 w-full bg-[#715036]/10 animate-pulse rounded-full mt-4" />
   </div>
 );
 
 const CategorySkeleton = () => (
-  <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
+  <div className="flex flex-wrap justify-center gap-4 border-b border-[#715036]/10 mb-8 pb-4">
     {[1, 2, 3, 4, 5].map((index) => (
       <div
         key={index}
-        className="w-24 h-10 bg-gray-200 animate-pulse rounded"
+        className="w-24 h-10 bg-[#715036]/10 animate-pulse rounded-full"
       />
     ))}
   </div>
 );
 
 const ProductTabs = ({ products: allProducts, categories, loading: initialLoading }) => {
-  const [activeTab, setActiveTab] = useState("ALL PRODUCTS");
   const [products, setProducts] = useState(allProducts);
   const [loading, setLoading] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
-  const navigate = useNavigate()
-
-  //get the id from the url
-  const { id } = useParams();
-
-  // console.log("id.........", id);
+  const navigate = useNavigate();
+  const { id } = useParams(); // id represents the active category name or 'all'
 
   useEffect(() => {
-    console.log("id.........wefsdrfgth", id);
-    if (id === "all") {
+    if (!id || id === "all") {
       setProducts(allProducts);
     } else {
       setLoading(true);
@@ -58,154 +50,125 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
     }
   }, [id, allProducts]);
 
-  const calculateDiscount = (price, discountPrice) => {
-    //deciaml to 2 decimal places
-    const discount = ((price - discountPrice) / price) * 100;
-    return discount.toFixed(2);
-  }
+  const handleAddToCart = (e, product) => {
+    e.preventDefault(); // Prevent link navigation
+    if (!checkIfUserIsLoggedIn()) {
+      navigate("/login");
+      return;
+    }
+    addToCart(product);
+    toast.success("Added to cart");
+  };
 
   return (
-    <div className="w-full px-4 py-8">
+    // Background: Cream
+    <div className="w-full px-4 py-12 bg-[#FDFBF7]">
+
       {/* Tabs */}
       {initialLoading ? (
         <CategorySkeleton />
       ) : (
-        <div className="flex flex-wrap justify-center gap-4 border-b border-gray-300 mb-6">
+        <div className="flex flex-wrap justify-center gap-2 md:gap-6 border-b border-[#715036]/10 mb-10 pb-4">
           <button
-            // onClick={() => setActiveTab("ALL PRODUCTS")}
             onClick={() => navigate(`/shop/all`)}
-            className={`px-4 cursor-pointer py-2 font-semibold border-b-2 ${
-              id === "all"
-                ? "border-black text-black"
-                : "border-transparent text-gray-500"
-            } hover:text-black transition-all`}
+            className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${!id || id === "all"
+              ? "text-[#2A3B28]"
+              : "text-[#715036]/60 hover:text-[#715036]"
+              }`}
           >
-            ALL PRODUCTS
+            All Products
+            {(!id || id === "all") && (
+              <motion.div layoutId="activeTabIndicator" className="absolute bottom-0 left-0 w-full h-1 bg-[#C17C3A] rounded-t-full" />
+            )}
           </button>
           {categories.map((cat) => (
             <button
               key={cat._id}
-              // onClick={() => setActiveTab(cat.name)}
               onClick={() => navigate(`/shop/${cat.name}`)}
-              className={`px-4 py-2 cursor-pointer font-semibold border-b-2 ${
-                id === cat.name
-                  ? "border-black text-black"
-                  : "border-transparent text-gray-500"
-              } hover:text-black transition-all`}
+              className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${id === cat.name
+                ? "text-[#2A3B28]"
+                : "text-[#715036]/60 hover:text-[#715036]"
+                }`}
             >
               {cat.name}
+              {id === cat.name && (
+                <motion.div layoutId="activeTabIndicator" className="absolute bottom-0 left-0 w-full h-1 bg-[#C17C3A] rounded-t-full" />
+              )}
             </button>
           ))}
         </div>
       )}
 
       {/* Product Grid */}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-7xl mx-auto">
         {(loading || initialLoading) ? (
-          // Show 8 skeleton products while loading
           Array(8).fill(null).map((_, index) => (
             <ProductSkeleton key={index} />
           ))
         ) : products.length === 0 ? (
-          <div className="col-span-full text-center">No products found</div>
+          <div className="col-span-full text-center py-20">
+            <p className="text-[#715036]/60 text-lg italic">No products found in this category.</p>
+            <button onClick={() => navigate('/shop/all')} className="mt-4 text-[#C17C3A] font-bold hover:underline">
+              View all products
+            </button>
+          </div>
         ) : (
           products.map((product) => (
             <motion.div
               key={product._id}
-              className="bg-white shadow rounded-xl p-4 flex flex-col"
+              className="bg-white shadow-sm hover:shadow-xl border border-[#715036]/10 rounded-2xl p-5 flex flex-col group transition-all duration-300"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Link to={`/ProductDetailsById/${product._id}`} className="group">
-                <div className="relative w-full h-48 flex justify-center overflow-hidden">
+              <Link to={`/product/${product._id}`} className="block flex-1">
+                <div className="relative w-full h-56 bg-[#FDFBF7] rounded-xl overflow-hidden flex justify-center items-center p-4">
                   <img
                     src={product.images[0]?.url || '/placeholder.png'}
                     alt={product.name}
-                    className="object-cover transition-transform group-hover:scale-110"
+                    className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                   />
                   {product.stock <= 0 && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                      Out of Stock
+                    <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+                      <span className="bg-red-50 text-red-600 text-xs font-bold px-3 py-1.5 rounded-full border border-red-100 uppercase tracking-wide">
+                        Out of Stock
+                      </span>
+                    </div>
+                  )}
+                  {/* Discount Badge */}
+                  {product.discountPrice > 0 && product.discountPrice < product.price && product.stock > 0 && (
+                    <div className="absolute top-3 right-3 bg-[#C17C3A] text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
+                      SALE
                     </div>
                   )}
                 </div>
-                <div className="text-center mt-4">
-                  <h3 className="font-semibold text-sm group-hover:text-green-600 transition-colors">
+
+                <div className="text-center mt-5">
+                  <p className="text-xs font-bold text-[#C17C3A] uppercase tracking-widest mb-1">
+                    {product.brand || "Ayucan"}
+                  </p>
+                  <h3 className="font-serif font-bold text-lg text-[#2A3B28] group-hover:text-[#C17C3A] transition-colors line-clamp-1">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
-                  <div className="text-sm mt-2">
 
-                  {/* discounted price */}
-                  <PriceDisplay product={product} />
-                  {/* {
-                    product.discountPrice ? (
-                      <div className="flex justify-center mb-3  flex-col items-center ">
-                        
-                        <span className="text-green-600  font-bold text-lg">
-                        
-                        ₹{product.discountPrice}
-                        </span>
-                        <span className=" text-gray-500 line-through">₹{product.price}</span>
-
-                        <span className="text-green-600 text-sm">
-                          {calculateDiscount(product.price, product.discountPrice)}% off
-                        </span>
-
-                       
-
-                      </div>
-                    ) : (
-                      <span className="font-bold">₹{product.price}</span>
-                    )
-                  } */}
-                  {/* <span className="font-bold">₹{product.price}</span> */}
-                  
-                    {/* <span className="font-bold">₹{product.price}</span> */}
+                  <div className="mt-2 mb-4">
+                    <PriceDisplay product={product} />
                   </div>
                 </div>
               </Link>
-<button
-  onClick={() => {
-    if (!checkIfUserIsLoggedIn()) {
-      navigate("/login");
-      return;
-    }
-    addToCart(product);
-  }}
-  disabled={product.stock <= 0}
-  className="group relative mt-3 mx-auto w-[180px] h-[54px] flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-not-allowed"
->
-  {/* Background */}
-  <div
-    className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-out 
-      group-hover:scale-110 ${product.stock <= 0 ? "opacity-50" : ""}`}
-    style={{
-      backgroundImage: "url('/ResourseImages/bgOrignal.png')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      WebkitMaskImage: "url('/ResourseImages/buttonShape2.png')",
-      WebkitMaskRepeat: "no-repeat",
-      WebkitMaskSize: "cover",
-      WebkitMaskPosition: "center",
-      maskImage: "url('/ResourseImages/buttonShape2.png')",
-      maskRepeat: "no-repeat",
-      maskSize: "cover",
-      maskPosition: "center",
-    }}
-  />
 
-  {/* Text */}
-  <span
-    className={`relative z-10 text-white font-semibold text-sm ${
-      product.stock <= 0 ? "opacity-70" : ""
-    }`}
-  >
-    {product.stock <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
-  </span>
-</button>
-
+              {/* Add to Cart Button - CSS Styled */}
+              <button
+                onClick={(e) => handleAddToCart(e, product)}
+                disabled={product.stock <= 0}
+                className={`w-full py-3 rounded-full font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-md ${product.stock <= 0
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                  : "bg-[#2A3B28] text-white hover:bg-[#C17C3A] hover:shadow-lg hover:-translate-y-0.5"
+                  }`}
+              >
+                <FaShoppingBag className="text-xs mb-0.5" />
+                {product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
+              </button>
 
             </motion.div>
           ))

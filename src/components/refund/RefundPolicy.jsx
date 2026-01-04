@@ -8,15 +8,15 @@ const RefundPolicy = () => {
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">Returns, Cancellations & Refund Policy</h1>
 
       <p className="mb-6">
-        At Wellvas, we strive to ensure a smooth and satisfying experience for all our customers. This policy outlines our approach to order cancellations, returns, and refunds. Please read carefully to understand your options as a valued customer.
+        At Ayucan, we strive to ensure a smooth and satisfying experience for all our customers. This policy outlines our approach to order cancellations, returns, and refunds. Please read carefully to understand your options as a valued customer.
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">Order Cancellations</h2>
       <p className="mb-6">
-        Orders placed on <a href="https://www.wellvas.com" className="text-blue-600 underline">www.wellvas.com</a> can be cancelled at any time before they are shipped. You may initiate a cancellation request from your order history section on your account page. Once your order is eligible for cancellation, a "Cancel Order" button will be displayed next to it.
+        Orders placed on <a href="https://www.ayucan.com" className="text-blue-600 underline">www.ayucan.com</a> can be cancelled at any time before they are shipped. You may initiate a cancellation request from your order history section on your account page. Once your order is eligible for cancellation, a "Cancel Order" button will be displayed next to it.
       </p>
       <p className="mb-6">
-        For prepaid orders, if the order is still in the “Confirmed” status, the refund can be processed either to your original payment method or as a credit to your Wellvas Wallet. Refunds to the wallet are typically processed instantly, while bank refunds may take 5–7 business days after cancellation is initiated. For orders already shipped, a return request will be required after delivery (see below).
+        For prepaid orders, if the order is still in the “Confirmed” status, the refund can be processed either to your original payment method or as a credit to your Ayucan Wallet. Refunds to the wallet are typically processed instantly, while bank refunds may take 5–7 business days after cancellation is initiated. For orders already shipped, a return request will be required after delivery (see below).
       </p>
 
       <h2 className="text-2xl font-semibold mb-4">Returns</h2>
@@ -43,7 +43,7 @@ const RefundPolicy = () => {
 
       <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
       <p className="mb-6">
-        For assistance with cancellations, returns, or refunds, reach out to our customer support at <a href="mailto:support@wellvas.com" className="text-blue-600 underline">support@wellvas.com</a> or call us at [Insert Phone Number]. We’re here to help you from 10 AM to 6 PM, Monday to Saturday.
+        For assistance with cancellations, returns, or refunds, reach out to our customer support at <a href="mailto:support@ayucan.com" className="text-blue-600 underline">support@ayucan.com</a> or call us at [8799722636]. We’re here to help you from 10 AM to 6 PM, Monday to Saturday.
       </p>
 
       <p className="text-sm text-gray-500 text-center mt-10">

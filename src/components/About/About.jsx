@@ -7,16 +7,16 @@ import WhyChooseUs from "./AboutComponents/WhyChooseUs";
 import ContactSocialMedia from "./AboutComponents/ContactSocialMedia";
 import Note from "./AboutComponents/Note";
 
-function About(){
+function About() {
     return (
         <>
-        <HeroSection />
-        <MissionVision />
-        <WhatWeOffer />
-        {/* <MeetOurTeam /> */}
-        <WhyChooseUs />
-        <ContactSocialMedia />
-        <Note />
+            <HeroSection />
+            <MissionVision />
+            <WhatWeOffer />
+            {/* <MeetOurTeam /> */}
+            <WhyChooseUs />
+            <ContactSocialMedia />
+            <Note />
         </>
     )
 }

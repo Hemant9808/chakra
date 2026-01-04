@@ -32,9 +32,9 @@ export default function WellnessCallToAction() {
             Ready to Rediscover Wellness?
           </h2>
           <p className="text-lg text-blue-100 mb-6">
-            Transform your health today with Wellvas Ayurvedic supplements. Act
+            Transform your health today with Ayucan Ayurvedic supplements. Act
             now and enjoy a limited-time 15% discount using code{" "}
-            <span className="font-semibold text-white">WELLVAS15</span>. For
+            <span className="font-semibold text-white">AYUCAN15</span>. For
             deeper insights, explore our blog filled with Ayurvedic wisdom and
             tips.
           </p>

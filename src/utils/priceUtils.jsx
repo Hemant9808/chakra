@@ -7,12 +7,12 @@
  */
 export const getEffectivePrice = (product) => {
   if (!product) return 0;
-  
+
   // If discountedPrice exists and is not null/undefined, use it
   if (product.discountedPrice && product.discountedPrice > 0) {
     return product.discountedPrice;
   }
-  
+
   // Otherwise use original price
   return product.price || 0;
 };
@@ -36,15 +36,15 @@ export const getDiscountPercentage = (product) => {
   if (!product || !product.discountedPrice || product.discountedPrice <= 0) {
     return 0;
   }
-  
+
   const originalPrice = product.price || 0;
   const discountedPrice = product.discountedPrice;
-  
+
   if (originalPrice <= 0) return 0;
-  
+
   const discount = originalPrice - discountedPrice;
   const percentage = Math.round((discount / originalPrice) * 100);
-  
+
   return percentage;
 };
 
@@ -74,7 +74,7 @@ export const formatPrice = (price) => {
  * @returns {JSX.Element} - Price display component
  */
 export const PriceDisplay = ({ product, className = "" }) => {
- 
+
 
   const calculateDiscount = (price, discountPrice) => {
     //deciaml to 2 decimal places
@@ -84,27 +84,27 @@ export const PriceDisplay = ({ product, className = "" }) => {
 
   return (
     <div className={`flex justify-center items-center gap-2 ${className}`}>
-       {
-                    product.discountPrice ? (
-                      <div className="flex justify-center mb-3  flex-col items-center ">
-                        
-                        <span className="text-green-600  font-bold text-lg">
-                        
-                        ₹{product.discountPrice}
-                        </span>
-                        <span className=" text-gray-500 line-through">₹{product.price}</span>
+      {
+        product.discountPrice ? (
+          <div className="flex justify-center mb-3  flex-col items-center ">
 
-                        <span className="text-green-600 text-sm">
-                          {calculateDiscount(product.price, product.discountPrice)}% off
-                        </span>
+            <span className="text-gray-700  font-bold text-lg">
 
-                        {/* <span className="text-gray-500 text-sm">`{calculateDiscount(price,discountPrice)"% off"}`</span> */}
+              ₹{product.discountPrice}
+            </span>
+            <span className=" text-gray-500 line-through">₹{product.price}</span>
 
-                      </div>
-                    ) : (
-                      <span className="font-bold">₹{product.price}</span>
-                    )
-                  }
+            <span className="text-gray-400 text-sm">
+              {calculateDiscount(product.price, product.discountPrice)}% off
+            </span>
+
+            {/* <span className="text-gray-500 text-sm">`{calculateDiscount(price,discountPrice)"% off"}`</span> */}
+
+          </div>
+        ) : (
+          <span className="font-bold">₹{product.price}</span>
+        )
+      }
     </div>
   );
 };

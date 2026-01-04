@@ -31,89 +31,107 @@ const Profile = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    // Background: Cream
+    <div className="min-h-screen bg-[#FDFBF7] py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto"
+        className="max-w-5xl mx-auto"
       >
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {/* Profile Header */}
-          <div className="bg-green-600 p-6 text-white">
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
-                <FaUser className="text-4xl text-green-600" />
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-[#715036]/10">
+
+          {/* Profile Header: Deep Forest Green */}
+          <div className="bg-[#2A3B28] p-8 text-[#FDFBF7] relative overflow-hidden">
+            {/* Decorative decorative circle (optional) */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#C17C3A]/10 rounded-full blur-3xl pointer-events-none translate-x-1/2 -translate-y-1/2"></div>
+
+            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 relative z-10">
+              <div className="w-24 h-24 bg-[#FDFBF7] rounded-full flex items-center justify-center shadow-lg border-4 border-[#C17C3A]/20">
+                <FaUser className="text-4xl text-[#715036]" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold">
+              <div className="text-center md:text-left">
+                <h1 className="text-3xl font-serif font-bold tracking-wide">
                   {user?.firstName} {user?.lastName}
                 </h1>
-                <p className="text-green-100">{user?.email}</p>
+                <p className="text-[#C17C3A] font-medium mt-1">{user?.email}</p>
+                <p className="text-sm text-[#FDFBF7]/60 mt-1">Wellness Member</p>
               </div>
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex">
-            {/* Sidebar */}
-            <div className="w-64 bg-gray-50 p-4">
-              <nav className="space-y-2">
+          {/* Main Content Layout */}
+          <div className="flex flex-col md:flex-row min-h-[500px]">
+
+            {/* Sidebar Navigation */}
+            <div className="w-full md:w-72 bg-white border-b md:border-b-0 md:border-r border-[#715036]/10 p-6">
+              <nav className="space-y-3">
                 {menuItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center space-x-2 w-full px-4 py-2 rounded-md ${
-                      activeTab === item.id
-                        ? 'bg-green-600 text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
+                    className={`flex items-center space-x-3 w-full px-5 py-3 rounded-lg transition-all duration-300 font-medium ${activeTab === item.id
+                      ? 'bg-[#FDFBF7] text-[#C17C3A] shadow-sm border-l-4 border-[#C17C3A]' // Active State
+                      : 'text-[#2A3B28]/70 hover:bg-[#FDFBF7] hover:text-[#2A3B28]' // Inactive State
+                      }`}
                   >
-                    {item.icon}
+                    <span className="text-lg">{item.icon}</span>
                     <span>{item.label}</span>
                   </button>
                 ))}
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2 w-full px-4 py-2 rounded-md text-red-600 hover:bg-red-50"
-                >
-                  <FaSignOutAlt />
-                  <span>Logout</span>
-                </button>
+
+                <div className="pt-6 mt-6 border-t border-[#715036]/10">
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-3 w-full px-5 py-3 rounded-lg text-red-500 hover:bg-red-50 transition-colors font-medium"
+                  >
+                    <FaSignOutAlt />
+                    <span>Logout</span>
+                  </button>
+                </div>
               </nav>
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-8 md:p-10 bg-white">
               {activeTab === 'profile' && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-6"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="space-y-8"
                 >
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold">Personal Information</h2>
-                    <button className="text-green-600 hover:text-green-700">
+                  <div className="flex justify-between items-center border-b border-[#715036]/10 pb-4">
+                    <h2 className="text-2xl font-serif font-bold text-[#2A3B28]">Personal Information</h2>
+                    <button className="flex items-center space-x-2 text-[#C17C3A] hover:text-[#8a5624] transition-colors font-medium">
                       <FaEdit />
+                      <span>Edit</span>
                     </button>
                   </div>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-[#715036] uppercase tracking-widest">
                         First Name
                       </label>
-                      <p className="mt-1 text-gray-900">{user?.firstName}</p>
+                      <div className="p-3 bg-[#FDFBF7] rounded-md border border-[#715036]/10 text-[#2A3B28] font-medium">
+                        {user?.firstName}
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-[#715036] uppercase tracking-widest">
                         Last Name
                       </label>
-                      <p className="mt-1 text-gray-900">{user?.lastName}</p>
+                      <div className="p-3 bg-[#FDFBF7] rounded-md border border-[#715036]/10 text-[#2A3B28] font-medium">
+                        {user?.lastName}
+                      </div>
                     </div>
-                    <div className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Email
+                    <div className="col-span-1 md:col-span-2 space-y-2">
+                      <label className="block text-xs font-bold text-[#715036] uppercase tracking-widest">
+                        Email Address
                       </label>
-                      <p className="mt-1 text-gray-900">{user?.email}</p>
+                      <div className="p-3 bg-[#FDFBF7] rounded-md border border-[#715036]/10 text-[#2A3B28] font-medium">
+                        {user?.email}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -121,14 +139,20 @@ const Profile = () => {
 
               {activeTab === 'orders' && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-12"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-center py-16"
                 >
-                  <p className="text-gray-500">View your order history</p>
+                  <div className="w-20 h-20 bg-[#FDFBF7] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#715036]/10">
+                    <FaHistory className="text-3xl text-[#C17C3A]" />
+                  </div>
+                  <h3 className="text-xl font-serif font-bold text-[#2A3B28] mb-2">Order History</h3>
+                  <p className="text-[#715036]/70 mb-8 max-w-sm mx-auto">
+                    View your past purchases and track the journey of your wellness products.
+                  </p>
                   <button
                     onClick={() => navigate('/orders')}
-                    className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    className="inline-flex items-center px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wider text-white bg-[#2A3B28] hover:bg-[#C17C3A] transition-colors duration-300 shadow-md"
                   >
                     Go to Orders
                   </button>
@@ -137,17 +161,24 @@ const Profile = () => {
 
               {activeTab === 'security' && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-6"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-8"
                 >
-                  <h2 className="text-xl font-semibold">Security Settings</h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Change Password
+                  <div className="border-b border-[#715036]/10 pb-4">
+                    <h2 className="text-2xl font-serif font-bold text-[#2A3B28]">Security Settings</h2>
+                  </div>
+
+                  <div className="space-y-6 max-w-md">
+                    <div className="bg-[#FDFBF7] p-6 rounded-xl border border-[#715036]/10">
+                      <div className="flex items-center space-x-3 mb-4 text-[#715036]">
+                        <FaLock />
+                        <span className="font-bold uppercase text-xs tracking-wider">Password Management</span>
+                      </div>
+                      <label className="block text-sm font-medium text-[#2A3B28] mb-4">
+                        Change your account password to keep your account secure.
                       </label>
-                      <button className="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                      <button className="w-full py-3 border border-transparent text-sm font-bold uppercase tracking-wider rounded-lg text-white bg-[#C17C3A] hover:bg-[#8a5624] transition-colors duration-300 shadow-sm">
                         Update Password
                       </button>
                     </div>
@@ -162,4 +193,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;
