@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Use Vite's import.meta.env for environment variables
 // Automatically uses localhost in development, production URL when deployed
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+// const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+const BACKEND_URL = "https://ayucan.in";
 
 console.log("Using Backend URL:", BACKEND_URL);
 
