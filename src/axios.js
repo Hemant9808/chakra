@@ -1,8 +1,10 @@
 import axios from "axios";
 
-// Use Vite's import.meta.env for environment variables
-// Automatically uses localhost in development, production URL when deployed
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+// For local testing
+// const BACKEND_URL = "http://localhost:4000";
+
+// For production (change back after Nginx is fixed)
+const BACKEND_URL = "https://ayucan.in";
 
 console.log("Using Backend URL:", BACKEND_URL);
 
@@ -14,6 +16,8 @@ const axiosInstance = axios.create({
   },
   // withCredentials: true, // Remove if not using cookies
 });
+
+
 
 // Add a request interceptor to attach the token
 axiosInstance.interceptors.request.use(
