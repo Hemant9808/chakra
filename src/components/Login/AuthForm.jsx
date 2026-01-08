@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useAuthStore from "../../Store/useAuthStore";
 import { toast } from "react-hot-toast";
 import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi"; // icons
@@ -8,6 +8,7 @@ import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi"; // icons
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -48,6 +49,16 @@ const AuthForm = () => {
       if (isLogin) {
         await login(formData.email, formData.password);
         toast.success("Login successful!");
+
+        // Check if user came from instant-reward page (QR code scan)
+        const redirectPath = location.state?.from;
+        if (redirectPath === '/instant-reward') {
+          // Redirect back to instant reward page
+          navigate('/instant-reward');
+        } else {
+          // Normal login flow - go to OTP verification
+          navigate("/otp-verification", { state: { email: formData.email } });
+        }
       } else {
         const requiredFields = [
           "firstName",
@@ -66,8 +77,8 @@ const AuthForm = () => {
 
         await signup(formData);
         toast.success("Account created successfully!");
+        navigate("/otp-verification", { state: { email: formData.email } });
       }
-      navigate("/otp-verification", { state: { email: formData.email } });
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }

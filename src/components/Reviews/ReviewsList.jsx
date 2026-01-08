@@ -23,7 +23,19 @@ const ReviewsList = ({ productId }) => {
     } = useReviewStore();
 
     useEffect(() => {
-        fetchProductReviews(productId, 1, sortBy);
+        const loadReviews = async () => {
+            try {
+                console.log('Fetching reviews for product:', productId);
+                await fetchProductReviews(productId, 1, sortBy);
+                console.log('Reviews loaded:', reviews.length);
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        };
+
+        if (productId) {
+            loadReviews();
+        }
     }, [productId, sortBy]);
 
     const handleSubmitReview = async (productId, formData) => {
@@ -159,6 +171,22 @@ const ReviewsList = ({ productId }) => {
                 <div className="text-center py-12">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
                     <p className="text-gray-600 mt-4">Loading reviews...</p>
+                </div>
+            ) : useReviewStore.getState().error ? (
+                <div className="text-center py-16 bg-red-50 rounded-lg border border-red-200">
+                    <MessageCircle size={48} className="mx-auto text-red-400 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        Unable to load reviews
+                    </h3>
+                    <p className="text-red-600 mb-4">
+                        {useReviewStore.getState().error}
+                    </p>
+                    <button
+                        onClick={() => fetchProductReviews(productId, 1, sortBy)}
+                        className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
+                    >
+                        Try Again
+                    </button>
                 </div>
             ) : reviews.length === 0 ? (
                 <div className="text-center py-16 bg-gray-50 rounded-lg">

@@ -14,7 +14,9 @@ import {
   ArrowRightCircle,
   CheckCircle2,
   ShieldCheck,
-  Leaf
+  Leaf,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import BenefitsSection from "./BenefitsSection";
 import BenifitsRight from "./BenifitsRight";
@@ -74,6 +76,22 @@ const ProductDetailsById = () => {
     }
   }, [product]);
 
+  // Keyboard navigation for images
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!product?.images) return;
+
+      if (e.key === 'ArrowLeft' && selectedImage > 0) {
+        setSelectedImage(prev => prev - 1);
+      } else if (e.key === 'ArrowRight' && selectedImage < product.images.length - 1) {
+        setSelectedImage(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImage, product?.images]);
+
   if (showAgePopup) {
     return (
 
@@ -127,23 +145,85 @@ const ProductDetailsById = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
           {/* --- Image Section --- */}
           <div className="space-y-6">
-            {/* Main Image */}
-            <motion.div
-              key={selectedImage}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="rounded-3xl overflow-hidden shadow-sm border border-[#715036]/10 bg-white relative group"
-            >
+            {/* Main Image with Swipe/Drag Support */}
+            <div className="relative rounded-3xl overflow-hidden shadow-sm border border-[#715036]/10 bg-white">
+              {/* Badge */}
               <div className="absolute top-4 left-4 bg-[#2A3B28] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider z-10">
                 Premium Ayurveda
               </div>
-              <img
-                src={product.images[selectedImage]?.url || "/placeholder.png"}
-                alt={product.name}
-                className="w-full max-h-[35rem] object-contain p-8 group-hover:scale-105 transition-transform duration-700"
-              />
-            </motion.div>
+
+              {/* Navigation Arrows */}
+              {product.images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setSelectedImage(prev => Math.max(0, prev - 1))}
+                    disabled={selectedImage === 0}
+                    className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all ${selectedImage === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                      }`}
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="text-[#2A3B28]" size={24} />
+                  </button>
+                  <button
+                    onClick={() => setSelectedImage(prev => Math.min(product.images.length - 1, prev + 1))}
+                    disabled={selectedImage === product.images.length - 1}
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all ${selectedImage === product.images.length - 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                      }`}
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="text-[#2A3B28]" size={24} />
+                  </button>
+                </>
+              )}
+
+              {/* Swipeable Image Container */}
+              <motion.div
+                key={selectedImage}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = Math.abs(offset.x) * velocity.x;
+
+                  // Swipe right (show previous image)
+                  if (swipe > 500 && selectedImage > 0) {
+                    setSelectedImage(prev => prev - 1);
+                  }
+                  // Swipe left (show next image)
+                  else if (swipe < -500 && selectedImage < product.images.length - 1) {
+                    setSelectedImage(prev => prev + 1);
+                  }
+                }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="cursor-grab active:cursor-grabbing relative group"
+              >
+                <img
+                  src={product.images[selectedImage]?.url || "/placeholder.png"}
+                  alt={product.name}
+                  className="w-full max-h-[35rem] object-contain p-8 select-none pointer-events-none"
+                  draggable={false}
+                />
+              </motion.div>
+
+              {/* Dot Indicators */}
+              {product.images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {product.images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`h-2 rounded-full transition-all duration-300 ${selectedImage === index
+                        ? 'w-8 bg-[#C17C3A]'
+                        : 'w-2 bg-white/60 hover:bg-white/80'
+                        }`}
+                      aria-label={`Go to image ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Thumbnails */}
             <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
@@ -297,7 +377,7 @@ const ProductDetailsById = () => {
                   return;
                 }
                 addToCart(product);
-                toast.success("Added to your wellness cart!");
+                // Toast is already shown in the cart store
               }}
               disabled={product.stock <= 0}
               className={`w-full py-5 rounded-full font-bold uppercase tracking-widest text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 ${product.stock <= 0

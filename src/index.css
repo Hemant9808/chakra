@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Prevent horizontal scrolling */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+}
+
 .gold-gradient-text {
   background: linear-gradient(90deg, #D4AF37 0%, #F2DFA4 50%, #D4AF37 100%);
   background-size: 200% auto;

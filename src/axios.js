@@ -1,11 +1,10 @@
 import axios from "axios";
 
 // Use Vite's import.meta.env for environment variables
-// const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-// const BACKEND_URL = "https://wellvas-backend.onrender.com";
-// const BACKEND_URL = "https://wellvas.in";
+// Automatically uses localhost in development, production URL when deployed
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
-const BACKEND_URL = "http://localhost:4000";
+console.log("Using Backend URL:", BACKEND_URL);
 
 const axiosInstance = axios.create({
 

@@ -57,7 +57,7 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
       return;
     }
     addToCart(product);
-    toast.success("Added to cart");
+    // Toast is already shown in the cart store
   };
 
   return (

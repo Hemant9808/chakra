@@ -28,7 +28,7 @@ function LayoutContent() {
       </a>
 
       {/* Main Wrapper - Cream Background */}
-      <div className="min-h-screen flex flex-col bg-[#FDFBF7]">
+      <div className="min-h-screen flex flex-col bg-[#FDFBF7] overflow-x-hidden">
         <Header />
         <div className="flex-1 flex flex-col">
           <Breadcrumbs

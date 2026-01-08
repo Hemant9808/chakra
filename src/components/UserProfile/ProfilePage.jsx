@@ -264,9 +264,9 @@ const ProfileItem = ({ icon, label, value }) => (
     <div className="flex-shrink-0 mt-1 p-2 bg-white rounded-full text-[#C17C3A] shadow-sm">
       <span className="text-lg">{icon}</span>
     </div>
-    <div className="ml-4">
+    <div className="ml-4 flex-1 min-w-0">
       <p className="text-xs font-bold text-[#715036] uppercase tracking-wider">{label}</p>
-      <p className="text-lg font-medium text-[#2A3B28] mt-1 font-serif">{value}</p>
+      <p className="text-lg font-medium text-[#2A3B28] mt-1 font-serif break-all">{value}</p>
     </div>
   </div>
 );

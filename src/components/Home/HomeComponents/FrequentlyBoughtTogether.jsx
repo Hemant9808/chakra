@@ -51,7 +51,7 @@ const FrequentlyBoughtTogether = () => {
             // return;
         }
         addToCart(product);
-        toast.success(`${product.name} added to cart!`);
+        // Toast is already shown in the cart store
         // navigate("/cart"); // Optional: Redirect or stay on page
     };
 

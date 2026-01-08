@@ -129,7 +129,7 @@ const Profile = () => {
                       <label className="block text-xs font-bold text-[#715036] uppercase tracking-widest">
                         Email Address
                       </label>
-                      <div className="p-3 bg-[#FDFBF7] rounded-md border border-[#715036]/10 text-[#2A3B28] font-medium">
+                      <div className="p-3 bg-[#FDFBF7] rounded-md border border-[#715036]/10 text-[#2A3B28] font-medium break-all overflow-hidden">
                         {user?.email}
                       </div>
                     </div>

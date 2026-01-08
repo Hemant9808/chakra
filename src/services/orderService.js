@@ -1,8 +1,6 @@
 import axios from 'axios';
 import axiosInstance from '../axios';
 
-const API_URL = 'http://localhost:4000/order'; // Update with your actual API URL
-
 const orderService = {
   // Create a new order
   createOrder: async (orderData) => {
@@ -38,11 +36,7 @@ const orderService = {
   // Verify payment
   verifyPayment: async (paymentData) => {
     try {
-      const response = await axiosInstance.post(`${API_URL}/verify-payment`, paymentData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
+      const response = await axiosInstance.post('/order/verify-payment', paymentData);
       return response.data;
     } catch (error) {
       throw error.response?.data?.message || 'Failed to verify payment';

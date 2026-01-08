@@ -7,7 +7,7 @@ import { useCartStore } from "../../Store/useCartStore";
 import useAuthStore from "../../Store/useAuthStore";
 import { toast } from "react-hot-toast";
 import { clearLocalStorage } from "../../middleware/middleware";
-import logo from "../../../public/ResourseImages/logo.png"; // Make sure this is your new Ayucan logo
+import logo from "../../../public/ResourseImages/logo.png";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,12 +30,12 @@ const Header = () => {
     { path: "/", label: "Home" },
     { path: "/shop/all", label: "Shop" },
     { path: "/contact", label: "Contact" },
-    { path: "/about", label: "Our Roots" }, // Renamed for branding
-    { path: "/blogs", label: "Wellness Journal" }, // Renamed for branding
+    { path: "/about", label: "Our Roots" },
+    { path: "/blogs", label: "Wellness Journal" },
     { path: "/evas", label: "Men's Wellness" },
   ];
 
-  // Handle scroll effect for a sticky glassmorphism look
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -43,6 +43,18 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -62,11 +74,20 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 w-screen z-50 transition-all duration-300 overflow-x-hidden ${scrolled
-        ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-md py-2" // Cream color with blur on scroll
-        : "bg-[#FDFBF7] py-4" // Solid cream when at top
+      // FIX: Removed bg, blur, and shadow from the parent Header tag. 
+      // Changed w-screen to w-full to prevent horizontal overflow.
+      className={`fixed top-0 left-0 right-0 w-full z-[9997] transition-all duration-300 ${scrolled ? "py-2" : "py-4"
         }`}
     >
+      {/* FIX: Added a separate background div. 
+          This applies the styles without trapping the fixed sidebar inside a filter context. */}
+      <div
+        className={`absolute inset-0 -z-10 transition-all duration-300 ${scrolled
+            ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-md"
+            : "bg-[#FDFBF7]"
+          }`}
+      />
+
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center text-[#2A3B28]">
         {/* Left: Hamburger Icon (Mobile Only) */}
         <div className="lg:hidden">
@@ -143,7 +164,7 @@ const Header = () => {
           <>
             {/* Overlay */}
             <motion.div
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -156,8 +177,8 @@ const Header = () => {
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 left-0 w-3/4 sm:w-1/2 h-full bg-[#2A3B28] text-[#FDFBF7] flex flex-col px-8 py-8 z-50 shadow-2xl"
+              transition={{ type: "spring", stiffness: 400, damping: 35 }}
+              className="fixed inset-y-0 left-0 w-3/4 sm:w-1/2 bg-[#2A3B28] text-[#FDFBF7] flex flex-col px-8 py-8 z-[9999] shadow-2xl overflow-y-auto"
             >
               {/* Header inside sidebar */}
               <div className="flex justify-between items-center mb-10">
