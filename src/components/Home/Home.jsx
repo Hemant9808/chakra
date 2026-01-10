@@ -8,7 +8,7 @@ import OfficeMap from "./HomeComponents/OfficeMap";
 import HeroSlider from "./HomeComponents/ProductCarousel";
 import PromoBanner from "./HomeComponents/PromoBanner";
 import Hero from "./HomeComponents/Hero";
-import WhyWellvas from "./HomeComponents/WhyWellvas";
+import WhyAyucan from "./HomeComponents/WhyAyucan";
 import Testimonials from "./HomeComponents/Testimonials.jsx";
 import BlogHighlights from "./HomeComponents/BlogPreview.jsx";
 import FeaturedProduct from "./HomeComponents/FeaturedProduct.jsx";
@@ -26,10 +26,10 @@ function Home() {
   return (
     <div className="">
       {/* <MarqueeBanner /> */}
-      {/* <PromoBanner /> */}
+      <PromoBanner />
       {/* <SelectConcern /> */}
       <ProductCarousel />
-      
+
       {/* <VideoSlider /> */}
       <BenefitsOfAyurveda />
 
@@ -41,10 +41,10 @@ function Home() {
       <Testimonials />
       <InfluencerVideoSync />
       <BlogHighlights />
-      <WhyWellvas />
+      <WhyAyucan />
       <LoudAndProud />
       <TrustSection />
-      
+
     </div>
   );
 }

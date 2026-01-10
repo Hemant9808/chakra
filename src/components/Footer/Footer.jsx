@@ -178,7 +178,7 @@ const Footer = () => {
         {/* Brand Tagline Statement */}
         <div className="mt-8 pt-8 border-t border-[#FDFBF7]/5 text-center">
           <p className="text-3xl md:text-4xl font-serif font-bold text-[#FDFBF7] mb-6 tracking-tight">
-            Ayurveda <span className="italic text-[#C17C3A]">Can.</span>
+            Ayurveda <span className="italic text-[#F7941D]">Can.</span>
           </p>
           <p className="text-[10px] text-[#FDFBF7]/30 leading-relaxed max-w-4xl mx-auto">
             © {new Date().getFullYear()} Ayucan. All rights reserved. <br />

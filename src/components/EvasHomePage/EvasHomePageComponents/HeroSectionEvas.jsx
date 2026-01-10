@@ -23,7 +23,7 @@ const HeroSectionEvas = () => {
                     {/* Bold Tagline Statement */}
                     <div className="mb-6">
                         <p className="text-3xl md:text-4xl font-serif font-bold text-[#2A3B28] tracking-tight">
-                            Ayurveda <span className="italic text-[#C17C3A]">Can.</span>
+                            Ayurveda <span className="italic text-[#F7941D]">Can.</span>
                         </p>
                     </div>
 

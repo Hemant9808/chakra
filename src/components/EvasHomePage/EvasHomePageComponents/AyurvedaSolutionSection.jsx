@@ -161,7 +161,7 @@ export default function AyurvedaSolutionSection() {
 
             {/* Tagline Statement */}
             <p className="font-bold text-sm text-[#2A3B28] mt-auto border-t border-[#715036]/10 pt-4 italic">
-              Ayurveda <span className="text-[#C17C3A] not-italic">Can.</span>
+              Ayurveda <span className="text-[#F7941D] not-italic">Can.</span>
             </p>
           </motion.div>
         </div>
