@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuthStore from "../../Store/useAuthStore";
 import { toast } from "react-hot-toast";
-import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi"; // icons
+import { FiUser, FiMail, FiPhone, FiLock, FiEye, FiEyeOff } from "react-icons/fi"; // icons
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -227,7 +228,7 @@ const AuthForm = () => {
             <div className={inputContainerClass}>
               <FiLock className={inputIconClass} />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 className={inputFieldClass}
                 placeholder="••••••••"
@@ -235,6 +236,14 @@ const AuthForm = () => {
                 onChange={handleChange}
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3.5 text-[#715036]/60 hover:text-[#C17C3A] transition-colors focus:outline-none"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+              </button>
             </div>
           </div>
           {isLogin && (

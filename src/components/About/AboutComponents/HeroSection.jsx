@@ -30,7 +30,7 @@ const HeroSection = () => {
           className="mb-8"
         >
           <p className="text-4xl md:text-5xl font-serif font-bold text-[#FDFBF7] tracking-tight">
-            Ayurveda <span className="italic text-[#C17C3A]">Can.</span>
+            Ayurveda <span className="italic text-[#F7941D]">Can.</span>
           </p>
         </motion.div>
 
