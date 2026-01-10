@@ -26,7 +26,7 @@ function Home() {
   return (
     <div className="">
       {/* <MarqueeBanner /> */}
-      <PromoBanner />
+      {/* <PromoBanner /> */}
       {/* <SelectConcern /> */}
       <ProductCarousel />
       
