@@ -50,15 +50,9 @@ const AuthForm = () => {
         await login(formData.email, formData.password);
         toast.success("Login successful!");
 
-        // Check if user came from instant-reward page (QR code scan)
-        const redirectPath = location.state?.from;
-        if (redirectPath === '/instant-reward') {
-          // Redirect back to instant reward page
-          navigate('/instant-reward');
-        } else {
-          // Normal login flow - go to OTP verification
-          navigate("/otp-verification", { state: { email: formData.email } });
-        }
+        // Check if user came from instant-reward page (QR code scan) or other protected routes
+        const redirectPath = location.state?.from || '/';
+        navigate(redirectPath);
       } else {
         const requiredFields = [
           "firstName",

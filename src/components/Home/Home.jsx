@@ -34,7 +34,7 @@ function Home() {
       <BenefitsOfAyurveda />
 
       <FrequentlyBoughtTogether />
-      <MensWellnessImage />
+      {/* <MensWellnessImage /> */}
       <FeaturedProduct />
       <MarqueeBanner />
       {/* <CBDSection /> */}
