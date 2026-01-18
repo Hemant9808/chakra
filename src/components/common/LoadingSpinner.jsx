@@ -50,7 +50,7 @@ const LoadingSpinner = ({ className = '' }) => {
         className="mt-6 text-center"
       >
         <p className="text-2xl md:text-3xl font-serif font-bold text-[#2A3B28] tracking-tight">
-          Ayurveda <span className="italic text-[#C17C3A]">Can.</span>
+          Ayurveda <span className="italic text-[#F7941D]">Can.</span>
         </p>
       </motion.div>
 

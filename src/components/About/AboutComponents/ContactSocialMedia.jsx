@@ -82,7 +82,7 @@ const ContactSocialMedia = () => {
                 <FaFacebook />
               </a>
               <a
-                href="https://www.instagram.com/wellvashealthcare/"
+                href="https://www.instagram.com/ayucanhealthcare/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-12 h-12 rounded-full border border-[#715036]/20 flex items-center justify-center text-[#2A3B28] hover:bg-[#C17C3A] hover:text-white hover:border-[#C17C3A] transition-all duration-300 text-xl"

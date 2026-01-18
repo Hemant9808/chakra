@@ -232,7 +232,7 @@ export default function ContactUs() {
                   <FaFacebook />
                 </a>
                 <a
-                  href="https://www.instagram.com/wellvashealthcare/"
+                  href="https://www.instagram.com/ayucanhealthcare/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-[#FDFBF7]/10 flex items-center justify-center text-[#C17C3A] hover:bg-[#C17C3A] hover:text-white transition-all duration-300"
