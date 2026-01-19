@@ -1,10 +1,10 @@
 import axios from "axios";
 
 // For local testing
-// const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = "http://localhost:4000";
 
 // For production (change back after Nginx is fixed)
-const BACKEND_URL = "https://ayucan.in";
+// const BACKEND_URL = "https://ayucan.in";
 
 console.log("Using Backend URL:", BACKEND_URL);
 

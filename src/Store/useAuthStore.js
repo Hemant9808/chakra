@@ -205,6 +205,13 @@ const useAuthStore = create(
     {
       name: "auth-storage",
       getStorage: () => localStorage,
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+        loading: state.loading,
+        error: state.error,
+      }),
     }
   )
 );

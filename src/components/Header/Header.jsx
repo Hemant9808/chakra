@@ -16,11 +16,8 @@ const Header = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { cartItems, getTotalItems, getTotalPrice } = useCartStore();
-  const { getUserDetails } = useAuthStore();
 
-  const userStorage = localStorage.getItem("auth-storage");
-  const token = JSON.parse(userStorage)?.state?.token;
-
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const authUser = useAuthStore((state) => state.user);
   const authLogout = useAuthStore((state) => state.logout);
 
@@ -83,8 +80,8 @@ const Header = () => {
           This applies the styles without trapping the fixed sidebar inside a filter context. */}
       <div
         className={`absolute inset-0 -z-10 transition-all duration-300 ${scrolled
-            ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-md"
-            : "bg-[#FDFBF7]"
+          ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-md"
+          : "bg-[#FDFBF7]"
           }`}
       />
 
@@ -126,7 +123,7 @@ const Header = () => {
 
         {/* Right-side Icons */}
         <div className="flex items-center space-x-6">
-          {token && (
+          {isAuthenticated && (
             <div className="cursor-pointer group" onClick={() => navigate("/profile")}>
               <FaUser className="text-xl text-[#2A3B28] group-hover:text-[#C17C3A] transition" />
             </div>
@@ -147,7 +144,7 @@ const Header = () => {
             )}
           </div>
 
-          {!token && (
+          {!isAuthenticated && (
             <Link
               to="/login"
               className="hidden sm:block bg-[#2A3B28] text-[#FDFBF7] px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#C17C3A] transition-colors duration-300"
@@ -209,7 +206,7 @@ const Header = () => {
               </div>
 
               {/* User Info & Logout */}
-              {token ? (
+              {isAuthenticated ? (
                 <div className="mt-auto border-t border-[#FDFBF7]/20 pt-8">
                   <p className="text-sm text-[#FDFBF7]/70 mb-4">Welcome, {authUser?.firstName || "Wellness Seeker"}</p>
                   <button
