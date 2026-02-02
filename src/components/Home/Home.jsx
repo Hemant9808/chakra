@@ -39,7 +39,7 @@ function Home() {
       <MarqueeBanner />
       {/* <CBDSection /> */}
       <Testimonials />
-      <InfluencerVideoSync />
+      {/* <InfluencerVideoSync /> */}
       <BlogHighlights />
       <WhyAyucan />
       <LoudAndProud />

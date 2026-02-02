@@ -142,13 +142,13 @@ export default function AyurvedaSolutionSection() {
             whileHover="hover"
             className="p-8 gradient-border backdrop-blur-xl bg-white rounded-3xl shadow-xl transform-gpu flex flex-col"
           >
-            <motion.img
+            {/* <motion.img
               variants={floating}
               animate="animate"
               src="./ResourseImages/evas.jpg"
               alt="Evas Supplements"
               className="rounded-xl shadow-sm mb-6 mx-auto w-full object-cover max-h-48"
-            />
+            /> */}
 
             <h3 className="text-2xl font-serif font-bold text-[#2A3B28] mb-3">
               The Ayucan Method: <br /> <span className="text-[#C17C3A]">Evas Trio + Kama</span>

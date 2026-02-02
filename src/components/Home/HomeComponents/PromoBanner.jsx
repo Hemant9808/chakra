@@ -11,14 +11,14 @@ const slides = [
   // },
   {
     id: 2,
-    imageSmall: "/ResourseImages/promo1Mob.jpg",
-    imageLarge: "/ResourseImages/promo2.jpg",
+    imageSmall: "/ResourseImages/promo1.png",
+    imageLarge: "/ResourseImages/promo1.png",
     button: "Shop Wellness",
   },
   {
     id: 3,
-    imageSmall: "/ResourseImages/promo2Mob.jpg",
-    imageLarge: "/ResourseImages/promo3.jpg",
+    imageSmall: "/ResourseImages/promo2.png",
+    imageLarge: "/ResourseImages/promo2.png",
     button: "Discover Ayurveda",
   },
 ];

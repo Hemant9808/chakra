@@ -85,14 +85,14 @@ const HeroSectionEvas = () => {
                     {/* Abstract Backdrop for Image */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-[#C17C3A]/20 to-transparent rounded-full blur-2xl scale-90 pointer-events-none"></div>
 
-                    <motion.img
+                    {/* <motion.img
                         loading="lazy"
                         src="./ResourseImages/evas.jpg"
                         alt="Evas Neo, Evas Pro, Evas Max wellness trio product"
                         className="w-full max-w-md mx-auto rounded-3xl shadow-2xl border border-[#715036]/10 relative z-10"
                         animate={{ y: [0, -15, 0] }}
                         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    />
+                    /> */}
                 </motion.div>
             </div>
         </section>
