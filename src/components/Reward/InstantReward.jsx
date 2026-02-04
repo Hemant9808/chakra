@@ -5,6 +5,7 @@ import { Sparkles, ArrowRight, CheckCircle2, Camera, Copy, Lock, LogIn } from "l
 import { FaWhatsapp } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../../Store/useAuthStore";
+import { rewardService } from "../../services/rewardService";
 
 // --- Sub-component: Confetti Particle ---
 const ConfettiPiece = ({ delay }) => {
@@ -58,61 +59,59 @@ const InstantReward = () => {
   const location = useLocation();
   const { user } = useAuthStore();
 
+  const [rewardId, setRewardId] = useState(null);
   const [rewardCode, setRewardCode] = useState("");
   const [cashbackAmount, setCashbackAmount] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  // --- CLAIM LIMIT LOGIC ---
-  const MAX_CLAIMS = 5;
   const [canClaim, setCanClaim] = useState(true);
 
+  // Get WhatsApp number from environment variable
+  const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "918799722636";
+
   useEffect(() => {
-    console.log("InstantReward - User state:", user);
-    console.log("InstantReward - Is user logged in?", !!user);
-
-    setIsLoading(true);
-
-    // 1. Check if user is logged in and has reached the limit
-    if (user) {
-      const storageKey = `ayucan_claims_${user._id || user.id}`;
-      const currentClaims = parseInt(localStorage.getItem(storageKey) || "0");
-
-      console.log("InstantReward - Storage Key:", storageKey);
-      console.log("InstantReward - Current Claims:", currentClaims);
-      console.log("InstantReward - Max Claims:", MAX_CLAIMS);
-
-      if (currentClaims >= MAX_CLAIMS) {
-        console.log("InstantReward - User has reached claim limit, redirecting...");
-        setCanClaim(false);
-        toast.error("You have reached the maximum limit of 5 rewards!");
-        navigate("/shop/all"); // Redirect away immediately if limit reached
-      } else {
-        console.log("InstantReward - Generating reward...");
-        // Generate Reward Data ONLY if under limit
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let code = "";
-        for (let i = 0; i < 5; i++) {
-          code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        setRewardCode(code);
-
-        const randomAmount = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
-        setCashbackAmount(randomAmount);
-
-        console.log("InstantReward - Reward Code:", code);
-        console.log("InstantReward - Cashback Amount:", randomAmount);
-
-        setShowConfetti(true);
-        const timer = setTimeout(() => setShowConfetti(false), 6000);
+    const generateReward = async () => {
+      if (!user) {
         setIsLoading(false);
-        return () => clearTimeout(timer);
+        return;
       }
-    } else {
-      console.log("InstantReward - User NOT logged in");
-      setShowConfetti(false);
-      setIsLoading(false);
-    }
+
+      setIsLoading(true);
+
+      try {
+        // Call backend API to generate reward
+        const response = await rewardService.generateReward();
+
+        if (response.success) {
+          setRewardId(response.reward.id);
+          setRewardCode(response.reward.rewardCode);
+          setCashbackAmount(response.reward.cashbackAmount);
+          setCanClaim(true);
+          setShowConfetti(true);
+
+          // Stop confetti after 6 seconds
+          const timer = setTimeout(() => setShowConfetti(false), 6000);
+          setIsLoading(false);
+
+          return () => clearTimeout(timer);
+        }
+      } catch (error) {
+        console.error("Error generating reward:", error);
+
+        // Check if user has reached claim limit
+        if (error.message && error.message.includes("maximum limit")) {
+          setCanClaim(false);
+          toast.error(error.message || "You have reached the maximum limit of rewards!");
+          setTimeout(() => navigate("/shop/all"), 1500);
+        } else {
+          toast.error("Failed to generate reward. Please try again.");
+        }
+
+        setIsLoading(false);
+      }
+    };
+
+    generateReward();
   }, [user, navigate]);
 
   const handleLoginRedirect = () => {
@@ -120,9 +119,18 @@ const InstantReward = () => {
     navigate("/login", { state: { from: location.pathname } });
   };
 
-  const handleWhatsAppClaim = () => {
-    const phoneNumber = "918799722636";
-    const message = `Woohoo! I just scanned the QR code and won *₹${cashbackAmount} Cashback* from Ayucan!
+  const handleWhatsAppClaim = async () => {
+    if (!rewardId) {
+      toast.error("Reward ID not found. Please refresh and try again.");
+      return;
+    }
+
+    try {
+      // Call backend API to claim the reward
+      await rewardService.claimReward(rewardId);
+
+      // Prepare WhatsApp message
+      const message = `Woohoo! I just scanned the QR code and won *₹${cashbackAmount} Cashback* from Ayucan!
 
 *Reward Code:* ${rewardCode}
 
@@ -136,21 +144,19 @@ Please transfer the amount to my UPI ID:
 
 [Enter your UPI ID here]`;
 
-    // 1. Open WhatsApp
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+      // Open WhatsApp with pre-filled message
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
 
-    // 2. Increment Claim Count in LocalStorage
-    if (user) {
-      const storageKey = `ayucan_claims_${user._id || user.id}`;
-      const currentClaims = parseInt(localStorage.getItem(storageKey) || "0");
-      localStorage.setItem(storageKey, (currentClaims + 1).toString());
+      // Show success message and redirect
+      toast.success("Reward claimed! Redirecting...");
+      setTimeout(() => {
+        navigate("/shop/all");
+      }, 1000);
+
+    } catch (error) {
+      console.error("Error claiming reward:", error);
+      toast.error(error.message || "Failed to claim reward. Please try again.");
     }
-
-    // 3. Make page "disappear" (Redirect away)
-    toast.success("Reward claimed! Redirecting...");
-    setTimeout(() => {
-      navigate("/shop/all");
-    }, 1000); // Short delay to allow WhatsApp tab to open
   };
 
   const copyToClipboard = () => {
