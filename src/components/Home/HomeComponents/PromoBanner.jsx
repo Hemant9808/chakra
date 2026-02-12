@@ -3,22 +3,22 @@ import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 
 const slides = [
-  // {
-  //   id: 1,
-  //   imageSmall: "/ResourseImages/promo4Mob.jpg", 
-  //   imageLarge: "/ResourseImages/promo1.jpg", 
-  //   button: "Explore Now",
-  // },
+  {
+    id: 1,
+    imageSmall: "/ResourseImages/promo2 mob.png", 
+    imageLarge: "/ResourseImages/promo2.jpg", 
+    button: "Explore Now",
+  },
   {
     id: 2,
-    imageSmall: "/ResourseImages/promo1.png",
-    imageLarge: "/ResourseImages/promo1.png",
+    imageSmall: "/ResourseImages/promo1 mob.png",
+    imageLarge: "/ResourseImages/promo1.jpg",
     button: "Shop Wellness",
   },
   {
     id: 3,
-    imageSmall: "/ResourseImages/promo2.png",
-    imageLarge: "/ResourseImages/promo2.png",
+    imageSmall: "/ResourseImages/promo3 mob.png",
+    imageLarge: "/ResourseImages/promo3.jpg",
     button: "Discover Ayurveda",
   },
 ];
@@ -35,7 +35,7 @@ export default function PromoBanner() {
 
   return (
     // Container: Adjusts margin for header height
-    <div className="relative w-full mt-20 md:mt-24 group">
+    <div className="relative w-full mt-23 md:mt-24 group">
 
       {/* ASPECT RATIO:
          - Mobile: aspect-[16/9] (Standard Horizontal Landscape)
