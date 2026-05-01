@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axiosInstance from "../axios";
+import { useCartStore } from "./useCartStore";
 
 const useAuthStore = create(
   persist(
@@ -30,6 +31,9 @@ const useAuthStore = create(
             loading: false,
             error: null,
           });
+
+          // Merge guest cart items to backend after successful login
+          await useCartStore.getState().mergeGuestCart();
 
           return response.data;
         } catch (error) {
@@ -91,6 +95,9 @@ const useAuthStore = create(
             loading: false,
             error: null,
           });
+
+          // Merge guest cart items to backend after successful signup/login
+          await useCartStore.getState().mergeGuestCart();
 
           return response.data;
         } catch (error) {

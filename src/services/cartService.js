@@ -8,10 +8,7 @@ const cartService = {
   // Get user's cart
   getCart: async () => {
     try {
-      if(!checkIfUserIsLoggedIn){
-        redirect("/login")
-        return;
-      }
+      // Auth check is now handled by useCartStore
 
       const response = await axiosInstance.get(`${API_URL}/getUserCart  `, {
         headers: {
@@ -26,21 +23,7 @@ const cartService = {
 
   // Add item to cart
   addToCart: async (productId, quantity, price,discountPrice) => {
-    console.log("fasgs")
-    // console.log(checkIfUserIsLoggedIn())
-    try {
-      if (!checkIfUserIsLoggedIn()) {
-        
-        throw new Error("User not logged in");
-      }
-
-      // if(!checkIfUserIsLoggedIn()){
-      //   // const navigate = useNavigate();
-      //   console.log(checkIfUserIsLoggedIn())
-      //   window.AbortControllerlocation.href = "/login"
-      //   // navigate("/login");
-      //   return;
-      // }
+      // Auth check is now handled by useCartStore
       const response = await axiosInstance.post(
         `${API_URL}/addToCart`,
         { productId, quantity, price,discountPrice },

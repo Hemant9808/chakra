@@ -1,7 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FaTrashAlt, FaArrowRight, FaShoppingBag } from "react-icons/fa";
 import { useCartStore } from "../../../Store/useCartStore";
+import useAuthStore from "../../../Store/useAuthStore";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/LoadingSpinner";
 import { getProductUrl } from "../../../utils/productNavigation";
@@ -16,7 +18,17 @@ const CartComponent = () => {
         updateQuantity,
         getTotalPrice,
     } = useCartStore();
+    const { isAuthenticated } = useAuthStore();
     const navigate = useNavigate();
+
+    const handleCheckout = () => {
+        if (!isAuthenticated) {
+            toast("Please login to proceed to checkout", { icon: "🔒" });
+            navigate("/login");
+        } else {
+            navigate("/checkout");
+        }
+    };
 
     useEffect(() => {
         fetchCart();
@@ -353,11 +365,12 @@ const CartComponent = () => {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <Link to="/checkout" className="block">
-                                        <button className="w-full bg-[#2A3B28] text-white py-4 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-[#C17C3A] transition-colors duration-300 shadow-md">
-                                            Proceed to Checkout
-                                        </button>
-                                    </Link>
+                                    <button 
+                                        onClick={handleCheckout}
+                                        className="w-full bg-[#2A3B28] text-white py-4 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-[#C17C3A] transition-colors duration-300 shadow-md"
+                                    >
+                                        Proceed to Checkout
+                                    </button>
                                 </motion.div>
 
                                 <div className="mt-6 text-center">
