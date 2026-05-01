@@ -1,44 +1,40 @@
-// App.jsx
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import ProtectedRoute from './components/UserProfile/ProtectedRoute';
 import Layout from './Layout';
-import Home from './components/Home/Home';
-import About from './components/About/About';
-import Contact from './components/Contact/Contact';
-import Login from './components/Login/Login';
-import ForgotPassword from './components/Login/ForgotPassword';
-import ResetPassword from './components/Login/ResetPassword';
-import Quiz from './components/Quiz/Quiz';
-import Cart from './components/Cart/Cart';
 import ScrollToTop from './components/common/ScrollToTop';
 import LoadingSpinner from './components/common/LoadingSpinner';
-
-// import ProductDetails from './components/Home/HomeComponents/ProductDetails';
-import ProfilePage from './components/UserProfile/ProfilePage';
-import Shop from './components/Shop/Shop';
 import { useAuthMiddleware } from './middleware/middleware';
-import Orders from './components/Orders/Orders';
-import Profile from './components/Profile/Profile';
-import Checkout from './components/Checkout/Checkout';
-import Gallery from './components/Gallery/Gallery';
-import BlogSection from './components/Blogs/BlogSection';
-import BlogDetail from './components/Blogs/BlogDetail';
-// import ChatPage from './pages/ChatPage';
-import OrderInfoPage from './components/OrdersInfo/OrderInfoPage';
-import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
-import RefundPolicy from './components/refund/RefundPolicy';
-import TermsAndConditions from './components/T&C/TermsAndConditions';
-import Faqs from './components/FaQs/Faqs';
-import ProductDetailsById from './components/Shop/productDetials';
-import OrderSuccess from './components/Shop/ShopComponents/orderSuccess';
-import OtpVerification from './pages/Otp-verification';
-import Landing from './components/landing/Landing';
-import EvasHomePage from './components/EvasHomePage/EvasHomePage';
-import LearnMoreCourse from './components/EvasHomePage/EvasHomePageComponents/LearnMoreCourse';
-import Gym from './components/Gym/Gym';
-import InstantReward from './components/Reward/InstantReward';
+
+const Home = lazy(() => import('./components/Home/Home'));
+const About = lazy(() => import('./components/About/About'));
+const Contact = lazy(() => import('./components/Contact/Contact'));
+const Login = lazy(() => import('./components/Login/Login'));
+const ForgotPassword = lazy(() => import('./components/Login/ForgotPassword'));
+const ResetPassword = lazy(() => import('./components/Login/ResetPassword'));
+const Quiz = lazy(() => import('./components/Quiz/Quiz'));
+const Cart = lazy(() => import('./components/Cart/Cart'));
+const ProfilePage = lazy(() => import('./components/UserProfile/ProfilePage'));
+const Shop = lazy(() => import('./components/Shop/Shop'));
+const Profile = lazy(() => import('./components/Profile/Profile'));
+const Checkout = lazy(() => import('./components/Checkout/Checkout'));
+const Gallery = lazy(() => import('./components/Gallery/Gallery'));
+const BlogSection = lazy(() => import('./components/Blogs/BlogSection'));
+const BlogDetail = lazy(() => import('./components/Blogs/BlogDetail'));
+const OrderInfoPage = lazy(() => import('./components/OrdersInfo/OrderInfoPage'));
+const PrivacyPolicy = lazy(() => import('./components/privacyPolicy/PrivacyPolicy'));
+const RefundPolicy = lazy(() => import('./components/refund/RefundPolicy'));
+const TermsAndConditions = lazy(() => import('./components/T&C/TermsAndConditions'));
+const Faqs = lazy(() => import('./components/FaQs/Faqs'));
+const ProductDetailsById = lazy(() => import('./components/Shop/productDetials'));
+const OrderSuccess = lazy(() => import('./components/Shop/ShopComponents/orderSuccess'));
+const OtpVerification = lazy(() => import('./pages/Otp-verification'));
+const Landing = lazy(() => import('./components/landing/Landing'));
+const EvasHomePage = lazy(() => import('./components/EvasHomePage/EvasHomePage'));
+const LearnMoreCourse = lazy(() => import('./components/EvasHomePage/EvasHomePageComponents/LearnMoreCourse'));
+const Gym = lazy(() => import('./components/Gym/Gym'));
+const InstantReward = lazy(() => import('./components/Reward/InstantReward'));
 
 function AppRoutes() {
   useAuthMiddleware();
@@ -47,62 +43,64 @@ function AppRoutes() {
     <>
       <ScrollToTop />
       <Toaster position="top-right" />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="login" element={<Login />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="quiz" element={<Quiz />} />
-          <Route path="blogs" element={<BlogSection />} />
-          <Route path="blogs/:id" element={<BlogDetail />} />
-          {/* <Route path="product/:id" element={<ProductDetails />} /> */}
-          <Route path="product/:id" element={<ProductDetailsById />} />
-          <Route path="/shop/:id" element={<Shop />} />
-          <Route path="gallery" element={<Gallery />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/refund-policy" element={<RefundPolicy />} />
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-          <Route path="/faqs" element={<Faqs />} />
-          <Route
-            path="profile"
-            element={
-              // <ProtectedRoute>
-              <ProfilePage />
-              // </ProtectedRoute>
-            }
-          />
-          <Route
-            path="cart"
-            element={
-              // <ProtectedRoute>
-              <Cart />
-              // </ProtectedRoute>
-            }
-          />
-          <Route
-            path="checkout"
-            element={
-              // <ProtectedRoute>-
-              <Checkout />
-              // </ProtectedRoute>
-            }
-          />
-          <Route path="/orders" element={<OrderInfoPage />} />
-          <Route path="/profile" element={<Profile />} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="quiz" element={<Quiz />} />
+            <Route path="blogs" element={<BlogSection />} />
+            <Route path="blogs/:id" element={<BlogDetail />} />
+            {/* <Route path="product/:id" element={<ProductDetails />} /> */}
+            <Route path="product/:id" element={<ProductDetailsById />} />
+            <Route path="/shop/:id" element={<Shop />} />
+            <Route path="gallery" element={<Gallery />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/faqs" element={<Faqs />} />
+            <Route
+              path="profile"
+              element={
+                // <ProtectedRoute>
+                <ProfilePage />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="cart"
+              element={
+                // <ProtectedRoute>
+                <Cart />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="checkout"
+              element={
+                // <ProtectedRoute>-
+                <Checkout />
+                // </ProtectedRoute>
+              }
+            />
+            <Route path="/orders" element={<OrderInfoPage />} />
+            <Route path="/profile" element={<Profile />} />
 
-          {/* <Route path="chat" element={<ChatPage />} /> */}
-          <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/otp-verification" element={<OtpVerification />} />
-          <Route path="/landing" element={<Landing />} />
-          <Route path="/evas" element={<EvasHomePage />} />
-          <Route path="/learnMore" element={<LearnMoreCourse />} />
-          <Route path="/gym" element={<Gym />} />
-        </Route>
-        <Route path="/instant-reward" element={<InstantReward />} />
-      </Routes>
+            {/* <Route path="chat" element={<ChatPage />} /> */}
+            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/otp-verification" element={<OtpVerification />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/evas" element={<EvasHomePage />} />
+            <Route path="/learnMore" element={<LearnMoreCourse />} />
+            <Route path="/gym" element={<Gym />} />
+          </Route>
+          <Route path="/instant-reward" element={<InstantReward />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }
@@ -119,12 +117,13 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <Router>
+      {isLoading && (
+        <div className="fixed inset-0 z-[10000]">
+          <LoadingSpinner />
+        </div>
+      )}
       <AppRoutes />
     </Router>
   );

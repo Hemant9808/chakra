@@ -67,12 +67,12 @@ const DiscountBanner = () => {
         <div className="md:w-3/5 w-full p-8 flex justify-center items-center relative z-10">
           {/* Optional: Radial gradient behind image to make it pop */}
           <div className="absolute inset-0 bg-gradient-to-l from-[#ffffff]/5 to-transparent pointer-events-none"></div>
-          {/* <img
-            src="/ResourseImages/shop.png"
+          <img
+            src="/ResourseImages/shop.jpg"
             alt="Wellness Product"
             // Changed max-w-md to max-w-lg and added lg:max-w-xl for even larger screens
             className="w-full max-w-lg lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
-          /> */}
+          />
         </div>
       </motion.div>
     </div>

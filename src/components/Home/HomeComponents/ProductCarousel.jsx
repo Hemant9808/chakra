@@ -6,6 +6,7 @@ import { PriceDisplay } from "../../../utils/priceUtils";
 import { useCartStore } from "../../../Store/useCartStore";
 import { FaShoppingBag } from "react-icons/fa";
 import { getProductUrl } from "../../../utils/productNavigation";
+import { optimizeImageUrl } from "../../../utils/imageUtils";
 
 const ProductSkeleton = () => (
   <div className="bg-white shadow-sm border border-[#715036]/10 p-4 rounded-2xl w-64 sm:w-full max-w-sm flex-shrink-0 flex flex-col items-center">
@@ -33,35 +34,43 @@ const ProductCarousel = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [productCache, setProductCache] = useState({});
   const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [productsData, categoriesData] = await Promise.all([
-        productService.getAllProducts(),
-        productService.getAllCategories()
-      ]);
-
-      // Filter featured products
-      const featuredProducts = productsData.filter(product => product.isFeatured);
-      setProducts(featuredProducts);
-      setCategories(categoriesData);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    const fetchInitialData = async () => {
+      try {
+        setLoading(true);
+        const [productsData, categoriesData] = await Promise.all([
+          productService.getAllProducts(),
+          productService.getAllCategories()
+        ]);
+
+        // Filter featured products
+        const featuredProducts = productsData.filter(product => product.isFeatured);
+        setProducts(featuredProducts);
+        setCategories(categoriesData);
+        setProductCache(prev => ({ ...prev, "ALL PRODUCTS": featuredProducts }));
+      } catch (error) {
+        console.error("Error fetching data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
-    if (selectedCategory === "ALL PRODUCTS") {
-      fetchData();
+    // Skip on initial mount where cache is empty
+    if (selectedCategory === "ALL PRODUCTS" && Object.keys(productCache).length === 0) {
+      return;
+    }
+
+    // Return from cache if available
+    if (productCache[selectedCategory]) {
+      setProducts(productCache[selectedCategory]);
       return;
     }
 
@@ -72,6 +81,7 @@ const ProductCarousel = () => {
         // Filter featured products
         const featuredProducts = categoryProducts.filter(product => product.isFeatured);
         setProducts(featuredProducts);
+        setProductCache(prev => ({ ...prev, [selectedCategory]: featuredProducts }));
       } catch (error) {
         console.error("Error fetching category products", error);
       } finally {
@@ -80,7 +90,7 @@ const ProductCarousel = () => {
     };
 
     fetchProductsByCategory();
-  }, [selectedCategory]);
+  }, [selectedCategory, productCache]);
 
   return (
     // Section Background: Cream
@@ -161,8 +171,10 @@ const ProductCarousel = () => {
                   {/* Image Container */}
                   <div className="w-full h-56 bg-[#FDFBF7] rounded-xl overflow-hidden mb-4 relative p-4 flex items-center justify-center">
                     <img
-                      src={product.images[0]?.url || "/placeholder.png"}
+                      src={optimizeImageUrl(product.images[0]?.url, 500)}
                       alt={product.name}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
                     />
                     {/* Quick Badge */}
