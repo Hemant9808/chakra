@@ -83,8 +83,8 @@ const CartComponent = () => {
     };
 
     return (
-        // Background: Cream
-        <div className="min-h-screen bg-[#FDFBF7] text-[#2A3B28] px-4 sm:px-6 lg:px-20 py-12">
+        // Background: Cream. Added bottom padding pb-28 on mobile viewports to prevent content overlap with sticky checkout bar.
+        <div className="min-h-screen bg-[#FDFBF7] text-[#2A3B28] px-4 sm:px-6 lg:px-20 py-12 pb-28 lg:pb-12">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     className="flex items-center justify-between mb-8 border-b border-[#715036]/10 pb-6"
@@ -124,34 +124,43 @@ const CartComponent = () => {
                         {/* Cart Items Section */}
                         <div className="flex-1">
 
-                            {/* Mobile Card Layout */}
+                            {/* Mobile Card Layout - Redesigned for premium visual appeal */}
                             <div className="lg:hidden space-y-4">
                                 {cartItems.map((item) => {
                                     const product = renderProductInfo(item);
                                     return (
                                         <motion.div
                                             key={item._id}
-                                            className="bg-white p-4 rounded-xl shadow-sm border border-[#715036]/10"
+                                            className="bg-gradient-to-br from-white to-[#FDFBF7]/40 p-4 rounded-2xl shadow-md border border-[#715036]/10 hover:shadow-lg transition-all duration-300 relative"
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -20 }}
                                             transition={{ duration: 0.3 }}
                                         >
+                                            {/* Trashcan Delete Button - Placed at top-right for visual cleanliness */}
+                                            <button
+                                                onClick={() => removeItem(product.id)}
+                                                className="absolute top-3 right-3 text-[#715036]/50 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-colors"
+                                                title="Remove Item"
+                                            >
+                                                <FaTrashAlt className="text-sm" />
+                                            </button>
+
                                             <div className="flex items-start space-x-4">
                                                 <div
                                                     onClick={() => navigate(getProductUrl({ _id: product.id, name: product.name }))}
-                                                    className="w-24 h-24 bg-[#FDFBF7] rounded-lg overflow-hidden flex-shrink-0 cursor-pointer"
+                                                    className="w-24 h-24 bg-[#FDFBF7] rounded-xl overflow-hidden flex-shrink-0 cursor-pointer border border-[#715036]/10 shadow-sm"
                                                 >
                                                     <img
                                                         src={product.image}
                                                         alt={product.name}
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
                                                 </div>
-                                                <div className="flex-1 min-w-0">
+                                                <div className="flex-1 min-w-0 pr-8">
                                                     <h4
                                                         onClick={() => navigate(getProductUrl({ _id: product.id, name: product.name }))}
-                                                        className="text-lg font-serif font-bold text-[#2A3B28] truncate cursor-pointer"
+                                                        className="text-base font-serif font-bold text-[#2A3B28] cursor-pointer line-clamp-2 hover:text-[#C17C3A] transition-colors"
                                                         title={product.name}
                                                     >
                                                         {product.name}
@@ -162,47 +171,40 @@ const CartComponent = () => {
                                                             product.discountPrice > 0 &&
                                                             product.discountPrice < product.price ? (
                                                             <div className="flex items-center gap-2">
-                                                                <span className="text-[#C17C3A] font-bold">
+                                                                <span className="text-[#C17C3A] font-bold text-base">
                                                                     ₹{product.discountPrice}
                                                                 </span>
-                                                                <span className="text-[#715036]/50 line-through text-sm">
+                                                                <span className="text-[#715036]/40 line-through text-xs">
                                                                     ₹{product.price}
                                                                 </span>
                                                             </div>
                                                         ) : (
-                                                            <span className="text-[#2A3B28] font-bold">₹{product.price}</span>
+                                                            <span className="text-[#2A3B28] font-bold text-base">₹{product.price}</span>
                                                         )}
                                                     </div>
 
                                                     <div className="flex items-center justify-between">
-                                                        <div className="flex items-center border border-[#715036]/20 rounded-lg overflow-hidden">
+                                                        <div className="flex items-center border border-[#715036]/20 rounded-lg overflow-hidden bg-white shadow-sm">
                                                             <button
                                                                 onClick={() =>
                                                                     handleQuantityChange(product.id, product.quantity - 1, item)
                                                                 }
-                                                                className="px-3 py-1 bg-[#FDFBF7] hover:bg-[#eaddcf] text-[#2A3B28] transition-colors"
+                                                                className="px-2.5 py-1 bg-transparent hover:bg-[#FDFBF7] text-[#2A3B28] transition-colors border-r border-[#715036]/10"
                                                             >
                                                                 -
                                                             </button>
-                                                            <span className="px-3 py-1 text-sm font-medium bg-white min-w-[30px] text-center">
+                                                            <span className="px-3 py-1 text-sm font-semibold min-w-[30px] text-center text-[#2A3B28]">
                                                                 {product.quantity}
                                                             </span>
                                                             <button
                                                                 onClick={() =>
                                                                     handleQuantityChange(product.id, product.quantity + 1, item)
                                                                 }
-                                                                className="px-3 py-1 bg-[#FDFBF7] hover:bg-[#eaddcf] text-[#2A3B28] transition-colors"
+                                                                className="px-2.5 py-1 bg-transparent hover:bg-[#FDFBF7] text-[#2A3B28] transition-colors border-l border-[#715036]/10"
                                                             >
                                                                 +
                                                             </button>
                                                         </div>
-
-                                                        <button
-                                                            onClick={() => removeItem(product.id)}
-                                                            className="text-red-400 hover:text-red-600 p-2 transition-colors"
-                                                        >
-                                                            <FaTrashAlt />
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -383,6 +385,24 @@ const CartComponent = () => {
                     </div>
                 )}
             </div>
+
+            {/* STICKY BOTTOM SUMMARY BAR FOR MOBILE VIEWPORTS */}
+            {cartItems.length > 0 && (
+                <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#FDFBF7]/95 backdrop-blur-md border-t border-[#715036]/15 shadow-[0_-8px_30px_rgb(0,0,0,0.06)] px-5 py-4 flex items-center justify-between lg:hidden pb-safe-bottom">
+                    <div className="min-w-0">
+                        <p className="text-[10px] text-[#715036]/60 uppercase tracking-widest font-bold">Total Price</p>
+                        <p className="text-xl font-serif font-bold text-[#2A3B28]">
+                            ₹{totaldiscountedPrice < totalPrice ? totaldiscountedPrice : totalPrice}
+                        </p>
+                    </div>
+                    <button
+                        onClick={handleCheckout}
+                        className="bg-[#2A3B28] hover:bg-[#C17C3A] text-white px-6 py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
+                    >
+                        Proceed to Checkout <FaArrowRight className="text-xs" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

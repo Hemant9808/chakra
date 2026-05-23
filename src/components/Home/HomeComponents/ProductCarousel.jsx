@@ -94,16 +94,16 @@ const ProductCarousel = () => {
 
   return (
     // Section Background: Cream
-    <section className="bg-[#FDFBF7] py-20 px-4 sm:px-8 relative">
+    <section className="bg-[#FDFBF7] pt-6 pb-16 md:py-20 px-4 sm:px-8 relative">
       {/* Decorative Background Element */}
-      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white to-[#FDFBF7] pointer-events-none"></div>
+      <div className="absolute top-0 left-0 w-full h-6 md:h-20 bg-gradient-to-b from-white to-[#FDFBF7] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto text-center mb-12 relative z-10">
-        <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#2A3B28] mb-4 tracking-tight">
+      <div className="max-w-7xl mx-auto text-center mb-5 sm:mb-12 relative z-10">
+        <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#2A3B28] mb-2 sm:mb-4 tracking-tight">
           Wellness Essentials
         </h2>
-        <div className="h-1 w-24 bg-[#C17C3A] mx-auto rounded-full mb-6"></div>
-        <p className="text-[#715036]/80 max-w-2xl mx-auto font-medium">
+        <div className="h-1 w-20 sm:w-24 bg-[#C17C3A] mx-auto rounded-full mb-3 sm:mb-6"></div>
+        <p className="hidden sm:block text-[#715036]/80 max-w-2xl mx-auto font-medium">
           Curated Ayurvedic formulations to support your journey to optimal health.
         </p>
       </div>
@@ -112,10 +112,10 @@ const ProductCarousel = () => {
       {loading && categories.length === 0 ? (
         <CategorySkeleton />
       ) : (
-        <div className="flex flex-wrap justify-center gap-3 mb-12 relative z-10">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-12 relative z-10">
           <button
             onClick={() => setSelectedCategory("ALL PRODUCTS")}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 border ${selectedCategory === "ALL PRODUCTS"
+            className={`px-4 py-1.5 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 border ${selectedCategory === "ALL PRODUCTS"
               ? "bg-[#2A3B28] text-white border-[#2A3B28] shadow-lg transform scale-105"
               : "bg-white text-[#715036] border-[#715036]/20 hover:border-[#C17C3A] hover:text-[#C17C3A]"
               }`}
@@ -126,7 +126,7 @@ const ProductCarousel = () => {
             <button
               key={category._id}
               onClick={() => setSelectedCategory(category.name)}
-              className={`px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 border ${selectedCategory === category.name
+              className={`px-4 py-1.5 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 border ${selectedCategory === category.name
                 ? "bg-[#2A3B28] text-white border-[#2A3B28] shadow-lg transform scale-105"
                 : "bg-white text-[#715036] border-[#715036]/20 hover:border-[#C17C3A] hover:text-[#C17C3A]"
                 }`}

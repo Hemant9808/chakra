@@ -10,22 +10,28 @@ import {
 import { productService } from "../../services/productService";
 
 const Footer = () => {
-  // Get all categories from the database
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
 
-  const fetchCategories = async () => {
+  const fetchFooterData = async () => {
     try {
-      const [categoriesData] = await Promise.all([
-        productService.getAllCategories()
+      const [categoriesData, productsData] = await Promise.all([
+        productService.getAllCategories(),
+        productService.getAllProducts()
       ]);
       setCategories(categoriesData);
+
+      // Get first 4 active products for footer quick links
+      if (productsData && productsData.length > 0) {
+        setProducts(productsData.slice(0, 4));
+      }
     } catch (error) {
-      console.error("Error fetching categories for footer:", error);
+      console.error("Error fetching footer data:", error);
     }
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchFooterData();
   }, []);
 
   return (
@@ -55,20 +61,24 @@ const Footer = () => {
               Products
             </h3>
             <ul className="text-sm space-y-3 text-[#FDFBF7]/80">
-              {[
-                { name: "AshwaZen X", path: "/product/68bdc188f56e1a004b70616d" },
-                { name: "Evas Neo", path: "/product/68bdc4d9f56e1a004b7061a1" },
-                { name: "Anti Addiction Drops", path: "/product/68b73127347f29004bac86de" },
-              ].map((item, index) => (
-                <li key={index}>
-                  <Link
-                    to={item.path}
-                    className="hover:text-[#C17C3A] hover:translate-x-1 transition-all duration-300 inline-block"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
+              {products.length > 0 ? (
+                products.map((prod) => (
+                  <li key={prod._id}>
+                    <Link
+                      to={`/product/${prod._id}`}
+                      className="hover:text-[#C17C3A] hover:translate-x-1 transition-all duration-300 inline-block"
+                    >
+                      {prod.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                ["AshwaZen X", "Evas Neo", "Anti Addiction Drops"].map((name, index) => (
+                  <li key={index}>
+                    <span className="opacity-50">{name}</span>
+                  </li>
+                ))
+              )}
             </ul>
           </div>
 

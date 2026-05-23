@@ -134,10 +134,10 @@ const ProductDetailsById = () => {
   };
 
   return (
-    <div className="bg-[#FDFBF7] min-h-screen font-sans">
+    <div className="bg-[#FDFBF7] min-h-screen font-sans pb-20 md:pb-0">
 
       <motion.div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -202,21 +202,21 @@ const ProductDetailsById = () => {
                 <img
                   src={product.images[selectedImage]?.url || "/placeholder.png"}
                   alt={product.name}
-                  className="w-full max-h-[35rem] object-contain p-8 select-none pointer-events-none"
+                  className="w-full max-h-[22rem] sm:max-h-[35rem] object-contain p-4 sm:p-8 select-none pointer-events-none"
                   draggable={false}
                 />
               </motion.div>
 
               {/* Dot Indicators */}
               {product.images.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 bg-black/20 backdrop-blur-sm px-2.5 py-1.5 rounded-full">
                   {product.images.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`h-2 rounded-full transition-all duration-300 ${selectedImage === index
-                        ? 'w-8 bg-[#C17C3A]'
-                        : 'w-2 bg-white/60 hover:bg-white/80'
+                      className={`h-1.5 rounded-full transition-all duration-300 ${selectedImage === index
+                        ? 'w-6 bg-white'
+                        : 'w-1.5 bg-white/50 hover:bg-white/80'
                         }`}
                       aria-label={`Go to image ${index + 1}`}
                     />
@@ -226,14 +226,14 @@ const ProductDetailsById = () => {
             </div>
 
             {/* Thumbnails */}
-            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex gap-2 sm:gap-4 overflow-x-auto scrollbar-hide py-2 px-1 -mx-1">
               {product.images.map((image, index) => (
                 <motion.button
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   whileTap={{ scale: 0.9 }}
                   animate={selectedImage === index ? { scale: 1.05 } : { scale: 1 }}
-                  className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 bg-white ${selectedImage === index
+                  className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 bg-white ${selectedImage === index
                     ? "border-[#C17C3A] shadow-md ring-2 ring-[#C17C3A]/20"
                     : "border-[#715036]/10 hover:border-[#C17C3A]/50"
                     }`}
@@ -270,7 +270,7 @@ const ProductDetailsById = () => {
               <span className="text-[#C17C3A] font-bold text-xs uppercase tracking-[0.2em] mb-2 block">
                 {product.brand || "Ayucan Wellness"}
               </span>
-              <h1 className="text-3xl md:text-5xl font-serif font-bold text-[#2A3B28] leading-tight mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-serif font-bold text-[#2A3B28] leading-tight mb-3 md:mb-4">
                 {product.name}
               </h1>
 
@@ -402,6 +402,35 @@ const ProductDetailsById = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <ReviewsList productId={product?._id} />
       </div>
+
+      {/* Sticky Mobile Add to Cart Bar */}
+      {product.stock > 0 && (
+        <motion.div 
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#715036]/10 px-6 py-3.5 flex items-center justify-between md:hidden shadow-[0_-8px_30px_rgb(0,0,0,0.12)]"
+        >
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-wider text-[#715036]/60">Price</span>
+            <span className="text-xl font-bold text-[#2A3B28] font-serif">₹{product.discountPrice}</span>
+          </div>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              if (!checkIfUserIsLoggedIn()) {
+                navigate("/login");
+                return;
+              }
+              addToCart(product);
+            }}
+            className="bg-[#2A3B28] hover:bg-[#C17C3A] text-white px-6 py-3 rounded-full font-bold uppercase tracking-wider text-xs flex items-center gap-2 shadow-md transition-all duration-300"
+          >
+            <ShoppingCart size={14} />
+            Add to Cart
+          </motion.button>
+        </motion.div>
+      )}
     </div>
   );
 };
