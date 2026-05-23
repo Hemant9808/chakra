@@ -14,7 +14,9 @@ const SEO = ({
   url = window.location.href,
   price,
   currency = "INR",
-  brand = "Ayucan"
+  brand = "Ayucan",
+  rating,
+  reviewCount
 }) => {
   const fullTitle = title ? `${title} | ${name}` : name;
   const canonicalUrl = url;
@@ -70,11 +72,11 @@ const SEO = ({
               "itemCondition": "https://schema.org/NewCondition",
               "availability": "https://schema.org/InStock"
             },
-            "aggregateRating": {
+            "aggregateRating": rating > 0 && reviewCount > 0 ? {
               "@type": "AggregateRating",
-              "ratingValue": "4.8",
-              "reviewCount": "124"
-            }
+              "ratingValue": rating.toFixed(1),
+              "reviewCount": reviewCount.toString()
+            } : undefined
           })}
         </script>
       )}
