@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import ResponsiveImage from "../../common/ResponsiveImage";
 
 const DiscountBanner = () => {
   return (
@@ -60,17 +61,19 @@ const DiscountBanner = () => {
           <div className="absolute inset-0 bg-gradient-to-l from-[#ffffff]/5 to-transparent pointer-events-none"></div>
 
           {/* Mobile Image — swap src to a portrait/square crop later */}
-          <img
+          <ResponsiveImage
             src="/ResourseImages/shop.jpg"
             alt="Wellness Product"
             className="block md:hidden w-full h-full object-cover object-bottom drop-shadow-2xl"
+            sizes="40vw"
           />
 
           {/* Desktop Image — swap src to a wider landscape version later */}
-          <img
+          <ResponsiveImage
             src="/ResourseImages/shop.jpg"
             alt="Wellness Product"
             className="hidden md:block w-full object-contain object-center drop-shadow-2xl hover:scale-105 transition-transform duration-500 max-w-lg lg:max-w-xl p-8"
+            sizes="50vw"
           />
         </div>
 

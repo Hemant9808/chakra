@@ -24,6 +24,7 @@ import FrequentlyBoughtTogether from "../Home/HomeComponents/FrequentlyBoughtTog
 import ReviewsList from "../Reviews/ReviewsList";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
 import SEO from "../common/SEO";
+import ResponsiveImage from "../common/ResponsiveImage";
 
 
 const ProductDetailsById = () => {
@@ -241,11 +242,13 @@ const ProductDetailsById = () => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="cursor-grab active:cursor-grabbing relative group"
               >
-                <img
+                <ResponsiveImage
                   src={product.images[selectedImage]?.url || "/placeholder.png"}
                   alt={product.name}
                   className="w-full max-h-[22rem] sm:max-h-[35rem] object-contain p-4 sm:p-8 select-none pointer-events-none"
                   draggable={false}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={true}
                 />
               </motion.div>
 
@@ -280,10 +283,11 @@ const ProductDetailsById = () => {
                     : "border-[#715036]/10 hover:border-[#C17C3A]/50"
                     }`}
                 >
-                  <img
+                  <ResponsiveImage
                     src={image.url}
                     alt={`${product.name} ${index + 1}`}
                     className="w-full h-full object-contain p-2"
+                    sizes="80px"
                   />
                 </motion.button>
               ))}
