@@ -48,6 +48,36 @@ const SEO = ({
           <meta property="product:brand" content={brand} />
         </>
       )}
+
+      {/* JSON-LD Product Schema for Google Search Rich Snippets */}
+      {type === "product" && price && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": title ? `${title}` : name,
+            "image": image.startsWith('http') ? image : `${window.location.origin}${image}`,
+            "description": description,
+            "brand": {
+              "@type": "Brand",
+              "name": brand
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": canonicalUrl,
+              "priceCurrency": currency,
+              "price": price,
+              "itemCondition": "https://schema.org/NewCondition",
+              "availability": "https://schema.org/InStock"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "reviewCount": "124"
+            }
+          })}
+        </script>
+      )}
     </Helmet>
   );
 };

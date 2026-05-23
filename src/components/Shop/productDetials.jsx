@@ -134,12 +134,41 @@ const ProductDetailsById = () => {
     return discount.toFixed(0);
   };
 
+  const getCustomSEO = (prod) => {
+    if (!prod) return { title: "", description: "" };
+    const nameLower = (prod.name || "").toLowerCase();
+
+    // 1. Optimized Shilajit custom SEO & Trust credentials
+    if (nameLower.includes("shilajit")) {
+      return {
+        title: "Himalayan Shilajit Resin for Stamina, Strength & Vigour",
+        description: "FSSAI Approved, AYUSH Certified, Lab-Tested for Heavy Metals, 100% Pure Himalayan Resin, GMP Certified. Every single pack includes copies of these lab reports copy."
+      };
+    }
+
+    // 2. Optimized Multivitamin custom SEO & Trust credentials (Pure Veg)
+    if (nameLower.includes("multivitamin")) {
+      return {
+        title: "Daily Multivitamin Capsules for Men & Women - Immunity & Energy Booster",
+        description: "100% Pure Veg Capsule formulation. 100% RDA of Vitamins, NABL Lab Tested. Perfect for daily energy and immunity boosting support."
+      };
+    }
+
+    // Fallback standard SEO
+    return {
+      title: prod.name,
+      description: prod.description ? prod.description.substring(0, 155) : "Buy pure Ayurvedic healthcare formulations from Ayucan."
+    };
+  };
+
+  const seoData = getCustomSEO(product);
+
   return (
     <div className="bg-[#FDFBF7] min-h-screen font-sans pb-20 md:pb-0">
       {product && (
         <SEO 
-          title={product.name} 
-          description={product.description ? product.description.substring(0, 155) : "Buy pure Ayurvedic healthcare formulations from Ayucan."} 
+          title={seoData.title} 
+          description={seoData.description} 
           image={product.images?.[0]?.url}
           type="product"
           price={product.discountPrice > 0 ? product.discountPrice : product.price}

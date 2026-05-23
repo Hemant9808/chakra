@@ -1,0 +1,16 @@
+# Robots.txt - Ayucan Healthcare
+User-agent: *
+Allow: /
+
+# Prevent indexing of private, empty, or duplicate checkout/cart pages
+Disallow: /cart
+Disallow: /checkout
+Disallow: /profile
+Disallow: /order-success
+Disallow: /login
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /otp-verification
+
+# Link to the Sitemap
+Sitemap: https://www.ayucan.com/sitemap.xml
