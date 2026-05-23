@@ -84,7 +84,7 @@ const CartComponent = () => {
 
     return (
         // Background: Cream. Added bottom padding pb-28 on mobile viewports to prevent content overlap with sticky checkout bar.
-        <div className="min-h-screen bg-[#FDFBF7] text-[#2A3B28] px-4 sm:px-6 lg:px-20 py-12 pb-28 lg:pb-12">
+        <div className="min-h-screen bg-[#FDFBF7] text-[#2A3B28] px-4 sm:px-6 lg:px-20 pt-5 md:pt-10 pb-12 pb-28 lg:pb-12">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     className="flex items-center justify-between mb-8 border-b border-[#715036]/10 pb-6"

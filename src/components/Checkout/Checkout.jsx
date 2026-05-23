@@ -230,7 +230,7 @@ const Checkout = () => {
 
   return (
     // Background: Cream
-    <div className="pt-30 bg-[#FDFBF7] text-[#2A3B28] min-h-screen px-4 py-12 md:px-12 lg:px-24 font-sans relative overflow-hidden">
+    <div className="pt-5 md:pt-10 bg-[#FDFBF7] text-[#2A3B28] min-h-screen px-4 py-12 md:px-12 lg:px-24 font-sans relative overflow-hidden">
 
       {/* Decorative Background Element */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C17C3A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>

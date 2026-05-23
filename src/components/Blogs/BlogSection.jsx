@@ -5,6 +5,8 @@ import { toast } from "react-hot-toast";
 import { Editor } from '@tinymce/tinymce-react';
 import useAuthStore from "../../Store/useAuthStore";
 import { FaArrowRight, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { motion } from "framer-motion";
+
 
 const BlogSection = () => {
   const [blogs, setBlogs] = useState([]);
@@ -24,6 +26,42 @@ const BlogSection = () => {
 
   const { user } = useAuthStore();
   const isAdmin = user?.role === 'admin';
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const filteredBlogs = selectedCategory === "All"
+    ? blogs
+    : blogs.filter(post => 
+        (post.title || '').toLowerCase().includes(selectedCategory.toLowerCase()) ||
+        (post.description || '').toLowerCase().includes(selectedCategory.toLowerCase()) ||
+        (post.content || '').toLowerCase().includes(selectedCategory.toLowerCase())
+      );
+
+  const heroPost = selectedCategory === "All" && filteredBlogs.length > 0 ? filteredBlogs[0] : null;
+  const gridBlogs = selectedCategory === "All" && filteredBlogs.length > 0 ? filteredBlogs.slice(1) : filteredBlogs;
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    show: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        type: "spring", 
+        stiffness: 80, 
+        damping: 15 
+      } 
+    }
+  };
 
   const handleFileUpload = async (file) => {
     const formData = new FormData();
@@ -159,14 +197,14 @@ const BlogSection = () => {
 
   return (
     // Background: Cream
-    <section className="pt-30 bg-[#FDFBF7] py-20 px-4 sm:px-6 relative overflow-hidden">
+    <section className="pt-5 md:pt-10 pb-20 bg-[#FDFBF7] px-4 sm:px-6 relative overflow-hidden">
 
       {/* Decorative Background Element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#2A3B28]/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
-          <div>
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
+          <div className="w-full md:w-auto">
             <span className="text-[#C17C3A] font-bold text-xs uppercase tracking-[0.2em] mb-3 block">
               Wellness Journal
             </span>
@@ -181,7 +219,7 @@ const BlogSection = () => {
                 resetForm();
                 setIsDialogOpen(true);
               }}
-              className="bg-[#2A3B28] text-white px-6 py-3 rounded-full hover:bg-[#C17C3A] transition-all duration-300 shadow-lg flex items-center gap-2 text-sm font-bold uppercase tracking-wider"
+              className="bg-[#2A3B28] text-white px-6 py-3 rounded-full hover:bg-[#C17C3A] transition-all duration-300 shadow-lg flex items-center gap-2 text-xs font-bold uppercase tracking-wider w-fit mx-auto md:mx-0"
             >
               <FaPlus /> Add New Blog
             </button>
@@ -310,58 +348,79 @@ const BlogSection = () => {
           </div>
         )}
 
-        {/* Blog grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((post) => (
-            <div
-              key={post._id}
-              className="bg-white rounded-2xl shadow-sm border border-[#715036]/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-[#C17C3A]/30 transform hover:-translate-y-1 group flex flex-col h-full"
+        {/* Category Pills Slider */}
+        <div 
+          className="flex flex-nowrap overflow-x-auto whitespace-nowrap gap-3 mb-10 pb-4 border-b border-[#715036]/10 [&::-webkit-scrollbar]:hidden"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {['All', 'Ayurveda', 'Stamina', 'Daily Wellness', 'Mental Health'].map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-2 md:px-6 md:py-2.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                selectedCategory === category
+                  ? 'bg-[#2A3B28] text-white shadow-md'
+                  : 'bg-white text-[#715036] border border-[#715036]/20 hover:border-[#C17C3A] hover:text-[#C17C3A]'
+              }`}
             >
-              <div className="h-56 overflow-hidden bg-[#FDFBF7] relative">
+              {category}
+            </button>
+          ))}
+        </div>
+
+        {/* Featured Hero Card */}
+        {heroPost && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="bg-white rounded-3xl shadow-sm border border-[#715036]/10 overflow-hidden mb-12 hover:shadow-xl hover:border-[#C17C3A]/30 transition-all duration-300 group"
+          >
+            <div className="grid md:grid-cols-2">
+              <div className="aspect-[16/10] sm:aspect-video md:aspect-auto md:h-full overflow-hidden bg-[#FDFBF7] relative">
                 <img
-                  src={post.mainImg}
-                  alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  src={heroPost.mainImg}
+                  alt={heroPost.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="text-[10px] font-bold text-white bg-[#C17C3A] px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                    Article
+                <div className="absolute top-4 left-4 md:top-6 md:left-6">
+                  <span className="text-[9px] md:text-[10px] font-bold text-white bg-[#C17C3A] px-3 py-1 md:px-3.5 md:py-1.5 rounded-full uppercase tracking-wider shadow-md">
+                    Featured Article
                   </span>
                 </div>
               </div>
-
-              <div className="p-6 flex flex-col flex-1">
-                <div className="mb-3 text-xs text-[#715036]/60 font-medium uppercase tracking-wide">
-                  {new Date(post.createdAt).toLocaleDateString()}
+              <div className="p-6 md:p-12 flex flex-col justify-center">
+                <div className="mb-3 md:mb-4 text-xs text-[#715036]/60 font-semibold uppercase tracking-wider">
+                  {new Date(heroPost.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                 </div>
-
-                <h3 className="text-xl font-serif font-bold text-[#2A3B28] mb-3 line-clamp-2 group-hover:text-[#C17C3A] transition-colors leading-tight">
-                  {post.title}
+                <h3 className="text-xl md:text-2xl lg:text-4xl font-serif font-bold text-[#2A3B28] mb-3 md:mb-4 group-hover:text-[#C17C3A] transition-colors leading-tight">
+                  {heroPost.title}
                 </h3>
-
-                <p className="text-[#715036]/70 text-sm line-clamp-3 mb-6 leading-relaxed flex-1">
-                  {post.description}
+                <p className="text-[#715036]/70 text-xs md:text-base leading-relaxed mb-5 md:mb-6 line-clamp-3">
+                  {heroPost.description}
                 </p>
-
-                <div className="pt-4 border-t border-[#715036]/10 flex justify-between items-center">
+                <div className="pt-4 md:pt-6 border-t border-[#715036]/10 flex justify-between items-center">
                   <Link
-                    to={`/blogs/${post._id}`}
-                    className="text-[#2A3B28] font-bold text-sm uppercase tracking-wider group-hover:text-[#C17C3A] transition-colors flex items-center gap-2"
+                    to={`/blogs/${heroPost._id}`}
+                    className="text-[#2A3B28] font-bold text-xs md:text-sm uppercase tracking-wider group-hover:text-[#C17C3A] transition-colors flex items-center gap-2"
                   >
-                    Read Article <FaArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                    Read Article <FaArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform" />
                   </Link>
 
                   {isAdmin && (
                     <div className="flex gap-3">
                       <button
-                        onClick={() => handleEdit(post)}
+                        type="button"
+                        onClick={() => handleEdit(heroPost)}
                         className="text-[#2A3B28] hover:text-[#C17C3A] transition-colors p-2 hover:bg-[#FDFBF7] rounded-full"
                         title="Edit"
                       >
                         <FaEdit />
                       </button>
                       <button
-                        onClick={() => handleDelete(post._id)}
+                        type="button"
+                        onClick={() => handleDelete(heroPost._id)}
                         className="text-red-400 hover:text-red-600 transition-colors p-2 hover:bg-red-50 rounded-full"
                         title="Delete"
                       >
@@ -372,8 +431,90 @@ const BlogSection = () => {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </motion.div>
+        )}
+
+        {/* Empty state */}
+        {filteredBlogs.length === 0 && (
+          <div className="text-center py-20 bg-white rounded-3xl border border-[#715036]/10">
+            <p className="text-[#715036]/60 font-serif text-lg">No articles found in this category.</p>
+          </div>
+        )}
+
+        {/* Blog grid */}
+        {gridBlogs.length > 0 && (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {gridBlogs.map((post) => (
+              <motion.div
+                key={post._id}
+                variants={itemVariants}
+                className="bg-white rounded-2xl shadow-sm border border-[#715036]/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-[#C17C3A]/30 transform hover:-translate-y-1 group flex flex-col h-full"
+              >
+                <div className="aspect-video overflow-hidden bg-[#FDFBF7] relative">
+                  <img
+                    src={post.mainImg}
+                    alt={post.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="text-[10px] font-bold text-white bg-[#C17C3A] px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                      Article
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-5 md:p-6 flex flex-col flex-1">
+                  <div className="mb-3 text-xs text-[#715036]/60 font-medium uppercase tracking-wide">
+                    {new Date(post.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </div>
+
+                  <h3 className="text-lg md:text-xl font-serif font-bold text-[#2A3B28] mb-3 line-clamp-2 group-hover:text-[#C17C3A] transition-colors leading-tight">
+                    {post.title}
+                  </h3>
+
+                  <p className="text-[#715036]/70 text-xs md:text-sm line-clamp-3 mb-5 md:mb-6 leading-relaxed flex-1">
+                    {post.description}
+                  </p>
+
+                  <div className="pt-4 border-t border-[#715036]/10 flex justify-between items-center">
+                    <Link
+                      to={`/blogs/${post._id}`}
+                      className="text-[#2A3B28] font-bold text-xs md:text-sm uppercase tracking-wider group-hover:text-[#C17C3A] transition-colors flex items-center gap-2"
+                    >
+                      Read Article <FaArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+
+                    {isAdmin && (
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(post)}
+                          className="text-[#2A3B28] hover:text-[#C17C3A] transition-colors p-2 hover:bg-[#FDFBF7] rounded-full"
+                          title="Edit"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(post._id)}
+                          className="text-red-400 hover:text-red-600 transition-colors p-2 hover:bg-red-50 rounded-full"
+                          title="Delete"
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

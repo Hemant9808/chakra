@@ -62,7 +62,7 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
 
   return (
     // Background: Cream
-    <div className="w-full px-4 py-12 bg-[#FDFBF7]">
+    <div className="w-full px-4 pt-3 pb-12 bg-[#FDFBF7]">
 
       {/* Tabs */}
       {initialLoading ? (

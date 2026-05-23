@@ -51,7 +51,7 @@ const Faqs = () => {
   };
 
   return (
-    <div className="bg-[#fef7f3] min-h-screen py-16 px-5 sm:px-10">
+    <div className="bg-[#fef7f3] min-h-screen pt-5 md:pt-10 pb-16 px-5 sm:px-10">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl sm:text-4xl font-bold text-center text-[#e03178] mb-12">
           Frequently Asked Questions

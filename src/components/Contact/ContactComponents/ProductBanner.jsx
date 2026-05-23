@@ -8,7 +8,7 @@ const ProductBanner = () => {
 
   return (
     // Background: Deep Forest Green
-    <section className="pt-30 bg-[#2A3B28] py-20 px-6 relative overflow-hidden">
+    <section className="pt-5 md:pt-10 bg-[#2A3B28] py-20 px-6 relative overflow-hidden">
 
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-[#C17C3A]/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>

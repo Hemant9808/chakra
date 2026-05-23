@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBlogById, updateBlog } from "../../services/blogService";
 import { toast } from "react-hot-toast";
-import { FaArrowLeft, FaCalendarAlt, FaEdit, FaSave, FaTimes, FaPenNib } from "react-icons/fa";
+import { FaArrowLeft, FaCalendarAlt, FaEdit, FaSave, FaTimes, FaPenNib, FaClock, FaWhatsapp, FaLink, FaCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const BlogDetail = () => {
@@ -13,6 +13,33 @@ const BlogDetail = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState(null);
+  const [scrollPercent, setScrollPercent] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollPercent((window.scrollY / totalScroll) * 100);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    toast.success("Link copied to clipboard!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShareWhatsapp = () => {
+    if (!post) return;
+    const shareText = `${post.title}\nRead more at: ${window.location.href}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+  };
+
 
   useEffect(() => {
     fetchBlog();
@@ -91,7 +118,12 @@ const BlogDetail = () => {
 
   return (
     // Background: Cream
-    <section className="bg-[#FDFBF7] min-h-screen py-12 px-4 sm:px-6 relative overflow-hidden">
+    <section className="bg-[#FDFBF7] min-h-screen pt-5 md:pt-10 pb-12 px-4 sm:px-6 relative overflow-hidden">
+      {/* Scroll Progress Meter */}
+      <div 
+        className="fixed top-0 left-0 h-1 bg-[#C17C3A] z-50 transition-all duration-100 ease-out origin-left" 
+        style={{ width: `${scrollPercent}%` }}
+      />
 
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-[#2A3B28]/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
@@ -199,9 +231,15 @@ const BlogDetail = () => {
 
               {/* Title Overlay */}
               <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
-                <div className="flex items-center gap-2 text-[#C17C3A] mb-3 font-bold text-xs uppercase tracking-widest bg-black/30 backdrop-blur-md px-3 py-1 rounded-full w-fit border border-white/10">
-                  <FaCalendarAlt />
-                  {new Date(post.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                <div className="flex flex-wrap items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 text-[#C17C3A] font-bold text-xs uppercase tracking-widest bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full w-fit border border-white/10 shadow-sm">
+                    <FaCalendarAlt />
+                    {new Date(post.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </div>
+                  <div className="flex items-center gap-2 text-[#C17C3A] font-bold text-xs uppercase tracking-widest bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full w-fit border border-white/10 shadow-sm">
+                    <FaClock />
+                    {Math.max(1, Math.ceil((post.content ? post.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0) / 200))} min read
+                  </div>
                 </div>
                 <h1 className="text-3xl md:text-5xl font-serif font-bold text-white leading-tight shadow-sm">
                   {post.title}
@@ -215,16 +253,52 @@ const BlogDetail = () => {
                 {post.description}
               </p>
 
-              {/* Main Content Render */}
-              <div className="prose prose-lg max-w-none text-[#715036]/80 
-                    prose-headings:font-serif prose-headings:text-[#2A3B28] prose-headings:font-bold
-                    prose-a:text-[#C17C3A] prose-a:no-underline hover:prose-a:underline
-                    prose-strong:text-[#2A3B28]
-                    prose-blockquote:border-l-[#C17C3A] prose-blockquote:bg-[#FDFBF7] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg
-                    prose-img:rounded-2xl prose-img:shadow-md
-                    leading-relaxed
-                ">
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              {/* Grid / Flex Layout for Share Sidebar & Content */}
+              <div className="flex flex-col lg:flex-row gap-12 relative">
+                
+                {/* Floating Social-Share Sidebar (sticky on desktop) */}
+                <div className="lg:w-16 flex lg:flex-row lg:flex-col items-center gap-4 lg:sticky lg:top-24 h-fit border-b lg:border-b-0 pb-6 lg:pb-0 border-[#715036]/10">
+                  <span className="text-[10px] font-bold text-[#715036]/60 uppercase tracking-widest lg:rotate-270 lg:my-6 whitespace-nowrap">
+                    Share
+                  </span>
+                  
+                  <button
+                    type="button"
+                    onClick={handleShareWhatsapp}
+                    className="w-12 h-12 rounded-full bg-[#25D366]/10 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow-md border border-[#25D366]/20"
+                    title="Share on WhatsApp"
+                  >
+                    <FaWhatsapp size={20} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleCopyLink}
+                    className={`w-12 h-12 rounded-full transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow-md border ${
+                      copied 
+                        ? 'bg-[#C17C3A] text-white border-[#C17C3A]' 
+                        : 'bg-[#C17C3A]/10 hover:bg-[#C17C3A] text-[#C17C3A] hover:text-white border-[#C17C3A]/20'
+                    }`}
+                    title="Copy Article Link"
+                  >
+                    {copied ? <FaCheck size={18} /> : <FaLink size={18} />}
+                  </button>
+                </div>
+
+                {/* Main Content Render */}
+                <div className="flex-1 prose prose-lg max-w-none text-[#715036]/85 
+                      prose-headings:font-serif prose-headings:text-[#2A3B28] prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4
+                      prose-h2:text-2xl prose-h3:text-xl
+                      prose-a:text-[#C17C3A] prose-a:underline decoration-[#C17C3A]/30 underline-offset-4 hover:decoration-[#C17C3A] transition-colors
+                      prose-strong:text-[#2A3B28] prose-strong:font-bold
+                      prose-blockquote:border-l-4 prose-blockquote:border-l-[#C17C3A] prose-blockquote:bg-[#FDFBF7] prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:font-serif prose-blockquote:italic
+                      prose-img:rounded-2xl prose-img:shadow-lg prose-img:border prose-img:border-[#715036]/10
+                      prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base md:prose-p:text-lg
+                      prose-li:text-base md:prose-li:text-lg prose-li:leading-relaxed
+                      leading-relaxed font-sans
+                  ">
+                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                </div>
               </div>
 
               {/* Secondary Images Grid */}

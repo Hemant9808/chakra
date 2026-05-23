@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 const HeroSectionEvas = () => {
     return (
         // Background: Cream
-        <section className="py-20 md:py-28 bg-[#FDFBF7] relative overflow-hidden">
+        <section className="pt-5 md:pt-10 pb-20 md:pb-28 bg-[#FDFBF7] relative overflow-hidden">
 
             {/* Decorative Background Elements */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#C17C3A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>

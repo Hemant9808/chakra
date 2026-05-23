@@ -72,7 +72,7 @@ const ProfilePage = () => {
 
   return (
     // Background: Cream
-    <div className="pt-30 min-h-screen bg-[#FDFBF7] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="pt-5 md:pt-10 min-h-screen bg-[#FDFBF7] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
 
         <motion.div

@@ -96,7 +96,7 @@ const OrderInfoPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 pt-5 md:pt-10 pb-8 max-w-7xl">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
