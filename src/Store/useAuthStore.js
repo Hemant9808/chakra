@@ -32,8 +32,10 @@ const useAuthStore = create(
             error: null,
           });
 
-          // Merge guest cart items to backend after successful login
-          await useCartStore.getState().mergeGuestCart();
+          // Merge guest cart items to backend in background after successful login
+          useCartStore.getState().mergeGuestCart().catch((err) => {
+            console.error("Failed to merge guest cart on login:", err);
+          });
 
           return response.data;
         } catch (error) {
@@ -96,8 +98,10 @@ const useAuthStore = create(
             error: null,
           });
 
-          // Merge guest cart items to backend after successful signup/login
-          await useCartStore.getState().mergeGuestCart();
+          // Merge guest cart items to backend in background after successful signup/login
+          useCartStore.getState().mergeGuestCart().catch((err) => {
+            console.error("Failed to merge guest cart on signup:", err);
+          });
 
           return response.data;
         } catch (error) {
@@ -155,6 +159,8 @@ const useAuthStore = create(
           error: null,
         });
         localStorage.removeItem("auth-storage");
+        // Clear local cart from memory and localStorage upon logout
+        useCartStore.getState().clearLocalCart();
       },
 
       updateProfile: async (userData) => {

@@ -23,6 +23,7 @@ const cartService = {
 
   // Add item to cart
   addToCart: async (productId, quantity, price,discountPrice) => {
+    try {
       // Auth check is now handled by useCartStore
       const response = await axiosInstance.post(
         `${API_URL}/addToCart`,

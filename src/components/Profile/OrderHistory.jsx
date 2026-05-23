@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../axios';
 import { format } from 'date-fns';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { getProductUrl } from '../../utils/productNavigation';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrders();
@@ -82,8 +85,11 @@ const OrderHistory = () => {
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <p className="text-xs uppercase tracking-wider font-bold text-[#715036]">Order #</p>
-                    <p className="text-sm font-bold text-[#2A3B28] font-serif">{order._id}</p>
+                    <p className="text-xs uppercase tracking-wider font-bold text-[#715036]">Items</p>
+                    <p className="text-sm font-bold text-[#2A3B28] font-serif">
+                      {order.items && order.items[0] ? order.items[0].productId.name : 'Unknown Product'}
+                      {order.items && order.items.length > 1 && ` (+ ${order.items.length - 1} other item${order.items.length > 2 ? 's' : ''})`}
+                    </p>
                   </div>
                   <p className="text-sm text-[#715036]/80">
                     <span className="font-medium">Placed:</span> {format(new Date(order.createdAt), 'MMM dd, yyyy')}
@@ -118,13 +124,21 @@ const OrderHistory = () => {
                   <div className="space-y-4 mb-6">
                     {order.items.map((item, index) => (
                       <div key={index} className="flex gap-4 items-start pb-4 border-b border-[#715036]/5 last:border-0 last:pb-0">
-                        {/* Uncomment and ensure image exists if you want to show it
-                        <div className="w-16 h-16 rounded-md bg-white border border-[#715036]/10 overflow-hidden flex-shrink-0">
-                             <img src={item.productId.image} alt={item.productId.name} className="w-full h-full object-cover" />
-                        </div> 
-                        */}
+                        {item.image && (
+                          <div 
+                            className="w-16 h-16 rounded-md bg-white border border-[#715036]/10 overflow-hidden flex-shrink-0 cursor-pointer"
+                            onClick={() => navigate(getProductUrl({ _id: item.productId._id?._id || item.productId._id || item.productId, name: item.productId.name }))}
+                          >
+                               <img src={item.image} alt={item.productId.name} className="w-full h-full object-cover" />
+                          </div> 
+                        )}
                         <div className="flex flex-col justify-between">
-                          <p className="font-serif font-bold text-[#2A3B28] text-lg">{item.productId.name}</p>
+                          <p 
+                            className="font-serif font-bold text-[#2A3B28] text-lg hover:text-[#C17C3A] cursor-pointer transition-colors"
+                            onClick={() => navigate(getProductUrl({ _id: item.productId._id?._id || item.productId._id || item.productId, name: item.productId.name }))}
+                          >
+                            {item.productId.name}
+                          </p>
                           <div className="flex items-center gap-3 mt-1">
                             <p className="text-sm text-[#715036] font-medium">
                               Qty: {item.quantity}

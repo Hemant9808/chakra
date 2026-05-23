@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   FaBox, 
@@ -200,23 +200,45 @@ const OrderInfoPage = () => {
                         <FaBox className="mr-2" /> Order Items
                       </h4>
                       <div className="space-y-4">
-                        {order.items.map((item) => (
-                          <div key={item._id} className="flex items-start gap-4">
-                            <img
-                              src={item.productId.image || 'https://via.placeholder.com/80'}
-                              alt={item.productId.name}
-                              className="h-16 w-16 object-cover rounded border border-gray-200"
-                            />
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-900">{item.productId.name}</p>
-                              <p className="text-xs text-gray-500">Brand: {item.productId.brand || 'N/A'}</p>
-                              <p className="text-xs text-gray-500">Quantity: {item.quantity}</p>
+                        {order.items.map((item) => {
+                          const resolvedId = item.productId?._id?._id || item.productId?._id || item.productId;
+                          const imageUrl = item.image || item.productId?.image || 'https://via.placeholder.com/80';
+                          const hasValidId = typeof resolvedId === 'string' && resolvedId.length > 5;
+
+                          const itemContent = (
+                            <div className="flex items-start gap-4 p-2 -mx-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
+                              <img
+                                src={imageUrl}
+                                alt={item.productId?.name || 'Product'}
+                                className="h-16 w-16 object-cover rounded border border-gray-200 flex-shrink-0 bg-white"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-900 truncate hover:text-indigo-600 transition-colors duration-200">
+                                  {item.productId?.name || 'Product'}
+                                </p>
+                                <p className="text-xs text-gray-500">Brand: {item.productId?.brand || 'N/A'}</p>
+                                <p className="text-xs text-gray-500">Quantity: {item.quantity}</p>
+                              </div>
+                              <p className="text-sm font-medium text-gray-900 flex-shrink-0">
+                                ₹{(item.price * item.quantity).toFixed(2)}
+                              </p>
                             </div>
-                            <p className="text-sm font-medium text-gray-900">
-                              ₹{(item.price * item.quantity).toFixed(2)}
-                            </p>
-                          </div>
-                        ))}
+                          );
+
+                          return hasValidId ? (
+                            <Link 
+                              key={item._id || resolvedId} 
+                              to={`/product/${resolvedId}`}
+                              className="block focus:outline-none"
+                            >
+                              {itemContent}
+                            </Link>
+                          ) : (
+                            <div key={item._id || resolvedId}>
+                              {itemContent}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
 

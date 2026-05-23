@@ -43,32 +43,60 @@ export const useCartStore = create((set) => ({
       set({ loading: true, error: null });
       
       if (!useAuthStore.getState().isAuthenticated) {
-        // Guest Cart Logic
-        const currentItems = [...useCartStore.getState().cartItems];
-        const existingItemIndex = currentItems.findIndex(
-          (item) => item.productId?._id === product._id || item.productId === product._id
-        );
+        // Guest Cart Logic - Fully Immutable and Robust ID Matching
+        const currentItems = useCartStore.getState().cartItems;
+        const targetId = product._id || product.id;
 
+        if (!targetId) {
+          toast.error("Invalid product");
+          set({ loading: false });
+          return;
+        }
+
+        const existingItemIndex = currentItems.findIndex((item) => {
+          const itemId = item.productId?._id || item.productId?.id || item.productId;
+          return itemId && targetId && String(itemId) === String(targetId);
+        });
+
+        let updatedItems;
         if (existingItemIndex >= 0) {
-          currentItems[existingItemIndex].quantity += 1;
+          // Immutably update quantity of the existing item
+          updatedItems = currentItems.map((item, index) => 
+            index === existingItemIndex 
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
         } else {
-          currentItems.push({
-            productId: product, // Store full product object for rendering
-            quantity: 1,
-            price: product.price,
-            discountPrice: product.discountPrice
-          });
+          // Immutably append the new item
+          updatedItems = [
+            ...currentItems,
+            {
+              productId: product, // Store full product object for rendering
+              quantity: 1,
+              price: product.price,
+              discountPrice: product.discountPrice
+            }
+          ];
         }
         
-        set({ cartItems: currentItems, loading: false });
-        localStorage.setItem('cartItems', JSON.stringify(currentItems));
+        set({ cartItems: updatedItems, loading: false });
+        localStorage.setItem('cartItems', JSON.stringify(updatedItems));
         toast.success("Added to cart!");
         return;
       }
 
-      // Authenticated Logic
-      const cart = await cartService.addToCart(product._id, 1, product.price, product.discountPrice);
-      const items = cart.items || [];
+      // Authenticated Logic - Calculate the correct new quantity instead of resetting it to 1
+      const currentItems = useCartStore.getState().cartItems;
+      const existingItem = currentItems.find((item) => {
+        const itemId = item.productId?._id || item.productId?.id || item.productId;
+        const targetId = product._id || product.id;
+        return itemId && targetId && String(itemId) === String(targetId);
+      });
+      const newQuantity = existingItem ? existingItem.quantity + 1 : 1;
+
+      await cartService.addToCart(product._id, newQuantity, product.price, product.discountPrice);
+      const freshCart = await cartService.getCart();
+      const items = freshCart.items || [];
       set({ cartItems: items, loading: false });
       localStorage.setItem('cartItems', JSON.stringify(items));
       toast.success("Added to cart!");
@@ -80,56 +108,78 @@ export const useCartStore = create((set) => ({
 
   removeItem: async (productId) => {
     try {
-      set({ loading: true, error: null });
+      // 1. Optimistically remove item from local state immediately for instant UX
+      const targetId = productId;
+      const currentItems = useCartStore.getState().cartItems.filter((item) => {
+        const itemId = item.productId?._id || item.productId?.id || item.productId;
+        return !itemId || !targetId || String(itemId) !== String(targetId);
+      });
+      set({ cartItems: currentItems }); // Updates UI immediately, no page loader
+      localStorage.setItem('cartItems', JSON.stringify(currentItems));
+      toast.success("Item removed from cart");
 
       if (!useAuthStore.getState().isAuthenticated) {
-        // Guest Cart Logic
-        const currentItems = useCartStore.getState().cartItems.filter(
-          (item) => item.productId?._id !== productId && item.productId !== productId
-        );
-        set({ cartItems: currentItems, loading: false });
-        localStorage.setItem('cartItems', JSON.stringify(currentItems));
-        toast.success("Item removed from cart");
+        // Guest Cart is fully done locally
         return;
       }
 
-      const cart = await cartService.removeFromCart(productId);
-      const items = cart.items || [];
-      set({ cartItems: items, loading: false });
+      // 2. Perform backend update silently in background and sync
+      await cartService.removeFromCart(productId);
+      const freshCart = await cartService.getCart();
+      const items = freshCart.items || [];
+      set({ cartItems: items });
       localStorage.setItem('cartItems', JSON.stringify(items));
-      toast.success("Item removed from cart");
     } catch (error) {
-      set({ error: error.message, loading: false });
-      toast.error(error.message);
+      // Revert to sync with server on error
+      const freshCart = await cartService.getCart().catch(() => null);
+      if (freshCart) {
+        set({ cartItems: freshCart.items || [] });
+      }
+      toast.error(error.message || "Failed to remove item");
     }
   },
 
   updateQuantity: async (productId, quantity, price, discountPrice) => {
     try {
-      set({ loading: true, error: null });
+      // 1. Optimistically update item quantity in local state immediately for instant UX
+      const currentItems = useCartStore.getState().cartItems;
+      const targetId = productId;
+
+      if (!targetId) return;
+
+      const itemIndex = currentItems.findIndex((item) => {
+        const itemId = item.productId?._id || item.productId?.id || item.productId;
+        return itemId && targetId && String(itemId) === String(targetId);
+      });
+
+      if (itemIndex >= 0) {
+        const optimisticItems = currentItems.map((item, index) =>
+          index === itemIndex
+            ? { ...item, quantity: quantity }
+            : item
+        );
+        set({ cartItems: optimisticItems }); // Updates UI immediately, no page loader
+        localStorage.setItem('cartItems', JSON.stringify(optimisticItems));
+      }
 
       if (!useAuthStore.getState().isAuthenticated) {
-        // Guest Cart Logic
-        const currentItems = [...useCartStore.getState().cartItems];
-        const itemIndex = currentItems.findIndex(
-          (item) => item.productId?._id === productId || item.productId === productId
-        );
-
-        if (itemIndex >= 0) {
-          currentItems[itemIndex].quantity = quantity;
-          set({ cartItems: currentItems, loading: false });
-          localStorage.setItem('cartItems', JSON.stringify(currentItems));
-        }
+        // Guest Cart is fully done locally
         return;
       }
 
-      const cart = await cartService.addToCart(productId, quantity, price, discountPrice);
-      const items = cart.items || [];
-      set({ cartItems: items, loading: false });
+      // 2. Perform backend update silently in background and sync
+      await cartService.addToCart(productId, quantity, price, discountPrice);
+      const freshCart = await cartService.getCart();
+      const items = freshCart.items || [];
+      set({ cartItems: items });
       localStorage.setItem('cartItems', JSON.stringify(items));
     } catch (error) {
-      set({ error: error.message, loading: false });
-      toast.error(error.message);
+      // Revert to sync with server on error
+      const freshCart = await cartService.getCart().catch(() => null);
+      if (freshCart) {
+        set({ cartItems: freshCart.items || [] });
+      }
+      toast.error(error.message || "Failed to update quantity");
     }
   },
   clearCart: async () => {
@@ -161,12 +211,27 @@ export const useCartStore = create((set) => ({
         return;
       }
       
-      // Send all local items to the backend
+      // Fetch user's current database cart first to avoid overwriting existing quantities
+      let dbCart = null;
+      try {
+        dbCart = await cartService.getCart();
+      } catch (err) {
+        console.error("Failed to fetch database cart for merge, proceeding without it", err);
+      }
+      const dbItems = dbCart?.items || [];
+      
+      // Send all local items to the backend, adding quantities for overlapping items
       for (const item of items) {
-        const id = item.productId?._id || item.productId;
+        const id = item.productId?._id || item.productId?.id || item.productId;
         if (id) {
+          const dbItem = dbItems.find(dbi => {
+            const dbId = dbi.productId?._id || dbi.productId?.id || dbi.productId;
+            return dbId && id && String(dbId) === String(id);
+          });
+          const finalQuantity = dbItem ? dbItem.quantity + item.quantity : item.quantity;
+          
           // We use addToCart service to append to user's real cart
-          await cartService.addToCart(id, item.quantity, item.price, item.discountPrice);
+          await cartService.addToCart(id, finalQuantity, item.price, item.discountPrice);
         }
       }
       
@@ -175,6 +240,11 @@ export const useCartStore = create((set) => ({
     } catch (error) {
       console.error("Failed to merge guest cart:", error);
     }
+  },
+
+  clearLocalCart: () => {
+    set({ cartItems: [] });
+    localStorage.removeItem('cartItems');
   },
 
   getTotalItems: () => {
