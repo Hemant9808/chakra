@@ -6,6 +6,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { FaWhatsapp } from 'react-icons/fa';
 import Breadcrumbs from './components/common/Breadcrumbs';
 import { BreadcrumbProvider, useBreadcrumb } from './context/BreadcrumbContext';
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from './components/common/PageTransition';
 
 
 function LayoutContent() {
@@ -36,7 +38,11 @@ function LayoutContent() {
             blogTitle={breadcrumbData.blogTitle}
             categoryName={breadcrumbData.categoryName}
           />
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <PageTransition key={location.pathname}>
+              <Outlet />
+            </PageTransition>
+          </AnimatePresence>
         </div>
         {/* {!hideFab && <FabButton />} */}
         {!hideFab && <Footer />}
