@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 const DiscountBanner = () => {
   return (
     // Background: Cream
-    <div className="pt-5 md:pt-10 flex justify-center bg-[#FDFBF7] items-center pb-8 md:py-20 px-3 md:px-4 relative overflow-hidden">
+    <div className="pt-5 md:pt-10 flex justify-center bg-[#FDFBF7] items-center pb-2 md:py-20 px-3 md:px-4 relative overflow-hidden">
 
       <motion.div
         className="bg-black text-[#FDFBF7] flex flex-row md:flex-row items-stretch rounded-2xl md:rounded-3xl shadow-2xl w-full max-w-[90rem] overflow-hidden border border-[#715036]/10 relative"

@@ -20,11 +20,16 @@ import MarqueeBanner from "./HomeComponents/MarqueeBanner.jsx";
 import InfluencerVideoSync from "./HomeComponents/InfluencerVideoSync.jsx";
 import MensWellnessImage from "./HomeComponents/MensWellnessImage.jsx";
 import SelectConcern from "./HomeComponents/SelectConcern.jsx";
+import SEO from "../common/SEO";
 
 
 function Home() {
   return (
     <div className="">
+      <SEO 
+        title="Premium Ayurvedic Wellness" 
+        description="Pure Himalayan Shilajit, energy boosters, natural stamina enhancers, and authentic Ayurvedic healthcare formulations from Ayucan." 
+      />
       {/* <MarqueeBanner /> */}
       <PromoBanner />
       {/* <SelectConcern /> */}

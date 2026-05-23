@@ -6,6 +6,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import useAuthStore from "../../Store/useAuthStore";
 import { FaArrowRight, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
+import SEO from "../common/SEO";
 
 
 const BlogSection = () => {
@@ -198,6 +199,10 @@ const BlogSection = () => {
   return (
     // Background: Cream
     <section className="pt-5 md:pt-10 pb-20 bg-[#FDFBF7] px-4 sm:px-6 relative overflow-hidden">
+      <SEO 
+        title="Ayurveda & Organic Wellness Blogs" 
+        description="Learn daily wellness habits, Ayurvedic tips, stamina advice, and chemical-free healthcare guides from the experts at Ayucan." 
+      />
 
       {/* Decorative Background Element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#2A3B28]/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>

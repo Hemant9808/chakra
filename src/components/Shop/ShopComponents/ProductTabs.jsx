@@ -62,16 +62,13 @@ const ProductTabs = ({ products: allProducts, categories, loading: initialLoadin
 
   return (
     // Background: Cream
-    <div className="w-full px-4 pt-3 pb-12 bg-[#FDFBF7]">
+    <div className="w-full px-4 pt-1 pb-12 bg-[#FDFBF7]">
 
       {/* Tabs */}
       {initialLoading ? (
         <CategorySkeleton />
       ) : (
-        <div className="relative w-full max-w-7xl mx-auto mb-10 border-b border-[#715036]/10">
-          {/* Left/Right Fade Masks for Mobile Overflows */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#FDFBF7] to-transparent pointer-events-none md:hidden z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#FDFBF7] to-transparent pointer-events-none md:hidden z-10" />
+        <div className="relative w-full max-w-7xl mx-auto mb-4 md:mb-8 border-b border-[#715036]/10">
           
           <div className="flex flex-nowrap overflow-x-auto whitespace-nowrap scrollbar-hide gap-2 md:gap-6 pb-4 px-4 justify-start md:justify-center -mx-4 md:mx-0 select-none snap-x snap-mandatory">
             <button

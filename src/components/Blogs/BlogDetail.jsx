@@ -4,6 +4,7 @@ import { getBlogById, updateBlog } from "../../services/blogService";
 import { toast } from "react-hot-toast";
 import { FaArrowLeft, FaCalendarAlt, FaEdit, FaSave, FaTimes, FaPenNib, FaClock, FaWhatsapp, FaLink, FaCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
+import SEO from "../common/SEO";
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -119,6 +120,14 @@ const BlogDetail = () => {
   return (
     // Background: Cream
     <section className="bg-[#FDFBF7] min-h-screen pt-5 md:pt-10 pb-12 px-4 sm:px-6 relative overflow-hidden">
+      {post && (
+        <SEO 
+          title={post.title} 
+          description={post.description || post.content?.substring(0, 155).replace(/<[^>]*>/g, '') || "Read our informative wellness article."} 
+          image={post.mainImg}
+          type="article"
+        />
+      )}
       {/* Scroll Progress Meter */}
       <div 
         className="fixed top-0 left-0 h-1 bg-[#C17C3A] z-50 transition-all duration-100 ease-out origin-left" 

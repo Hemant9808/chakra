@@ -23,6 +23,7 @@ import BenifitsRight from "./BenifitsRight";
 import FrequentlyBoughtTogether from "../Home/HomeComponents/FrequentlyBoughtTogether";
 import ReviewsList from "../Reviews/ReviewsList";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
+import SEO from "../common/SEO";
 
 
 const ProductDetailsById = () => {
@@ -135,6 +136,16 @@ const ProductDetailsById = () => {
 
   return (
     <div className="bg-[#FDFBF7] min-h-screen font-sans pb-20 md:pb-0">
+      {product && (
+        <SEO 
+          title={product.name} 
+          description={product.description ? product.description.substring(0, 155) : "Buy pure Ayurvedic healthcare formulations from Ayucan."} 
+          image={product.images?.[0]?.url}
+          type="product"
+          price={product.discountPrice > 0 ? product.discountPrice : product.price}
+          brand={product.brand || "Ayucan"}
+        />
+      )}
 
       <motion.div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-20"

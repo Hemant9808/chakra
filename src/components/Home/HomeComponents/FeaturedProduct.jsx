@@ -35,8 +35,15 @@ const FeaturedProduct = () => {
     ],
   };
 
-  // Timer logic
-  const [timeLeft, setTimeLeft] = useState(3600); // 1 hour in seconds
+  // Timer logic - Countdown to midnight of the current day (Daily Sale)
+  const getSecondsUntilMidnight = () => {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0); // Sets to 00:00:00 of the next day
+    return Math.floor((midnight.getTime() - now.getTime()) / 1000);
+  };
+
+  const [timeLeft, setTimeLeft] = useState(getSecondsUntilMidnight());
   const [bestSeller, setBestSeller] = useState();
 
   useEffect(() => {
@@ -56,22 +63,32 @@ const FeaturedProduct = () => {
   }, []);
 
   useEffect(() => {
+    // Initial sync
+    setTimeLeft(getSecondsUntilMidnight());
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          clearInterval(timer);
-          return 0; // Stop the timer when it reaches 0
+          // If it hits 0, seamlessly recalculate/reset for the next day's sale
+          return getSecondsUntilMidnight();
         }
-        return prev - 1; // Decrease the time left by 1 second
+        return prev - 1;
       });
-    }, 1000); // Update every second
-    return () => clearInterval(timer); // Cleanup on component unmount
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${mins}m ${secs < 10 ? "0" : ""}${secs}s`;
+
+    const hStr = hours > 0 ? `${hours}h ` : "";
+    const mStr = `${hours > 0 && mins < 10 ? "0" : ""}${mins}m `;
+    const sStr = `${secs < 10 ? "0" : ""}${secs}s`;
+
+    return `${hStr}${mStr}${sStr}`;
   };
 
   if (!bestSeller) return <></>;

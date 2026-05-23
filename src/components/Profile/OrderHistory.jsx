@@ -192,6 +192,7 @@ const OrderHistory = () => {
             {rows.slice(0, visibleRowsCount).map((row, idx) => {
               const productName = row.item.productId?.name || 'Unknown Product';
               const productImage = row.item.image || row.item.productId?.images?.[0]?.url || '/placeholder.png';
+              const resolvedId = row.item.productId?._id?._id || row.item.productId?._id || row.item.productId;
               
               return (
                 <div 
@@ -202,14 +203,14 @@ const OrderHistory = () => {
                   <div className="col-span-1 md:col-span-6 flex items-center gap-4">
                     <div 
                       className="w-16 h-16 rounded-xl border border-[#715036]/10 bg-white overflow-hidden flex-shrink-0 cursor-pointer"
-                      onClick={() => navigate(getProductUrl({ _id: row.item.productId?._id || row.item.productId, name: productName }))}
+                      onClick={() => navigate(getProductUrl({ _id: resolvedId, name: productName }))}
                     >
                       <img src={productImage} alt={productName} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex flex-col">
                       <span 
                         className="font-serif font-bold text-[#2A3B28] text-base hover:text-[#C17C3A] cursor-pointer transition-colors leading-tight line-clamp-1"
-                        onClick={() => navigate(getProductUrl({ _id: row.item.productId?._id || row.item.productId, name: productName }))}
+                        onClick={() => navigate(getProductUrl({ _id: resolvedId, name: productName }))}
                       >
                         {productName}
                       </span>
@@ -320,14 +321,22 @@ const OrderHistory = () => {
                 {selectedOrderDetails.items.map((item, idx) => {
                   const name = item.productId?.name || 'Unknown Product';
                   const img = item.image || item.productId?.images?.[0]?.url || '/placeholder.png';
+                  const resolvedItemId = item.productId?._id?._id || item.productId?._id || item.productId;
                   return (
-                    <div key={idx} className="flex gap-4 items-center">
+                    <div 
+                      key={idx} 
+                      className="flex gap-4 items-center cursor-pointer hover:bg-[#FDFBF7]/60 p-2 -mx-2 rounded-xl transition-all duration-300 group"
+                      onClick={() => {
+                        setSelectedOrderDetails(null);
+                        navigate(getProductUrl({ _id: resolvedItemId, name: name }));
+                      }}
+                    >
                       <div className="w-12 h-12 rounded-lg bg-white border border-[#715036]/10 overflow-hidden flex-shrink-0">
                         <img src={img} alt={name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 flex justify-between items-center text-sm">
                         <div>
-                          <p className="font-serif font-bold text-[#2A3B28] line-clamp-1">{name}</p>
+                          <p className="font-serif font-bold text-[#2A3B28] group-hover:text-[#C17C3A] transition-colors line-clamp-1">{name}</p>
                           <p className="text-xs text-[#715036]/60 mt-0.5">Quantity: {item.quantity}</p>
                         </div>
                         <span className="font-bold text-[#2A3B28]">₹{item.price * item.quantity}</span>
