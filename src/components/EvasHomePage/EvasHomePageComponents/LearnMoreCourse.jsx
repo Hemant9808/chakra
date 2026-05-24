@@ -28,12 +28,12 @@ const ingredients = [
     benefit_en: "Supports muscle recovery and boosts energy.",
     benefit_hi: "मांसपेशियों की रिकवरी में मदद करता है और ऊर्जा बढ़ाता है।"
   },
-  {
-    name: "Swarna Bhasma",
-    name_hi: "स्वर्ण भस्म",
-    benefit_en: "Enhances immunity, reduces inflammation, increases energy.",
-    benefit_hi: "प्रतिरक्षा बढ़ाता है, सूजन कम करता है और ऊर्जा बढ़ाता है।"
-  },
+  // {
+  //   name: "Swarna Bhasma",
+  //   name_hi: "स्वर्ण भस्म",
+  //   benefit_en: "Enhances immunity, reduces inflammation, increases energy.",
+  //   benefit_hi: "प्रतिरक्षा बढ़ाता है, सूजन कम करता है और ऊर्जा बढ़ाता है।"
+  // },
   {
     name: "Atma Gupta",
     name_hi: "आत्म गुप्ता",
@@ -88,18 +88,18 @@ const ingredients = [
     benefit_en: "Improves digestion and supports endocrine balance.",
     benefit_hi: "पाचन में सुधार करता है और एंडोक्राइन संतुलन को सपोर्ट करता है।"
   },
-  {
-    name: "Yasada Bhasma",
-    name_hi: "यशद भस्म",
-    benefit_en: "Boosts testosterone and supports metabolic functions.",
-    benefit_hi: "टेस्टोस्टेरोन बढ़ाता है और मेटाबॉलिक कार्यों को सपोर्ट करता है।"
-  },
-  {
-    name: "Rajata Bhasma",
-    name_hi: "रजत भस्म",
-    benefit_en: "Enhances immunity, nerve strength, and vitality.",
-    benefit_hi: "प्रतिरक्षा, नसों की शक्ति और जीवन ऊर्जा बढ़ाता है।"
-  },
+  // {
+  //   name: "Yasada Bhasma",
+  //   name_hi: "यशद भस्म",
+  //   benefit_en: "Boosts testosterone and supports metabolic functions.",
+  //   benefit_hi: "टेस्टोस्टेरोन बढ़ाता है और मेटाबॉलिक कार्यों को सपोर्ट करता है।"
+  // },
+  // {
+  //   name: "Rajata Bhasma",
+  //   name_hi: "रजत भस्म",
+  //   benefit_en: "Enhances immunity, nerve strength, and vitality.",
+  //   benefit_hi: "प्रतिरक्षा, नसों की शक्ति और जीवन ऊर्जा बढ़ाता है।"
+  // },
 ];
 
 // Updated timeline data with Hindi translations

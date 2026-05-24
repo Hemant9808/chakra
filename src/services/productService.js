@@ -43,6 +43,16 @@ export const productService = {
     } catch (error) {
       throw error.response?.data || { message: 'Failed to fetch products by category' };
     }
+  },
+  searchProducts: async (query) => {
+    try {
+      const response = await axiosInstance.get('/product/search', {
+        params: { q: query },
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: 'Failed to search products' };
+    }
   }
 
 }; 
