@@ -198,6 +198,7 @@ const Checkout = () => {
         shippingPrice: 0,
         shippingAddress: formData,
         razorpay_order_id: "",
+        paymentMethod: "cod",
         totalDiscountPrice: Number(total),
         authorised: true,
         couponCode: appliedCoupon?.code || null,
