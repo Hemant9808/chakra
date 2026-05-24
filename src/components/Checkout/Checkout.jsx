@@ -34,6 +34,9 @@ const Checkout = () => {
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponLoading, setCouponLoading] = useState(false);
 
+  // Payment Method state (online or cod)
+  const [paymentMethod, setPaymentMethod] = useState("online");
+
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/cart");
@@ -92,11 +95,19 @@ const Checkout = () => {
     toast.success("Coupon removed");
   };
 
-  // Calculate totals with coupon
+  // Calculate totals with coupon & prepaid discounts
   const subtotal = getTotalPrice();
   const backendDiscountPrice = getTotalDiscountPrice();
   const baseTotal = backendDiscountPrice || subtotal;
-  const total = baseTotal - couponDiscount;
+
+  const getPrepaidDiscount = (cartValue) => {
+    if (cartValue >= 1299) return 100;
+    if (cartValue >= 899) return 70;
+    return 50;
+  };
+
+  const prepaidDiscount = paymentMethod === "online" ? getPrepaidDiscount(baseTotal) : 0;
+  const total = Math.max(0, baseTotal - couponDiscount - prepaidDiscount);
 
   const handlePayment = async () => {
     try {
@@ -115,6 +126,7 @@ const Checkout = () => {
         shippingPrice: 0,
         shippingAddress: formData,
         razorpay_order_id: order.order.id,
+        paymentMethod: "online",
         totalDiscountPrice: Number(total),
         couponCode: appliedCoupon?.code || null,
         couponDiscount: couponDiscount || 0,
@@ -359,14 +371,73 @@ const Checkout = () => {
             </motion.div>
           </div>
 
-          {/* Payment Method Section (Info Only) */}
-          <div className="border border-[#715036]/10 rounded-2xl p-6 shadow-sm bg-white flex items-start gap-4">
-            <div className="w-6 h-6 rounded-full bg-[#2A3B28] text-white flex items-center justify-center text-xs mt-1 flex-shrink-0">3</div>
-            <div>
-              <h3 className="font-serif font-bold text-lg text-[#2A3B28] mb-2">Payment</h3>
-              <p className="text-sm text-[#715036]/70 flex items-center gap-2">
-                <FaLock size={12} /> All transactions are secure and encrypted. You will select your payment method in the next step.
-              </p>
+          {/* Payment Method Section (Interactive) */}
+          <div className="border border-[#715036]/10 rounded-2xl shadow-sm overflow-hidden bg-white">
+            <div className="flex justify-between items-center p-6 bg-white border-b border-[#715036]/5">
+              <h3 className={sectionTitleClasses}>
+                <span className="w-6 h-6 rounded-full bg-[#2A3B28] text-white flex items-center justify-center text-xs">3</span>
+                Select Payment Method
+              </h3>
+            </div>
+            <div className="p-6 bg-white space-y-4">
+              {/* Online Payment Option Card */}
+              <div
+                onClick={() => setPaymentMethod("online")}
+                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-start gap-4 ${
+                  paymentMethod === "online"
+                    ? "border-[#2A3B28] bg-[#FDFBF7] shadow-sm"
+                    : "border-[#715036]/10 hover:border-[#2A3B28]/30 bg-white"
+                }`}
+              >
+                <div className="mt-1">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === "online"}
+                    onChange={() => setPaymentMethod("online")}
+                    className="accent-[#2A3B28] w-4 h-4 cursor-pointer"
+                  />
+                </div>
+                <div className="flex-grow">
+                  <div className="flex justify-between items-center flex-wrap gap-2">
+                    <span className="font-bold text-[#2A3B28] flex items-center gap-2">
+                      Pay Online (Prepaid)
+                      <span className="bg-green-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
+                        ⚡ Save ₹{getPrepaidDiscount(baseTotal)} Instantly!
+                      </span>
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#715036]/70 mt-1">
+                    Pay securely using UPI, Cards, Netbanking, or Wallets and get an instant discount.
+                  </p>
+                </div>
+              </div>
+
+              {/* COD Option Card */}
+              <div
+                onClick={() => setPaymentMethod("cod")}
+                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-start gap-4 ${
+                  paymentMethod === "cod"
+                    ? "border-[#2A3B28] bg-[#FDFBF7] shadow-sm"
+                    : "border-[#715036]/10 hover:border-[#2A3B28]/30 bg-white"
+                }`}
+              >
+                <div className="mt-1">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === "cod"}
+                    onChange={() => setPaymentMethod("cod")}
+                    className="accent-[#2A3B28] w-4 h-4 cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <span className="font-bold text-[#2A3B28]">Cash on Delivery (COD)</span>
+                  <p className="text-xs text-[#715036]/70 mt-1">
+                    Pay with cash when your order is delivered. No instant online discount.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -497,6 +568,19 @@ const Checkout = () => {
               </div>
             )}
 
+            {/* Prepaid Discount */}
+            {paymentMethod === "online" ? (
+              <div className="flex justify-between text-green-600">
+                <span>Prepaid Discount</span>
+                <span className="font-bold">-₹{prepaidDiscount.toFixed(2)}</span>
+              </div>
+            ) : (
+              <div className="flex justify-between text-[#715036]/50 text-xs">
+                <span>Prepaid Discount</span>
+                <span className="italic">Select online payment to save ₹{getPrepaidDiscount(baseTotal)}</span>
+              </div>
+            )}
+
             {/* Shipping */}
             <div className="flex justify-between text-[#715036]">
               <span>Shipping</span>
@@ -504,11 +588,11 @@ const Checkout = () => {
             </div>
 
             {/* Total Savings Summary */}
-            {(subtotal > baseTotal || couponDiscount > 0) && (
+            {(subtotal > baseTotal || couponDiscount > 0 || prepaidDiscount > 0) && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                 <div className="flex justify-between items-center">
                   <span className="text-green-700 font-semibold text-xs">Total Savings</span>
-                  <span className="text-green-700 font-bold">₹{((subtotal - baseTotal) + couponDiscount).toFixed(2)}</span>
+                  <span className="text-green-700 font-bold">₹{((subtotal - baseTotal) + couponDiscount + prepaidDiscount).toFixed(2)}</span>
                 </div>
               </div>
             )}
@@ -517,7 +601,7 @@ const Checkout = () => {
             <div className="flex justify-between items-end border-t border-[#715036]/10 pt-4">
               <span className="font-serif font-bold text-lg text-[#2A3B28]">Total</span>
               <div className="text-right">
-                {(subtotal > total || couponDiscount > 0) && (
+                {(subtotal > total || couponDiscount > 0 || prepaidDiscount > 0) && (
                   <span className="text-[#715036]/50 line-through text-xs block mb-1">
                     ₹{subtotal.toFixed(2)}
                   </span>
@@ -533,11 +617,11 @@ const Checkout = () => {
             </p>
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Button */}
           <div className="space-y-3 pt-2">
             <button
-              onClick={handlePayment}
-              className="w-full bg-[#2A3B28] cursor-pointer text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-[#C17C3A] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+              onClick={paymentMethod === "online" ? handlePayment : handleCod}
+              className="w-full bg-[#2A3B28] cursor-pointer text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-[#C17C3A] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-2 animate-none"
               disabled={
                 loading ||
                 !formData.name ||
@@ -549,23 +633,15 @@ const Checkout = () => {
                 !formData.pincode
               }
             >
-              {loading ? "Processing..." : "Pay Online"}
-            </button>
-            <button
-              onClick={handleCod}
-              className="w-full bg-white border-2 border-[#2A3B28] cursor-pointer text-[#2A3B28] py-3.5 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-[#FDFBF7] transition-all"
-              disabled={
-                loading ||
-                !formData.name ||
-                !formData.email ||
-                !formData.phone ||
-                !formData.address ||
-                !formData.city ||
-                !formData.state ||
-                !formData.pincode
-              }
-            >
-              {loading ? "Processing..." : "Cash on Delivery"}
+              {loading ? (
+                "Processing..."
+              ) : paymentMethod === "online" ? (
+                <>
+                  <FaLock size={14} /> Pay ₹{total.toFixed(2)} Securely
+                </>
+              ) : (
+                "Place COD Order"
+              )}
             </button>
           </div>
 

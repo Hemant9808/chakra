@@ -156,11 +156,52 @@ const Header = () => {
 
   return (
     <header
-      // FIX: Removed bg, blur, and shadow from the parent Header tag. 
-      // Changed w-screen to w-full to prevent horizontal overflow.
-      className={`fixed top-0 left-0 right-0 w-full z-[9997] transition-all duration-300 ${scrolled ? "py-2" : "py-4"
-        }`}
+      className={`fixed top-0 left-0 right-0 w-full z-[9997] transition-all duration-300`}
     >
+      {/* Prepaid Discount Promo Marquee Banner */}
+      <div className="w-full bg-[#2A3B28] text-[#FDFBF7] py-1.5 sm:py-2.5 overflow-hidden border-b border-[#C17C3A]/20 transition-all duration-300 relative z-[9999] select-none">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-container {
+            display: flex;
+            width: max-content;
+            animation: marquee-scroll 30s linear infinite;
+          }
+          .marquee-container:hover {
+            animation-play-state: paused;
+          }
+        `}} />
+        <div className="marquee-container text-[10px] sm:text-xs font-serif font-semibold tracking-wider flex gap-12 items-center">
+          {/* Marquee Content Set 1 */}
+          <div className="flex items-center gap-12 whitespace-nowrap">
+            <span className="flex items-center gap-2">
+              <span className="bg-[#C17C3A] text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded font-sans uppercase">Prepaid Deal</span>
+              <span>⚡ PAY ONLINE & SAVE EXTRA: Save <strong className="text-[#C17C3A]">₹50 - ₹200 Instantly</strong> on Prepaid Orders! (Min. ₹50 guaranteed)</span>
+            </span>
+            <span className="text-[#C17C3A]">|</span>
+            <span>✨ LIMITED TIME PREPAID OFFER: Save <strong className="text-[#C17C3A]">₹50 to ₹200 instantly</strong> on paying online via UPI, Cards, Netbanking, or Wallets! ✨</span>
+            <span className="text-[#C17C3A]">|</span>
+            <span>🌿 Skip the COD Queue: Get <strong className="text-[#C17C3A]">Express Shipping</strong> & guaranteed instant discounts up to ₹200 on all prepaid checkouts! 🌿</span>
+            <span className="text-[#C17C3A]">|</span>
+          </div>
+          {/* Marquee Content Set 2 (Duplicate for Seamless Loop) */}
+          <div className="flex items-center gap-12 whitespace-nowrap">
+            <span className="flex items-center gap-2">
+              <span className="bg-[#C17C3A] text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded font-sans uppercase">Prepaid Deal</span>
+              <span>⚡ PAY ONLINE & SAVE EXTRA: Save <strong className="text-[#C17C3A]">₹50 - ₹200 Instantly</strong> on Prepaid Orders! (Min. ₹50 guaranteed)</span>
+            </span>
+            <span className="text-[#C17C3A]">|</span>
+            <span>✨ LIMITED TIME PREPAID OFFER: Save <strong className="text-[#C17C3A]">₹50 to ₹200 instantly</strong> on paying online via UPI, Cards, Netbanking, or Wallets! ✨</span>
+            <span className="text-[#C17C3A]">|</span>
+            <span>🌿 Skip the COD Queue: Get <strong className="text-[#C17C3A]">Express Shipping</strong> & guaranteed instant discounts up to ₹200 on all prepaid checkouts! 🌿</span>
+            <span className="text-[#C17C3A]">|</span>
+          </div>
+        </div>
+      </div>
+
       {/* FIX: Added a separate background div. 
           This applies the styles without trapping the fixed sidebar inside a filter context. */}
       <div
@@ -170,7 +211,7 @@ const Header = () => {
           }`}
       />
 
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center text-[#2A3B28]">
+      <nav className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center text-[#2A3B28] transition-all duration-300 ${scrolled ? "py-2" : "py-4"}`}>
         {/* Left: Hamburger Icon (Mobile Only) */}
         <div className="lg:hidden">
           <button onClick={() => setIsOpen(!isOpen)} className="text-2xl text-[#2A3B28] hover:text-[#C17C3A] transition">

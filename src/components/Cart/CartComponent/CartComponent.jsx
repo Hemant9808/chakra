@@ -120,7 +120,21 @@ const CartComponent = () => {
                         </Link>
                     </motion.div>
                 ) : (
-                    <div className="flex flex-col lg:flex-row gap-10">
+                    <div className="space-y-6">
+                        {/* Cart Top Prepaid Discount Info Callout */}
+                        <div className="w-full bg-[#2A3B28] text-white p-3.5 rounded-2xl flex items-center justify-between flex-wrap gap-3 shadow-sm border border-[#C17C3A]/20">
+                            <div className="flex items-center gap-2">
+                                <span className="bg-[#C17C3A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded font-sans uppercase tracking-wider animate-pulse">Prepaid Promo</span>
+                                <p className="text-xs font-serif text-[#FDFBF7]">
+                                    💡 <strong>Tip:</strong> Pay online at checkout to get an <strong>instant ₹50 - ₹100 discount</strong> on your order!
+                                </p>
+                            </div>
+                            <span className="text-[10px] uppercase font-sans tracking-wider text-[#FDFBF7]/80 bg-white/10 px-2.5 py-1 rounded-full font-bold">
+                                Min. ₹50 Off Guaranteed
+                            </span>
+                        </div>
+
+                        <div className="flex flex-col lg:flex-row gap-10">
                         {/* Cart Items Section */}
                         <div className="flex-1">
 
@@ -363,6 +377,16 @@ const CartComponent = () => {
                                     </div>
                                 </div>
 
+                                {/* Prepaid Savings Promo Callout */}
+                                <div className="bg-[#2A3B28]/5 border border-[#C17C3A]/20 rounded-xl p-3.5 mb-6">
+                                    <div className="flex items-center gap-1.5 justify-center text-xs text-[#2A3B28] font-bold">
+                                        <span>⚡ Pay Online & Save Extra!</span>
+                                    </div>
+                                    <p className="text-[11px] text-[#715036]/85 text-center mt-1.5 leading-relaxed">
+                                        Get <strong className="text-[#2A3B28]">₹50 - ₹100 instant off</strong> on prepaid orders. Guaranteed minimum ₹50 discount on checking out online!
+                                    </p>
+                                </div>
+
                                 <motion.div
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
@@ -382,6 +406,7 @@ const CartComponent = () => {
                                 </div>
                             </motion.div>
                         </div>
+                    </div>
                     </div>
                 )}
             </div>

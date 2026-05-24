@@ -413,6 +413,20 @@ const ProductDetailsById = () => {
 
 
 
+            {/* Prepaid Discount Callout Banner */}
+            <div className="bg-[#2A3B28]/5 border border-[#C17C3A]/20 rounded-2xl p-4 flex items-start gap-3">
+              <Tag size={18} className="text-[#C17C3A] mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="font-serif font-bold text-[#2A3B28] text-sm flex items-center gap-1.5">
+                  ⚡ Prepaid Instant Discount
+                  <span className="bg-green-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded font-sans uppercase animate-pulse">Save Extra</span>
+                </h4>
+                <p className="text-xs text-[#715036]/80 mt-1 leading-relaxed">
+                  Get <strong className="text-[#2A3B28]">₹50 - ₹200 instant off</strong> on paying online. Minimum ₹50 discount guaranteed on all prepaid orders!
+                </p>
+              </div>
+            </div>
+
             {/* Add to Cart Button */}
             <motion.button
               whileHover={{ scale: 1.02 }}
