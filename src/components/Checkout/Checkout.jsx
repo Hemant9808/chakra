@@ -191,8 +191,9 @@ const Checkout = () => {
         setLoading(false);
       });
     } catch (error) {
-      console.error("error", error.message);
-      toast.error("Payment initialization failed. Please try again.");
+      console.error("Detailed payment error:", error);
+      const errorMsg = error.response?.data?.message || error.message || String(error);
+      toast.error(`Payment initialization failed: ${errorMsg}`);
     } finally {
       setLoading(false);
     }
