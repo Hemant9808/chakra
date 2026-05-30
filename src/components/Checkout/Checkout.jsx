@@ -240,11 +240,19 @@ const Checkout = () => {
   const sectionHeaderClasses = "flex justify-between items-center p-6 cursor-pointer hover:bg-[#FDFBF7]/50 transition bg-white";
   const sectionTitleClasses = "font-serif font-bold text-lg text-[#2A3B28] flex items-center gap-2";
 
-  if (loading) return <LoadingSpinner />;
-
   return (
     // Background: Cream
     <div className="pt-5 md:pt-10 bg-[#FDFBF7] text-[#2A3B28] min-h-screen px-4 py-12 md:px-12 lg:px-24 font-sans relative overflow-hidden">
+
+      {/* Premium Full-Screen Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-[#FDFBF7]/90 backdrop-blur-md z-[9999] flex flex-col items-center justify-center">
+          <LoadingSpinner 
+            isOverlay={true} 
+            message={paymentMethod === "online" ? "Processing payment..." : "Confirming your order..."} 
+          />
+        </div>
+      )}
 
       {/* Decorative Background Element */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C17C3A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -382,9 +390,8 @@ const Checkout = () => {
             </div>
             <div className="p-6 bg-white space-y-4">
               {/* Online Payment Option Card */}
-              <div
-                onClick={() => setPaymentMethod("online")}
-                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-start gap-4 ${
+              <label
+                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-start gap-4 block ${
                   paymentMethod === "online"
                     ? "border-[#2A3B28] bg-[#FDFBF7] shadow-sm"
                     : "border-[#715036]/10 hover:border-[#2A3B28]/30 bg-white"
@@ -412,12 +419,11 @@ const Checkout = () => {
                     Pay securely using UPI, Cards, Netbanking, or Wallets and get an instant discount.
                   </p>
                 </div>
-              </div>
+              </label>
 
               {/* COD Option Card */}
-              <div
-                onClick={() => setPaymentMethod("cod")}
-                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-start gap-4 ${
+              <label
+                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-start gap-4 block ${
                   paymentMethod === "cod"
                     ? "border-[#2A3B28] bg-[#FDFBF7] shadow-sm"
                     : "border-[#715036]/10 hover:border-[#2A3B28]/30 bg-white"
@@ -438,13 +444,13 @@ const Checkout = () => {
                     Pay with cash when your order is delivered. No instant online discount.
                   </p>
                 </div>
-              </div>
+              </label>
             </div>
           </div>
         </div>
 
         {/* Right Column: Order Summary */}
-        <div className="border border-[#715036]/10 rounded-2xl p-6 shadow-lg bg-white space-y-6 h-fit sticky top-24">
+        <div className="border border-[#715036]/10 rounded-2xl p-6 shadow-lg bg-white space-y-6 h-fit md:sticky md:top-24">
           <h3 className="font-serif font-bold text-xl text-[#2A3B28] pb-4 border-b border-[#715036]/10">Order Summary <span className="text-sm font-normal text-[#715036]/60">({cartItems.length} items)</span></h3>
 
           <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">

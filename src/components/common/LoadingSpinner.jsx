@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const LoadingSpinner = ({ className = '' }) => {
+const LoadingSpinner = ({ className = '', isOverlay = false, message = '' }) => {
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen bg-[#FDFBF7] ${className}`}>
+    <div className={`flex flex-col items-center justify-center ${isOverlay ? 'h-auto bg-transparent' : 'min-h-screen bg-[#FDFBF7]'} ${className}`}>
 
       {/* 1. Logo Animation: Zooms in ONCE */}
       <motion.div
@@ -41,6 +41,22 @@ const LoadingSpinner = ({ className = '' }) => {
           }}
         />
       </motion.div>
+
+      {/* Custom message display with breathing animation */}
+      {message && (
+        <motion.p
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{
+            repeat: Infinity,
+            duration: 2,
+            ease: "easeInOut"
+          }}
+          className="mt-6 text-sm font-semibold text-[#C17C3A] tracking-[0.2em] uppercase text-center"
+        >
+          {message}
+        </motion.p>
+      )}
 
       {/* Tagline (Fade in) */}
       <motion.div

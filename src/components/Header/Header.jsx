@@ -318,7 +318,7 @@ const Header = () => {
               className="fixed inset-y-0 left-0 w-[280px] sm:w-[320px] bg-[#2A3B28]/95 backdrop-blur-md border-r border-[#FDFBF7]/10 text-[#FDFBF7] flex flex-col px-6 py-6 z-[9999] shadow-2xl overflow-y-auto"
             >
               {/* Header inside sidebar */}
-              <div className="flex justify-between items-center mb-8 border-b border-[#FDFBF7]/10 pb-4">
+              <div className="flex justify-between items-center mb-6 border-b border-[#FDFBF7]/10 pb-4">
                 <span className="text-xl font-serif tracking-widest text-[#C17C3A] font-bold">AYUCAN</span>
                 <button
                   onClick={() => setIsOpen(false)}
@@ -327,6 +327,19 @@ const Header = () => {
                   <FaTimes />
                 </button>
               </div>
+
+              {/* User Profile Card (Welcome Back User) at the top */}
+              {isAuthenticated && (
+                <div className="flex items-center gap-3 mb-6 px-3 py-2.5 bg-[#FDFBF7]/5 rounded-2xl border border-[#FDFBF7]/5 shadow-inner">
+                  <div className="w-9 h-9 rounded-full bg-[#C17C3A] flex items-center justify-center text-sm font-bold text-white uppercase shadow-inner flex-shrink-0">
+                    {authUser?.firstName?.charAt(0) || "W"}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] text-[#C17C3A] uppercase tracking-wider font-extrabold">Welcome Back</p>
+                    <p className="text-sm font-bold truncate text-[#FDFBF7]">{authUser?.firstName || "Wellness Seeker"}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Navigation Links with Icons */}
               <div className="flex flex-col gap-3">
@@ -388,27 +401,16 @@ const Header = () => {
                 </div>
               )}
 
-              {/* User Info & Logout */}
-              {isAuthenticated ? (
-                <div className="mt-auto border-t border-[#FDFBF7]/10 pt-6">
-                  <div className="flex items-center gap-3 mb-4 px-2">
-                    <div className="w-8 h-8 rounded-full bg-[#C17C3A] flex items-center justify-center text-sm font-bold text-white uppercase shadow-inner">
-                      {authUser?.firstName?.charAt(0) || "W"}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs text-[#FDFBF7]/50 uppercase tracking-wider font-bold">Welcome Back</p>
-                      <p className="text-sm font-semibold truncate text-[#FDFBF7]">{authUser?.firstName || "Wellness Seeker"}</p>
-                    </div>
-                  </div>
+              {/* User Logout or Login at the bottom */}
+              <div className="mt-auto border-t border-[#FDFBF7]/10 pt-6">
+                {isAuthenticated ? (
                   <button
                     onClick={handleLogout}
                     className="w-full bg-red-600/90 text-white py-3 rounded-xl text-sm font-bold hover:bg-red-700 active:scale-[0.98] transition-all shadow-md"
                   >
                     Logout
                   </button>
-                </div>
-              ) : (
-                <div className="mt-auto border-t border-[#FDFBF7]/10 pt-6">
+                ) : (
                   <Link 
                     to="/login" 
                     onClick={() => setIsOpen(false)} 
@@ -416,8 +418,8 @@ const Header = () => {
                   >
                     Login / Sign Up
                   </Link>
-                </div>
-              )}
+                )}
+              </div>
             </motion.nav>
           </>
         )}
@@ -471,7 +473,8 @@ const Header = () => {
                   }}
                   className="text-xs font-bold uppercase tracking-widest text-[#C17C3A] hover:text-[#e09b53] ml-4 px-2 py-1 transition-all"
                 >
-                  ESC
+                  <span className="hidden sm:inline">ESC</span>
+                  <span className="inline sm:hidden">Close</span>
                 </button>
               </div>
 
@@ -571,8 +574,8 @@ const Header = () => {
                 )}
               </div>
 
-              {/* Footer Helper Actions */}
-              <div className="bg-[#2A3B28]/40 border-t border-[#FDFBF7]/10 px-4 py-2.5 flex items-center justify-between text-[9px] text-[#FDFBF7]/40">
+              {/* Footer Helper Actions (Hidden on Mobile) */}
+              <div className="hidden sm:flex bg-[#2A3B28]/40 border-t border-[#FDFBF7]/10 px-4 py-2.5 items-center justify-between text-[9px] text-[#FDFBF7]/40">
                 <div className="flex gap-4">
                   <span><span className="bg-white/10 text-[#FDFBF7]/70 px-1 rounded">↑↓</span> to navigate</span>
                   <span><span className="bg-white/10 text-[#FDFBF7]/70 px-1 rounded">↵</span> to select</span>
