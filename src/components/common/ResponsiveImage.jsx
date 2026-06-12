@@ -14,12 +14,18 @@ const ResponsiveImage = ({
 }) => {
   if (!src) return null;
 
+  // Ensure Cloudinary URLs use HTTPS to prevent Mixed Content blocking
+  let secureSrc = src;
+  if (typeof src === "string" && src.includes("cloudinary.com") && src.startsWith("http://")) {
+    secureSrc = src.replace(/^http:\/\//i, "https://");
+  }
+
   // 1. Detect if the image is a Cloudinary hosted asset
-  const isCloudinary = src.includes("cloudinary.com");
+  const isCloudinary = typeof secureSrc === "string" && secureSrc.includes("cloudinary.com");
 
   if (isCloudinary) {
     // Locate the "/upload/" part of the Cloudinary URL
-    const uploadMatch = src.match(/(.*\/upload\/)(.*)/);
+    const uploadMatch = secureSrc.match(/(.*\/upload\/)(.*)/);
 
     if (uploadMatch) {
       const urlPrefix = uploadMatch[1];
@@ -55,7 +61,7 @@ const ResponsiveImage = ({
   // 2. Graceful fallback for local or non-Cloudinary images
   return (
     <img
-      src={src}
+      src={secureSrc}
       alt={alt}
       className={className}
       loading={priority ? "eager" : "lazy"}
