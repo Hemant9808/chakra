@@ -10,7 +10,7 @@ const SEO = ({
   description, 
   name = "Ayucan Healthcare", 
   type = "website", 
-  image = "/favicon.ico", 
+  image = "/favicon.png", 
   url = window.location.href,
   price,
   currency = "INR",
@@ -49,6 +49,19 @@ const SEO = ({
           <meta property="product:price:currency" content={currency} />
           <meta property="product:brand" content={brand} />
         </>
+      )}
+
+      {/* JSON-LD WebSite & Organization Schema for Google/Bing Search Logo */}
+      {type === "website" && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "url": window.location.origin,
+            "logo": `${window.location.origin}/favicon.png`,
+            "name": name
+          })}
+        </script>
       )}
 
       {/* JSON-LD Product Schema for Google Search Rich Snippets */}
